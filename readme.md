@@ -3,4 +3,4 @@
 git clone -b front-end https://github.com/kareemshaaban221/mowakly-app.git
 ```
 
-Will developed by `Ahmed Sameer`, `Mohamed Elshora`
+Will be developed by `Ahmed Sameer`, `Mohamed Elshora`

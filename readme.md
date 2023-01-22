@@ -1,9 +1,6 @@
 # Database Repo
 
-- Create database with name
-```
-mowakly
-```
+- Create database with name```mowakly```
 - Put these migrations in laravel project
 - Run command
 ```

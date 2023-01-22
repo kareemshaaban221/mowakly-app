@@ -1,6 +1,11 @@
 # Database Repo
 
 - Create database with name
-```mowakly```
+```
+mowakly
+```
 - Put these migrations in laravel project
-- Run command ```php artisan migrate```
+- Run command
+```
+php artisan migrate
+```

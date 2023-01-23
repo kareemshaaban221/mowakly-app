@@ -10,10 +10,12 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          Container(
-            height: 21.07.h,
-            width: double.infinity,
-            color: const Color(0xff0B3939),
+          SingleChildScrollView(
+            child: Container(
+              height: 21.07.h,
+              width: double.infinity,
+              color: const Color(0xff0B3939),
+            ),
           ),
 
           SizedBox(

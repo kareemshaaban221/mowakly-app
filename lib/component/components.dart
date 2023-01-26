@@ -120,3 +120,78 @@ Widget build_button_icon(){
     ),
   );
 }
+
+Widget build_container_icon_pay(){
+  return SizedBox(
+    height: 11.4.h,
+    width: 19.9.w,
+    child: Column(
+      children: [
+        Container(
+          height: 9.0.h,
+          width:19.85.w ,
+          decoration: BoxDecoration(
+            color: const Color(0xffFFFFFF),
+            borderRadius: BorderRadius.circular(21),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.grey,
+                blurRadius: 4.0,
+              ),
+            ],
+          ),
+
+
+        ),
+        SizedBox(height: 1.6.h,),
+        Container(
+          height: 0.66.h,
+          width: 12.38.w,
+          decoration: BoxDecoration(
+            color: Color(0xff1BE5BF),
+            borderRadius: BorderRadius.circular(3)
+          ),
+          
+        ),
+      ],
+    ),
+  );
+}
+
+Widget build_text_filed_pay(){
+  return SizedBox(
+    height:10.256.h,
+    width: 70.09.w,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      textDirection: TextDirection.rtl,
+      children: [
+        Text('رقم بطاقة الإئتمان',
+          style: TextStyle(
+              fontSize: 16,
+              color: Color(0xff0B3939)
+          ),
+        ),
+
+        Container(
+            height: 6.02.h,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Color(0xff0B3939).withOpacity(0.2),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                textAlign: TextAlign.end,
+                decoration:  InputDecoration(
+                  hintText: 'ادخل الرقم هنا',
+                  enabledBorder: InputBorder.none,
+                ),
+              ),
+            )
+        ),
+      ],
+    ),
+  );
+}

@@ -27,31 +27,27 @@ Route::middleware('isClient')->group(function () {
     Route::post('/login', [AuthClientController::class, 'login'])->name('client.login');
 });
 
-// Route::post('/loginAdmin', function (Request $request) {
-//     $user = App\Models\User::select()->where('email', $request->email)->first();
-
-//     $token = $user->createToken('admin')->plainTextToken;
-
-//     return response([
-//         'token' => $token,
-//         'message' => 'done'
-//     ], 200);
-// });
-// // 3|fmlmYCPwBXZEPlSteUm7nBhXgkcVW3v5YFoOHyS7
-
-
 Route::middleware('auth:sanctum')->group(function () {
 
     // lawyers routes
     Route::prefix('lawyer')->middleware('isLawyer')->group(function () {
 
         // logout route
-        Route::post('/logout', [AuthLawyerController::class, 'logout'])->name('lawyer.logout');
+        Route::get('/logout', [AuthLawyerController::class, 'logout'])->name('lawyer.logout');
+
+    });
+
+    // clients routes
+    Route::middleware('isClient')->group(function () {
+
+        // logout route
+        Route::get('/logout', [AuthClientController::class, 'logout'])->name('client.logout');
 
     });
 
 });
 
-Route::any('{any}', function ($response = new Response) {
-    return $response->notFound(NULL, 'resource');
+//? This route for any invalid request ;)
+Route::any('{any}', function () {
+    return (new Response)->notFound(NULL, 'resource');
 })->where('any', '.*');

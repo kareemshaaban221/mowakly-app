@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
+// use Illuminate\Foundation\Http\FormRequest;
+// use Illuminate\Validation\Rules\Password;
 
-class LawyerRegisterRequest extends FormRequest
+class LawyerRegisterRequest extends ValidationRulesRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,12 +17,6 @@ class LawyerRegisterRequest extends FormRequest
         return request()->user_type == 'lawyer';
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
-
     public $validator = NULL;
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
@@ -32,19 +26,10 @@ class LawyerRegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'fname' => 'required|min:3|max:255|alpha',
-            'lname' => 'required|min:3|max:255|alpha',
-            'email' => 'required|email|unique:lawyers,email',
-            'password' => [
-                'required',
-                'confirmed',
-                Password::min(8)
-                    ->letters()
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
-                    ->uncompromised()
-            ],
+            'fname' => 'required|min:3|max:255|alpha|regex:/\w/u',
+            'lname' => 'required|min:3|max:255|alpha|regex:/\w/u',
+            'email' => array_merge(['unique:lawyers,email'], parent::emailRule()),
+            'password' => parent::passwordRule('register'),
             'gender' => 'required|in:male,female',
             'description' => 'required|min:50|max:255',
             'date_of_birth' => 'required|date',

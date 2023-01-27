@@ -6,13 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\LawyerRegisterRequest;
 use App\Http\Requests\LawyerLoginRequest;
-use Illuminate\Support\Facades\Validator;
 use App\Helpers\Response;
 use App\Models\Lawyer;
 use App\Models\LawyerPhone;
 use App\Http\Controllers\LawyerPhoneController;
 use App\Http\Controllers\LawyerAttachController;
 use App\Http\Controllers\LawyerController;
+// use Illuminate\Support\Facades\Input;
 
 class AuthLawyerController extends Controller
 {
@@ -21,7 +21,7 @@ class AuthLawyerController extends Controller
     public function register(LawyerRegisterRequest $request, $response = new Response) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
-            return $response->badRequest('Data is not valid!', $request->validator->messages());
+            return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->except(['password', 'password_confirmation', 'card', 'avatar', 'attachments']));
         }
 
         $lawyer = (new LawyerController)->store($request);
@@ -38,7 +38,7 @@ class AuthLawyerController extends Controller
     public function login(LawyerLoginRequest $request, $response = new Response) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
-            return $response->badRequest('Data is not valid!', $request->validator->messages());
+            return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->except(['password']));
         }
 
         $data = $request->validated();
@@ -65,7 +65,12 @@ class AuthLawyerController extends Controller
     }
 
     public function logout($response = new Response) {
-        auth()->user()->tokens()->where('name', 'lawyer-'.auth()->user()->id)->delete();
+        $query = auth()->user()->tokens()->where('name', 'lawyer-'.auth()->user()->id);
+        $tokens = $query->get();
+
+        if($tokens->isEmpty()) return $response->notAuthorized('Unauthenticated. (Wrong user type)');
+
+        $query->delete();
         return $response->ok([
             'message' => 'Signed out successfully!',
         ]);

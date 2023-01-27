@@ -16,20 +16,16 @@ Class Response
         ], 401);
     }
 
-    public function badRequest($msg, $err = NULL) {
-        if($err) {
-            return response()->json([
-                'errors' => $err,
-                'message' => $msg,
-                'status' => 400
-            ], 400);
-        }
-        else {
-            return response()->json([
-                'message' => $msg,
-                'status' => 400
-            ], 400);
-        }
+    public function badRequest($msg, $err = NULL, $old = NULL) {
+        $response = [
+            'message' => $msg,
+            'status' => 400
+        ];
+
+        if($err)    $response['errors'] = $err;
+        if($old)    $response['old'] = $old;
+
+        return response()->json($response, 400);
     }
 
     public function created($data, $createdObj, $msg = NULL) {

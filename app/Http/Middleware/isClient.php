@@ -19,7 +19,7 @@ class isClient
         if($request->user_type == 'client') {
             return $next($request);
         } else {
-            return $response->notAuthorized('Access is not allowed!');
+            return $response->notAuthorized('(Client resource) Access is not allowed!');
         }
     }
 }

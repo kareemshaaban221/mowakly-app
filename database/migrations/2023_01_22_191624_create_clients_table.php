@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('gender', ['male', 'female']);
             $table->date('date_of_birth');
-            $table->string('avatar');
+            $table->string('avatar')->nullable();
             $table->string('phone');
             $table->rememberToken();
             $table->timestamps();

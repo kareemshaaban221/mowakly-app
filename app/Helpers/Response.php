@@ -38,4 +38,25 @@ Class Response
 
         return response()->json($data, 201);
     }
+
+    public function forbidden($msg) {
+        return response()->json([
+            'message' => $msg,
+            'status' => 403
+        ], 403);
+    }
+
+    public function notFound($msg = NULL, $obj = NULL) {
+        if(!$msg) {
+            if(!$obj) {
+                $msg = 'Not found';
+            }
+            $msg = 'This '. $obj .' is not found!';
+        }
+
+        return response()->json([
+            'message' => $msg,
+            'status' => 404,
+        ], 404);
+    }
 }

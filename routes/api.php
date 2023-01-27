@@ -2,8 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LawyerController;
-use App\Http\Controllers\Auth\ClientController;
+use App\Http\Controllers\Auth\AuthLawyerController;
+use App\Http\Controllers\Auth\AuthClientController;
+use App\Helpers\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,13 +18,13 @@ use App\Http\Controllers\Auth\ClientController;
 */
 
 Route::prefix('lawyer')->middleware('isLawyer')->group(function () {
-    Route::post('/register', [LawyerController::class, 'register'])->name('register');
-    Route::post('/login', [LawyerController::class, 'login'])->name('login');
+    Route::post('/register', [AuthLawyerController::class, 'register'])->name('lawyer.register');
+    Route::post('/login', [AuthLawyerController::class, 'login'])->name('lawyer.login');
 });
 
 Route::middleware('isClient')->group(function () {
-    Route::post('/register', [ClientController::class, 'register'])->name('register');
-    Route::post('/login', [ClientController::class, 'login'])->name('login');
+    Route::post('/register', [AuthClientController::class, 'register'])->name('client.register');
+    Route::post('/login', [AuthClientController::class, 'login'])->name('client.login');
 });
 
 // Route::post('/loginAdmin', function (Request $request) {
@@ -39,11 +40,18 @@ Route::middleware('isClient')->group(function () {
 // // 3|fmlmYCPwBXZEPlSteUm7nBhXgkcVW3v5YFoOHyS7
 
 
-// Route::middleware('auth:sanctum')->group(function () {
-//     Route::get('/logoutAdmin', function () {
-//         auth()->user()->tokens()->delete();
-//         return response([
-//             'message' => 'done'
-//         ], 200);
-//     });
-// });
+Route::middleware('auth:sanctum')->group(function () {
+
+    // lawyers routes
+    Route::prefix('lawyer')->middleware('isLawyer')->group(function () {
+
+        // logout route
+        Route::post('/logout', [AuthLawyerController::class, 'logout'])->name('lawyer.logout');
+
+    });
+
+});
+
+Route::any('{any}', function ($response = new Response) {
+    return $response->notFound(NULL, 'resource');
+})->where('any', '.*');

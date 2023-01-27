@@ -19,7 +19,7 @@ class isLawyer
         if($request->user_type == 'lawyer') {
             return $next($request);
         } else {
-            return $response->notAuthorized('Access is not allowed!gasdgasdgasd');
+            return $response->notAuthorized('(Lawyer resource) Access is not allowed!');
         }
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    use App\Helpers\Path;
     /**
      * Run the migrations.
      *
@@ -32,6 +33,17 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+        $files = glob($this->uploads_path('lawyers'). '/*');
+        $filess = glob($this->uploads_path('clients'). '/*');
+        foreach($files as $file) {
+            // if(is_file($file))
+                unlink($file);
+        }
+        foreach($filess as $file) {
+            // if(is_file($file))
+                unlink($file);
+        }
     }
 
     /**

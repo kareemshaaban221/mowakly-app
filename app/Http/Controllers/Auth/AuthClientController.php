@@ -6,26 +6,44 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientRegisterRequest;
 use App\Http\Requests\ClientLoginRequest;
 use App\Helpers\Response;
-use App\Http\Controllers\ClientController;
-use App\Models\Client;
+use Illuminate\Support\Facades\DB;
+use App\Interfaces\ClientRepositoryInterface;
 
 class AuthClientController extends Controller
 {
+    private ClientRepositoryInterface $clientRepository;
+
+    public function __construct(ClientRepositoryInterface $clientRepository) {
+        $this->clientRepository = $clientRepository;
+    }
+
     public function register(ClientRegisterRequest $request, $response = new Response) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
             return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->except(['password', 'password_confirmation', 'avatar']));
         }
 
-        $client = (new ClientController)->store($request);
+        DB::beginTransaction();
+        try {
 
-        if(get_class($client) != 'App\Models\Client') {
-            return $response->badRequest('An error occured', $client);
+            $client = $this->clientRepository->store($request);
+
+            if(isset($request->avatar)) {
+                $this->clientRepository->storeAvatar($request->avatar, $client);
+            }
+
+            $client->save();
+
+            $token = $this->clientRepository->generateToken($client);
+
+            DB::commit();
+
+            return $response->created(['data' => $client, 'token' => $token], 'client');
+
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $response->internalServerError($th->getMessage());
         }
-
-        $token = $client->createToken('client-' . $client->id)->plainTextToken;
-
-        return $response->created(['data' => $client, 'token' => $token], 'client');
     }
 
     public function login(ClientLoginRequest $request, $response = new Response) {
@@ -34,25 +52,28 @@ class AuthClientController extends Controller
             return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->except(['password']));
         }
 
-        $data = $request->validated();
+        DB::beginTransaction();
 
         try {
-            $client = Client::where('email', $data['email'])->firstOrFail();
 
-            if(!password_verify($data['password'], $client->password)) {
+            $client = $this->clientRepository->checkCredentials($request->validated());
+
+            if(!$client) {
                 return $response->forbidden('Wrong password!');
             }
 
-            $client->tokens()->where('name', 'client-'.$client->id)->delete();
+            $token = $this->clientRepository->generateToken($client);
 
-            $token = $client->createToken('client-' . $client->id)->plainTextToken;
+            DB::commit();
 
             return $response->ok([
                 'message' => 'Signed in successfully!',
                 'token' => $token,
                 'data' => $client
             ]);
+
         } catch (\Throwable $th) {
+            DB::rollback();
             return $response->badRequest('An error occured!', $th->getMessage());
         }
     }
@@ -61,7 +82,8 @@ class AuthClientController extends Controller
         $query = auth()->user()->tokens()->where('name', 'client-'.auth()->user()->id);
         $tokens = $query->get();
 
-        if($tokens->isEmpty()) return $response->notAuthorized('Unauthenticated. (Wrong user type)');
+        if($tokens->isEmpty())
+            return $response->notAuthorized('Unauthenticated. (Wrong user type)');
 
         $query->delete();
         return $response->ok([

@@ -55,4 +55,11 @@ Class Response
             'status' => 404,
         ], 404);
     }
+
+    public function internalServerError($msg) {
+        return response()->json([
+            'message' => $msg,
+            'status' => 500
+        ], 500);
+    }
 }

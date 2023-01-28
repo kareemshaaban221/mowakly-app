@@ -7,16 +7,19 @@ use Illuminate\Http\Request;
 use App\Http\Requests\LawyerRegisterRequest;
 use App\Http\Requests\LawyerLoginRequest;
 use App\Helpers\Response;
-use App\Models\Lawyer;
-use App\Models\LawyerPhone;
-use App\Http\Controllers\LawyerPhoneController;
-use App\Http\Controllers\LawyerAttachController;
-use App\Http\Controllers\LawyerController;
-// use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\DB;
+
+use App\Interfaces\LawyerRepositoryInterface;
 
 class AuthLawyerController extends Controller
 {
     use \App\Helpers\Functions;
+
+    private LawyerRepositoryInterface $lawyerRepository;
+
+    public function __construct(LawyerRepositoryInterface $lawyerRepository) {
+        $this->lawyerRepository = $lawyerRepository;
+    }
 
     public function register(LawyerRegisterRequest $request, $response = new Response) {
         // if fails
@@ -24,15 +27,28 @@ class AuthLawyerController extends Controller
             return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->except(['password', 'password_confirmation', 'card', 'avatar', 'attachments']));
         }
 
-        $lawyer = (new LawyerController)->store($request);
+        DB::beginTransaction();
 
-        if(get_class($lawyer) != 'App\Models\Lawyer') {
-            return $response->badRequest('An error occured', $lawyer);
+        try {
+            $lawyer = $this->lawyerRepository->store($request);
+
+            $this->lawyerRepository->storeAvatar($request->avatar, $lawyer);
+            $this->lawyerRepository->storeCard($request->card, $lawyer);
+            $lawyer->save();
+
+            // phones and attachments
+            $this->lawyerRepository->storePhones($request->phones, $lawyer);
+            $this->lawyerRepository->storeAttachments($request->attachments, $lawyer);
+
+            $token = $this->lawyerRepository->generateToken($lawyer);
+
+            DB::commit();
+
+            return $response->created(['data' => $lawyer, 'token' => $token], 'lawyer');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $response->internalServerError($th->getMessage());
         }
-
-        $token = $lawyer->createToken('lawyer-' . $lawyer->id)->plainTextToken;
-
-        return $response->created(['data' => $lawyer, 'token' => $token], 'lawyer');
     }
 
     public function login(LawyerLoginRequest $request, $response = new Response) {
@@ -41,18 +57,18 @@ class AuthLawyerController extends Controller
             return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->except(['password']));
         }
 
-        $data = $request->validated();
+        DB::beginTransaction();
 
         try {
-            $lawyer = Lawyer::where('email', $data['email'])->firstOrFail();
+            $lawyer = $this->lawyerRepository->checkCredentials($request->validated());
 
-            if(!password_verify($data['password'], $lawyer->password)) {
+            if(!$lawyer) {
                 return $response->forbidden('Wrong password!');
             }
 
-            $lawyer->tokens()->where('name', 'lawyer-'.$lawyer->id)->delete();
+            $token = $this->lawyerRepository->generateToken($lawyer);
 
-            $token = $lawyer->createToken('lawyer-' . $lawyer->id)->plainTextToken;
+            DB::commit();
 
             return $response->ok([
                 'message' => 'Signed in successfully!',
@@ -60,6 +76,7 @@ class AuthLawyerController extends Controller
                 'data' => $lawyer
             ]);
         } catch (\Throwable $th) {
+            DB::rollback();
             return $response->badRequest('An error occured!', $th->getMessage());
         }
     }
@@ -68,7 +85,8 @@ class AuthLawyerController extends Controller
         $query = auth()->user()->tokens()->where('name', 'lawyer-'.auth()->user()->id);
         $tokens = $query->get();
 
-        if($tokens->isEmpty()) return $response->notAuthorized('Unauthenticated. (Wrong user type)');
+        if($tokens->isEmpty())
+            return $response->notAuthorized('Unauthenticated. (Wrong user type)');
 
         $query->delete();
         return $response->ok([

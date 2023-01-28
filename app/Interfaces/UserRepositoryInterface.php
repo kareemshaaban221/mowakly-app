@@ -3,9 +3,12 @@
 namespace App\Interfaces;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
-interface UserRepositoryInterface {
-    public function store() : Model;
+interface UserRepositoryInterface extends AuthRepositoryInterface {
+    public function store(Request $request) : Model;
 
-    public function storeAvatar(Model $user) : bool;
+    public function storeFile(String $fieldname, $file, Model &$user);
+
+    public function storeAvatar($file, Model &$user);
 }

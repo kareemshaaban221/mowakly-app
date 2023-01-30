@@ -31,8 +31,11 @@ class AuthClientController extends Controller
             if(isset($request->avatar)) {
                 $this->clientRepository->storeAvatar($request->avatar, $client);
             }
-
             $client->save();
+
+            if(isset($request->payment_methods)) {
+                $this->clientRepository->storePaymentMethods($request->payment_methods, $client);
+            }
 
             $token = $this->clientRepository->generateToken($client);
 

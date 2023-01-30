@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthLawyerController;
 use App\Http\Controllers\Auth\AuthClientController;
 use App\Helpers\Response;
+use App\Http\Controllers\Auth\GoogleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,13 +19,21 @@ use App\Helpers\Response;
 */
 
 Route::prefix('lawyer')->middleware('isLawyer')->group(function () {
+    // auth routes
     Route::post('/register', [AuthLawyerController::class, 'register'])->name('lawyer.register');
     Route::post('/login', [AuthLawyerController::class, 'login'])->name('lawyer.login');
+    // google auth routes
+    Route::get('/google/register', [GoogleController::class, 'access'])->name('lawyer.google.register');
+    Route::get('/google/login', [GoogleController::class, 'access'])->name('lawyer.google.login');
+    Route::get('/google/callback', [GoogleController::class, 'callback'])->name('lawyer.google.callback');
 });
 
 Route::middleware('isClient')->group(function () {
     Route::post('/register', [AuthClientController::class, 'register'])->name('client.register');
     Route::post('/login', [AuthClientController::class, 'login'])->name('client.login');
+    Route::get('/google/register', [GoogleController::class, 'access'])->name('client.google.register');
+    Route::get('/google/login', [GoogleController::class, 'access'])->name('client.google.login');
+    Route::get('/google/callback', [GoogleController::class, 'callback'])->name('client.google.callback');
 });
 
 Route::middleware('auth:sanctum')->group(function () {

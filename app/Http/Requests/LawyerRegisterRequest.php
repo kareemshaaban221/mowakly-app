@@ -26,23 +26,23 @@ class LawyerRegisterRequest extends ValidationRulesRequest
     public function rules()
     {
         return [
-            'fname' => 'required|min:3|max:255|alpha|regex:/\w/u',
-            'lname' => 'required|min:3|max:255|alpha|regex:/\w/u',
+            'fname' => parent::nameRule(),
+            'lname' => parent::nameRule(),
             'email' => array_merge(['unique:lawyers,email'], parent::emailRule()),
             'password' => parent::passwordRule('register'),
-            'gender' => 'required|in:male,female',
-            'description' => 'required|min:50|max:255',
-            'date_of_birth' => 'required|date',
-            'card' => 'required|mimes:png,jpg||max:5000',
-            'card_id' => 'required|max:20',
-            'avatar' => 'required|mimes:png,jpg|max:5000',
-            'chat_price' => 'required|numeric|between:0,9999.99',
-            'video_price' => 'required|numeric|between:0,9999.99',
-            'phone_price' => 'required|numeric|between:0,9999.99',
+            'gender' => parent::genderRule(),
+            'description' => parent::descriptionRule(),
+            'date_of_birth' => parent::dateOfBirthRule(),
+            'card' => parent::cardRule(),
+            'card_id' => parent::cardIdRule(),
+            'avatar' => array_merge(['required'], parent::avatarRule()),
+            'chat_price' => parent::priceRule(),
+            'video_price' => parent::priceRule(),
+            'phone_price' => parent::priceRule(),
             'attachments' => 'required',
-            'attachments.*' => 'required|file|max:5000|mimes:pdf,csv,xls,xlsx,doc,docx,txt,pptx',
+            'attachments.*' => parent::attachmentRule(),
             'phones' => 'required',
-            'phones.*' => 'digits:10|regex:/1[5210]\d{8}/u'
+            'phones.*' => parent::phoneRule(),
         ];
     }
 }

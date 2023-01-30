@@ -13,13 +13,15 @@ class Lawyer extends Authenticatable
     use HasFactory, Notifiable, HasApiTokens;
 
     protected $guarded = [];
-    protected $with = ['lawyer_attachments', 'lawyer_phones'];
+    protected $with = ['attachments', 'phones'];
 
-    public function lawyer_phones() {
+    protected $hidden = ['password'];
+
+    public function phones() {
         return $this->hasMany(LawyerPhone::class);
     }
 
-    public function lawyer_attachments() {
+    public function attachments() {
         return $this->hasMany(LawyerAttachment::class);
     }
 }

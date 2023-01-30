@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Interfaces\LawyerRepositoryInterface;
 use App\Repositories\LawyerRepository;
 use App\Interfaces\ClientRepositoryInterface;
+use App\Interfaces\GoogleAuthRepositoryInterface;
 use App\Repositories\ClientRepository;
 
 class RepositoryServiceProvider extends ServiceProvider

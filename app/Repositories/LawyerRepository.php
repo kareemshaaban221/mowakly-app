@@ -8,11 +8,10 @@ use App\Models\Lawyer;
 use App\Models\LawyerPhone;
 use App\Models\LawyerAttachment;
 use Illuminate\Http\Request;
-use App\Helpers\Response;
 use App\Helpers\Functions;
 use App\Helpers\Path;
 
-class LawyerRepository implements LawyerRepositoryInterface {
+class LawyerRepository extends UserRepository implements LawyerRepositoryInterface {
     use Path, Functions;
 
     public function store(Request $request): Lawyer {
@@ -67,27 +66,31 @@ class LawyerRepository implements LawyerRepositoryInterface {
                 'lawyer_id' => $lawyer->id,
                 'phone_number' => $phone,
             ]);
-            array_push($records, $record);
+            array_push($records, $record->phone_number);
         }
+
+        $lawyer->phones = $records;
 
         return $records;
     }
 
     public function storeAttachments($attachments, Lawyer &$lawyer) {
-        $attach_filenames = [];
+        $records = [];
         $i = 1;
         foreach($attachments as $attachment) {
-            $filename = $this->storeFile('attach_'.$i, $attachment, $lawyer);
-
-            LawyerAttachment::create([
+            $record = LawyerAttachment::create([
                 'lawyer_id' => $lawyer->id,
-                'attachment' => $filename
+                'attachment' => $this->storeFile('attach_'.$i, $attachment, $lawyer)
             ]);
 
-            array_push($attach_filenames, $filename);
+            array_push($records, $record->attachment);
+
+            $i++;
         }
 
-        return $attach_filenames;
+        $lawyer->attachments = $records;
+
+        return $records;
     }
 
     public function checkCredentials(array $credentials): Model {

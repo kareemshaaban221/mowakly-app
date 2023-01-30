@@ -30,6 +30,7 @@ return new class extends Migration
             $table->double('chat_price', 8, 2);
             $table->double('video_price', 8, 2);
             $table->double('phone_price', 8, 2);
+            // $table->string('national_id', 14);
             $table->rememberToken();
             $table->timestamps();
         });
@@ -37,11 +38,11 @@ return new class extends Migration
         $files = glob($this->uploads_path('lawyers'). '/*');
         $filess = glob($this->uploads_path('clients'). '/*');
         foreach($files as $file) {
-            // if(is_file($file))
+            if(is_file($file))
                 unlink($file);
         }
         foreach($filess as $file) {
-            // if(is_file($file))
+            if(is_file($file))
                 unlink($file);
         }
     }

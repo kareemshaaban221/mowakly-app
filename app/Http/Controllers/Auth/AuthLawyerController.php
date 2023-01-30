@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\LawyerRegisterRequest;
 use App\Http\Requests\LawyerLoginRequest;
 use App\Helpers\Response;
 use Illuminate\Support\Facades\DB;
-
 use App\Interfaces\LawyerRepositoryInterface;
 
 class AuthLawyerController extends Controller

@@ -35,10 +35,4 @@ class LawyerLoginRequest extends ValidationRulesRequest
             'password' => parent::passwordRule('login'),
         ];
     }
-
-    public function messages() {
-        return [
-            'email.exists' => 'The email doesn\'t exist.'
-        ];
-    }
 }

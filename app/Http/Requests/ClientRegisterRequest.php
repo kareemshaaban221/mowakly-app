@@ -25,14 +25,15 @@ class ClientRegisterRequest extends ValidationRulesRequest
     public function rules()
     {
         return [
-            'fname' => 'required|min:3|max:255|alpha',
-            'lname' => 'required|min:3|max:255|alpha',
+            'fname' => parent::nameRule(),
+            'lname' => parent::nameRule(),
             'email' => array_merge(['unique:clients,email'], parent::emailRule()),
             'password' => parent::passwordRule('register'),
-            'gender' => 'required|in:male,female',
-            'date_of_birth' => 'required|date',
-            'avatar' => 'file|mimes:png,jpg|max:5000',
-            'phone' => 'required|digits:10|regex:/1[5210]\d{8}/u'
+            'gender' => parent::genderRule(),
+            'date_of_birth' => parent::dateOfBirthRule(),
+            'avatar' => parent::avatarRule(),
+            'phone' => parent::phoneRule(),
+            'payment_methods.*' => parent::paymentMethodRule(),
         ];
     }
 }

@@ -9,8 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Functions;
 use App\Helpers\Path;
+use App\Helpers\Response;
 
-class ClientRepository implements ClientRepositoryInterface {
+class ClientRepository extends UserRepository implements ClientRepositoryInterface {
     use Path, Functions;
 
     public function store(Request $request) : Model {
@@ -59,16 +60,18 @@ class ClientRepository implements ClientRepositoryInterface {
         return $client->createToken('client-' . $client->id)->plainTextToken;
     }
 
-    public function storePaymentMethods(array $methods, Client &$client): Client {
+    public function storePaymentMethods(array $methods, Client &$client) {
         $records = [];
         foreach($methods as $method) {
             $record = ClientPaymentMethod::create([
-                'client_id' => $client,
+                'client_id' => $client->id,
                 'method' => $method
             ]);
 
-            array_push($records, $record);
+            array_push($records, $record->method);
         }
+
+        $client->paymentMethods = $records;
 
         return $records;
     }

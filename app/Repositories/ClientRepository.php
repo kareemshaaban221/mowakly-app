@@ -2,14 +2,17 @@
 
 namespace App\Repositories;
 
+use App\Http\Requests\ValidationRulesRequest;
 use App\Interfaces\ClientRepositoryInterface;
 use App\Models\Client;
 use App\Models\ClientPaymentMethod;
+use App\Models\VerifyEmail;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Functions;
 use App\Helpers\Path;
 use App\Helpers\Response;
+use Carbon\Carbon;
 
 class ClientRepository extends UserRepository implements ClientRepositoryInterface {
     use Path, Functions;
@@ -75,4 +78,26 @@ class ClientRepository extends UserRepository implements ClientRepositoryInterfa
 
         return $records;
     }
+
+	public function verifyEmail(Request $request, String $token) {
+        $request->validate([
+            'email' => ['required', 'email', 'max:255', 'exists:clients,email']
+        ]);
+
+        $email = $request->email;
+
+        $client = Client::where('email', $email)->firstOrFail();
+
+        $record = VerifyEmail::where('email', $email)->where('token', $token)->first();
+
+        if(!$record) {
+            return false;
+        }
+
+        $record->delete();
+
+        $client->email_verified_at = Carbon::now();
+
+        return $client;
+	}
 }

@@ -15,7 +15,7 @@ class Client extends Authenticatable
 
     protected $with = ['paymentMethods'];
 
-    protected $hidden = ['password'];
+    protected $hidden = ['password', 'id'];
 
     public function paymentMethods() {
         return $this->hasMany(ClientPaymentMethod::class);

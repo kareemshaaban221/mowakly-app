@@ -11,4 +11,6 @@ interface UserRepositoryInterface extends AuthRepositoryInterface, SocialiteAuth
     public function storeFile(String $fieldname, $file, Model &$user);
 
     public function storeAvatar($file, Model &$user);
+
+    public function verifyEmail(Request $request, String $token);
 }

@@ -15,7 +15,7 @@ class Lawyer extends Authenticatable
     protected $guarded = [];
     protected $with = ['attachments', 'phones'];
 
-    protected $hidden = ['password'];
+    protected $hidden = ['password', 'id'];
 
     public function phones() {
         return $this->hasMany(LawyerPhone::class);

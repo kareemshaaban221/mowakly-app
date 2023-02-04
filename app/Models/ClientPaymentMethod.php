@@ -11,6 +11,8 @@ class ClientPaymentMethod extends Model
 
     protected $guarded = [];
 
+    protected $hidden = ['client_id'];
+
     public function client() {
         return $this->belongsTo(Client::class);
     }

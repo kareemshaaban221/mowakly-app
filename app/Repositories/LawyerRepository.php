@@ -10,6 +10,8 @@ use App\Models\LawyerAttachment;
 use Illuminate\Http\Request;
 use App\Helpers\Functions;
 use App\Helpers\Path;
+use App\Models\VerifyEmail;
+use Carbon\Carbon;
 
 class LawyerRepository extends UserRepository implements LawyerRepositoryInterface {
     use Path, Functions;
@@ -104,4 +106,26 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
 
         return $lawyer->createToken('lawyer-' . $lawyer->id)->plainTextToken;
     }
+    
+	public function verifyEmail(Request $request, String $token) {
+        $request->validate([
+            'email' => ['required', 'email', 'max:255', 'exists:lawyers,email']
+        ]);
+
+        $email = $request->email;
+
+        $lawyer = Lawyer::where('email', $email)->firstOrFail();
+
+        $record = VerifyEmail::where('email', $email)->where('token', $token)->first();
+
+        if(!$record) {
+            return false;
+        }
+
+        $record->delete();
+
+        $lawyer->email_verified_at = Carbon::now();
+
+        return $lawyer;
+	}
 }

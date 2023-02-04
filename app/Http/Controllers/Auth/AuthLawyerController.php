@@ -8,6 +8,7 @@ use App\Http\Requests\LawyerLoginRequest;
 use App\Helpers\Response;
 use Illuminate\Support\Facades\DB;
 use App\Interfaces\LawyerRepositoryInterface;
+use Illuminate\Http\Request;
 
 class AuthLawyerController extends Controller
 {
@@ -32,6 +33,11 @@ class AuthLawyerController extends Controller
 
             $this->lawyerRepository->storeAvatar($request->avatar, $lawyer);
             $this->lawyerRepository->storeCard($request->card, $lawyer);
+
+            if(is_null($this->sendVerificationLink($lawyer))) {
+                throw new \Exception('Error sending verification link!');
+            }
+
             $lawyer->save();
 
             // phones and attachments
@@ -90,5 +96,45 @@ class AuthLawyerController extends Controller
         return $response->ok([
             'message' => 'Signed out successfully!',
         ]);
+    }
+
+    public function verificationLink($response = new Response) {
+        $result = $this->sendVerificationLink(auth()->user(), auth: 'lawyer');
+        if($result) {
+            if($result == 'verified') {
+                return $response->ok([
+                    'message' => 'This account was verified!'
+                ]);
+            } else {
+                return $response->ok([
+                    'message' => 'Verification link has been sent successfully!'
+                ]);
+            }
+        }
+
+        return $response->internalServerError('Error while sending verification link!');
+    }
+
+    public function verify(Request $request, $token, $response = new Response) {
+        DB::beginTransaction();
+
+        try {
+            $lawyer = $this->lawyerRepository->verifyEmail($request, $token);
+
+            if(!$lawyer)
+                return $response->badRequest('Token is invalid!');
+
+            $lawyer->save();
+
+            DB::commit();
+
+            return $response->ok([
+               'message' => 'Email verified successfully!',
+               'data' => $lawyer
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $response->internalServerError($th->getMessage());
+        }
     }
 }

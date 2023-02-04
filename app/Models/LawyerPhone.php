@@ -11,6 +11,8 @@ class LawyerPhone extends Model
 
     protected $guarded = [];
 
+    protected $hidden = ['lawyer_id'];
+
     public function lawyer() {
         return $this->belongsTo(Lawyer::class);
     }

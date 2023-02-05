@@ -18,19 +18,27 @@ class ValidationRulesRequest extends FormRequest
         $this->validator = $validator;
     }
 
-    protected function nameRule(Int $min = 3, Int $max = 255, String $regex = '/\w/u') {
+    protected function nameRule(Int $min = 3, Int $max = 255, String $regex = '/\w/u', $update = false) {
+        if ($update) {
+            return ['min:' . $min, 'max:' . $max, 'alpha', 'regex:' . $regex];
+        }
+
         return ['required', 'min:' . $min, 'max:' . $max, 'alpha', 'regex:' . $regex];
     }
 
-    protected function emailRule() {
+    protected function emailRule($update = false) {
+        if ($update) {
+            return ['email', 'max:255'];
+        }
+
         return ['required', 'email', 'max:255'];
     }
 
-    protected function passwordRule($case) {
-        $rules = ['required'];
+    protected function passwordRule($case, $update = false) {
+        $rules = $update ? [] : ['required'];
         if($case == 'login') {
             array_push($rules, Password::min(8));
-        } else if($case == 'register') {
+        } else if($case == 'register' || $case == 'update') {
             $rules = array_merge($rules, [
                 'confirmed',
                 Password::min(8)
@@ -45,15 +53,27 @@ class ValidationRulesRequest extends FormRequest
         return $rules;
     }
 
-    protected function genderRule() {
+    protected function genderRule($update = false) {
+        if ($update) {
+            return ['in:male,female'];
+        }
+
         return ['required', 'in:male,female'];
     }
 
-    protected function descriptionRule() {
+    protected function descriptionRule($update = false) {
+        if ($update) {
+            return ['min:50', 'max:255'];
+        }
+
         return ['required', 'min:50', 'max:255'];
     }
 
-    protected function dateOfBirthRule(String $format = 'Y-m-d') {
+    protected function dateOfBirthRule(String $format = 'Y-m-d', $update = false) {
+        if ($update) {
+            return ['date', 'date_format:' . $format];
+        }
+
         return ['required', 'date', 'date_format:' . $format];
     }
 
@@ -61,27 +81,51 @@ class ValidationRulesRequest extends FormRequest
         return ['file', 'mimes:' . $mimes, 'max:' . $max];
     }
 
-    protected function phoneRule(Int $digits = 10, String $regex = '/1[5210]\d{8}/u') {
+    protected function phoneRule(Int $digits = 10, String $regex = '/1[5210]\d{8}/u', $update = false) {
+        if ($update) {
+            return ['digits:' . $digits, 'regex:' . $regex];
+        }
+
         return ['required', 'digits:' . $digits, 'regex:' . $regex];
     }
 
-    protected function paymentMethodRule(Int $min = 3, Int $max = 255) {
+    protected function paymentMethodRule(Int $min = 3, Int $max = 255, $update = false) {
+        if ($update) {
+            return ['string', 'min:' . $min, 'max:' . $max];
+        }
+
         return ['required', 'string', 'min:' . $min, 'max:' . $max];
     }
 
-    protected function cardRule(String $mimes = 'png,jpg,jpeg', Int $max = 5000) {
+    protected function cardRule(String $mimes = 'png,jpg,jpeg', Int $max = 5000, $update = false) {
+        if ($update) {
+            return ['file', 'mimes:' . $mimes, 'max:' . $max];
+        }
+
         return ['required', 'file', 'mimes:' . $mimes, 'max:' . $max];
     }
 
-    protected function cardIdRule(Int $digits = 20) {
+    protected function cardIdRule(Int $digits = 20, $update = false) {
+        if ($update) {
+            return ['numeric', 'digits_between:0,' . $digits];
+        }
+
         return ['required', 'numeric', 'digits_between:0,' . $digits];
     }
 
-    protected function attachmentRule(String $mimes = 'pdf,csv,xls,xlsx,doc,docx,txt,pptx', $max = 5000) {
+    protected function attachmentRule(String $mimes = 'pdf,csv,xls,xlsx,doc,docx,txt,pptx', $max = 5000, $update = false) {
+        if ($update) {
+            return ['file', 'mimes:' . $mimes, 'max:' . $max];
+        }
+
         return ['required', 'file', 'mimes:' . $mimes, 'max:' . $max];
     }
 
-    protected function priceRule(Float $min = 0, Float $max = 9999.99) {
+    protected function priceRule(Float $min = 0, Float $max = 9999.99, $update = false) {
+        if ($update) {
+            return ['numeric', 'between:' . $min . ',' . $max];
+        }
+
         return ['required', 'numeric', 'between:' . $min . ',' . $max];
     }
 

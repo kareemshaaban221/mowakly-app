@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('lawyer_attachments', function (Blueprint $table) {
-            $table->foreignId('lawyer_id')->constrained('lawyers');
+            $table->foreignId('lawyer_id')->constrained('lawyers')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('attachment');
             $table->timestamps();
             // constraints

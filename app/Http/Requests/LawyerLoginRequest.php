@@ -14,13 +14,7 @@ class LawyerLoginRequest extends ValidationRulesRequest
      */
     public function authorize()
     {
-        return request()->user_type == 'lawyer';
-    }
-
-    public $validator = NULL;
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    {
-        $this->validator = $validator;
+        return parent::authorizeRule('lawyer');
     }
 
     /**

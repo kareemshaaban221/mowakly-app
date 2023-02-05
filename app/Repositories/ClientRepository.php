@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\ValidationRulesRequest;
 use App\Interfaces\ClientRepositoryInterface;
 use App\Models\Client;
 use App\Models\ClientPaymentMethod;
@@ -31,6 +30,22 @@ class ClientRepository extends UserRepository implements ClientRepositoryInterfa
 
         return $client;
     }
+
+    public function update(Request $request, $email): Model {
+        $data = $request->validated();
+
+        $client = Client::where('email', $email)->first();
+
+        $client->fname = isset($data['fname']) ? $data['fname'] : $client->fname;
+        $client->lname = isset($data['lname']) ? $data['lname'] : $client->lname;
+        $client->email = isset($data['email']) ? $data['email'] : $client->email;
+        $client->password = isset($data['password']) ? bcrypt($data['password']) : $client->password;
+        $client->gender = isset($data['gender']) ? $data['gender'] : $client->gender;
+        $client->date_of_birth = isset($data['date_of_birth']) ? $data['date_of_birth'] : $client->date_of_birth;
+        $client->phone = isset($data['phone']) ? $data['phone'] : $client->phone;
+
+        return $client;
+	}
 
     public function storeFile(String $fieldname, $file, Model &$client) {
         $uploads_path = $this->uploads_path('clients');
@@ -97,6 +112,34 @@ class ClientRepository extends UserRepository implements ClientRepositoryInterfa
         $record->delete();
 
         $client->email_verified_at = Carbon::now();
+
+        return $client;
+	}
+
+	public function updateAvatar($file, Model &$client) {
+        $this->deleteAvatar($client->avatar, $client);
+
+        $filename = $this->storeAvatar($file, $client);
+
+        return $filename;
+	}
+
+	public function deleteFile($filename) {
+        $uploads_path = $this->uploads_path('clients');
+
+        if(file_exists($uploads_path . '/' . $filename)) {
+            unlink($uploads_path . '/' . $filename);
+
+            return $filename;
+        } else {
+            throw new \Exception('File not found');
+        }
+	}
+
+    public function deleteAvatar($filename, &$client) {
+        $this->deleteFile($filename);
+
+        $client->avatar = null;
 
         return $client;
 	}

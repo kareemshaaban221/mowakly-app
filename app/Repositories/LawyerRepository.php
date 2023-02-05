@@ -35,6 +35,26 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
         return $lawyer;
     }
 
+    public function update(Request $request, $email): Lawyer {
+        $data = $request->validated();
+
+        $lawyer = Lawyer::where('email', $email)->first();
+
+        $lawyer->fname = isset($data['fname']) ? $data['fname'] : $lawyer->fname;
+        $lawyer->lname = isset($data['lname']) ? $data['lname'] : $lawyer->lname;
+        $lawyer->email = isset($data['email']) ? $data['email'] : $lawyer->email;
+        $lawyer->password = isset($data['password']) ? bcrypt($data['password']) : $lawyer->password;
+        $lawyer->gender = isset($data['gender']) ? $data['gender'] : $lawyer->gender;
+        $lawyer->date_of_birth = isset($data['date_of_birth']) ? $data['date_of_birth'] : $lawyer->date_of_birth;
+        $lawyer->description = isset($data['description']) ? $data['description'] : $lawyer->description;
+        $lawyer->card_id = isset($data['card_id']) ? $data['card_id'] : $lawyer->card_id;
+        $lawyer->chat_price = isset($data['chat_price']) ? $data['chat_price'] : $lawyer->chat_price;
+        $lawyer->video_price = isset($data['video_price']) ? $data['video_price'] : $lawyer->video_price;
+        $lawyer->phone_price = isset($data['phone_price']) ? $data['phone_price'] : $lawyer->phone_price;
+
+        return $lawyer;
+    }
+
     public function storeFile(String $fieldname, $file, Model &$lawyer) {
         $uploads_path = $this->uploads_path('lawyers');
 
@@ -106,7 +126,7 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
 
         return $lawyer->createToken('lawyer-' . $lawyer->id)->plainTextToken;
     }
-    
+
 	public function verifyEmail(Request $request, String $token) {
         $request->validate([
             'email' => ['required', 'email', 'max:255', 'exists:lawyers,email']
@@ -127,5 +147,94 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
         $lawyer->email_verified_at = Carbon::now();
 
         return $lawyer;
+	}
+
+    public function updateAvatar($file, Model &$lawyer) {
+        $this->deleteAvatar($lawyer->avatar, $lawyer);
+        $filename = $this->storeAvatar($file, $lawyer);
+
+        return $filename;
+    }
+
+    public function updateCard($file, Lawyer &$lawyer) {
+        $this->deleteCard($lawyer->card, $lawyer);
+        $filename = $this->storeCard($file, $lawyer);
+
+        return $filename;
+	}
+
+    public function deleteFile($filename) {
+        $uploads_path = $this->uploads_path('lawyers');
+
+        if(file_exists($uploads_path . '/' . $filename)) {
+            unlink($uploads_path . '/' . $filename);
+            return $filename;
+        } else {
+            throw new \Exception('File not found');
+        }
+	}
+
+    public function deleteAvatar($filename, Model &$lawyer) {
+        $this->deleteFile($filename);
+
+        $lawyer->avatar = null;
+
+        return $lawyer;
+    }
+
+    public function deleteCard($filename, Model &$lawyer) {
+        $this->deleteFile($filename);
+
+        $lawyer->card = null;
+
+        return $lawyer;
+    }
+
+	public function addPhone($phone, Lawyer &$lawyer) {
+        if($lawyer->phones()->where('phone_number', $phone)->first()) {
+            return null;
+        }
+
+        return LawyerPhone::create([
+            'lawyer_id' => $lawyer->id,
+            'phone_number' => $phone
+        ]);
+	}
+
+	public function addAttachment($file, Lawyer &$lawyer) {
+        $no_attachments = $lawyer->attachments()->count();
+
+        $attachment = LawyerAttachment::create([
+            'lawyer_id' => $lawyer->id,
+            'attachment' => $this->storeFile('attach_'.$no_attachments + 1, $file, $lawyer)
+        ]);
+
+        return $attachment;
+	}
+
+	public function deletePhone($phone, Lawyer &$lawyer) {
+        $phone = $lawyer->phones()->where('phone_number', $phone)->first();
+
+        if(!$phone) {
+            return null;
+        }
+
+        $phone->delete();
+
+        return $phone;
+	}
+
+	public function deleteAttachment($filename, Lawyer &$lawyer) {
+        $attachment = $lawyer->attachments()->where('attachment', $filename)->first();
+
+        if(!$attachment) {
+            return null;
+        }
+
+        $attachment->delete();
+
+        $this->deleteFile($filename);
+
+        return $attachment;
 	}
 }

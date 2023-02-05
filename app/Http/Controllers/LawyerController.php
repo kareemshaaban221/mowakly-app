@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Response;
 use App\Http\Requests\LawyerRegisterRequest;
+use App\Http\Requests\LawyerUpdateRequest;
 use App\Interfaces\LawyerRepositoryInterface;
 use App\Models\Lawyer;
-use Illuminate\Http\Request;
+use App\Models\VerifyEmail;
 use Illuminate\Support\Facades\DB;
 
 class LawyerController extends Controller
@@ -19,7 +20,7 @@ class LawyerController extends Controller
 
         return $response->ok([
             'data' => $lawyers,
-            'message' => 'All lawyers'
+            'message' => 'All lawyers!'
         ]);
     }
 
@@ -52,18 +53,57 @@ class LawyerController extends Controller
         }
     }
 
-    public function show($id)
+    public function show($email, $response = new Response)
     {
-        //
+        $lawyer = Lawyer::where('email', $email)->first();
+
+        if(!$lawyer) {
+            return $response->notFound(obj: 'lawyer');
+        }
+
+        return $response->ok([
+            'data' => $lawyer,
+            'message' => 'Lawyer is found!',
+        ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(LawyerUpdateRequest $request, $email, $response = new Response)
     {
-        //
+        // if fails
+        if(isset($request->validator) && $request->validator->fails()) {
+            return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->except(['password', 'password_confirmation', 'card', 'avatar', 'attachments']));
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $lawyer = $this->lawyerRepository->update($request, $email);
+
+            isset($request->avatar) ? $this->lawyerRepository->updateAvatar($request->avatar, $lawyer) : null;
+            isset($request->card) ? $this->lawyerRepository->updateCard($request->card, $lawyer) : null;
+
+            $lawyer->save();
+
+            DB::commit();
+
+            return $response->ok([
+                'data' => $lawyer,
+                'message' => 'Lawyer has been updated successfully!'
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $response->internalServerError($th->getMessage());
+        }
     }
 
-    public function destroy($id)
+    public function destroy($email, $response = new Response)
     {
-        //
+        $lawyer = Lawyer::where('email', $email)->first();
+        $lawyer->tokens()->where('name', 'lawyer-' . $lawyer->id)->delete();
+        VerifyEmail::where('email', $email)->where('user_type', 'lawyer')->delete();
+
+        $lawyer->delete();
+
+        return $response->ok(['data' => $lawyer, 'message' => 'Lawyer has been deleted successfully!']);
     }
 }

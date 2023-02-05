@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('client_payment_methods', function (Blueprint $table) {
-            $table->foreignId('client_id')->constrained('clients');
+            $table->foreignId('client_id')->constrained('clients')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('method');
             $table->timestamps();
             // constraints

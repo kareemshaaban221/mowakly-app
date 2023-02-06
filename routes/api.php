@@ -1,11 +1,12 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthLawyerController;
 use App\Http\Controllers\Auth\AuthClientController;
 use App\Helpers\Response;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Lawyer\LawyerController;
+use App\Http\Controllers\Lawyer\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,11 @@ Route::middleware('auth:sanctum')->group(function () {
         // verification link request route
         Route::get('/email/send/verify/link', [AuthLawyerController::class, 'verificationLink'])->name('lawyer.email.verification.link');
 
+        // profile management routes
+        Route::get('/profile', [ProfileController::class, 'showProfile'])->name('lawyer.profile');
+        Route::post('profile/update', [ProfileController::class, 'updateProfile'])->name('lawyer.profile.update');
+        Route::post('profile/attachments/add', [ProfileController::class, 'addAttachment'])->name('lawyer.profile.attachments.add');
+        Route::post('profile/attachments/delete', [ProfileController::class, 'destroyAttachment'])->name('lawyer.profile.attachments.delete');
     });
 
     // clients routes
@@ -67,6 +73,11 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
 });
+
+Route::get('/lawyers', [LawyerController::class, 'index'])->name('lawyer.index');
+Route::get('/lawyers/show/{email}', [LawyerController::class, 'show'])->name('lawyer.show');
+Route::get('/lawyers/update/{email}', [LawyerController::class, 'update'])->name('lawyer.update');
+Route::get('/lawyers/delete/{email}', [LawyerController::class, 'delete'])->name('lawyer.delete');
 
 //? This route for any invalid request ;)
 Route::any('{any}', function () {

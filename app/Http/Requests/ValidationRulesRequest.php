@@ -131,7 +131,8 @@ class ValidationRulesRequest extends FormRequest
 
     public function messages() {
         return [
-            'email.exists' => 'The email doesn\'t exist.'
+            'email.exists' => 'The email doesn\'t exist.',
+            'filename.exists' => 'The file does\'t exist.',
         ];
     }
 }

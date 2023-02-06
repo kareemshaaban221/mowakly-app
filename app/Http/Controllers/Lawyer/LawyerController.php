@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Lawyer;
 
 use App\Helpers\Response;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\LawyerRegisterRequest;
 use App\Http\Requests\LawyerUpdateRequest;
 use App\Interfaces\LawyerRepositoryInterface;
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\DB;
 class LawyerController extends Controller
 {
     public LawyerRepositoryInterface $lawyerRepository;
+
+    public function __construct(LawyerRepositoryInterface $lawyerRepository) {
+        $this->lawyerRepository = $lawyerRepository;
+    }
 
     public function index($response = new Response)
     {
@@ -98,12 +103,21 @@ class LawyerController extends Controller
 
     public function destroy($email, $response = new Response)
     {
-        $lawyer = Lawyer::where('email', $email)->first();
-        $lawyer->tokens()->where('name', 'lawyer-' . $lawyer->id)->delete();
-        VerifyEmail::where('email', $email)->where('user_type', 'lawyer')->delete();
+        DB::beginTransaction();
 
-        $lawyer->delete();
+        try {
+            $lawyer = Lawyer::where('email', $email)->first();
+            $lawyer->tokens()->where('name', 'lawyer-' . $lawyer->id)->delete();
+            VerifyEmail::where('email', $email)->where('user_type', 'lawyer')->delete();
 
-        return $response->ok(['data' => $lawyer, 'message' => 'Lawyer has been deleted successfully!']);
+            $lawyer->delete();
+
+            DB::commit();
+
+            return $response->ok(['data' => $lawyer, 'message' => 'Lawyer has been deleted successfully!']);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $response->internalServerError($th->getMessage());
+        }
     }
 }

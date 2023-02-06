@@ -12,6 +12,7 @@ use App\Helpers\Functions;
 use App\Helpers\Path;
 use App\Models\VerifyEmail;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class LawyerRepository extends UserRepository implements LawyerRepositoryInterface {
     use Path, Functions;
@@ -28,9 +29,9 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
         $lawyer->date_of_birth = $data['date_of_birth'];
         $lawyer->description = $data['description'];
         $lawyer->card_id = $data['card_id'];
-        $lawyer->chat_price = $data['chat_price'];
-        $lawyer->video_price = $data['video_price'];
-        $lawyer->phone_price = $data['phone_price'];
+        $lawyer->chat_price = (double) $data['chat_price'];
+        $lawyer->video_price = (double) $data['video_price'];
+        $lawyer->phone_price = (double) $data['phone_price'];
 
         return $lawyer;
     }
@@ -48,9 +49,9 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
         $lawyer->date_of_birth = isset($data['date_of_birth']) ? $data['date_of_birth'] : $lawyer->date_of_birth;
         $lawyer->description = isset($data['description']) ? $data['description'] : $lawyer->description;
         $lawyer->card_id = isset($data['card_id']) ? $data['card_id'] : $lawyer->card_id;
-        $lawyer->chat_price = isset($data['chat_price']) ? $data['chat_price'] : $lawyer->chat_price;
-        $lawyer->video_price = isset($data['video_price']) ? $data['video_price'] : $lawyer->video_price;
-        $lawyer->phone_price = isset($data['phone_price']) ? $data['phone_price'] : $lawyer->phone_price;
+        $lawyer->chat_price = isset($data['chat_price']) ? (double) $data['chat_price'] : $lawyer->chat_price;
+        $lawyer->video_price = isset($data['video_price']) ? (double) $data['video_price'] : $lawyer->video_price;
+        $lawyer->phone_price = isset($data['phone_price']) ? (double) $data['phone_price'] : $lawyer->phone_price;
 
         return $lawyer;
     }
@@ -231,7 +232,10 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
             return null;
         }
 
-        $attachment->delete();
+        DB::table('lawyer_attachments')
+            ->where('lawyer_id', $lawyer->id)
+            ->where('attachment', $filename)
+            ->delete();
 
         $this->deleteFile($filename);
 

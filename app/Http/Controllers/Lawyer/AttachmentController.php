@@ -31,8 +31,12 @@ class AttachmentController extends Controller
             $lawyer = Lawyer::where('email', $email)->firstOrFail();
             $attachment = $this->lawyerRepository->deleteAttachment($request->filename, $lawyer);
 
-            if(!$attachment) {
+            if(is_int($attachment) && $attachment == 0) {
                 return $response->badRequest('Attachment is not found!');
+            }
+
+            if(is_int($attachment) && $attachment == 1) {
+                return $response->badRequest('Attachments cannot be less than one!');
             }
 
             DB::commit();

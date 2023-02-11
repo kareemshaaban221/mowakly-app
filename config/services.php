@@ -1,24 +1,35 @@
 <?php
 
+$link = NULL;
+$host = env('APP_URL') . '/';
 if(isset($_REQUEST['user_type'])) {
-    $host = 'http://localhost:8000/';
     $directs = explode('/', request()->getUri());
     $last = count($directs) - 1;
     $directs[$last] = explode('?', $directs[$last])[0];
     $register = array_search('register', $directs);
+    $callback = array_search('callback', $directs);
 
-    $link = NULL;
-    if(request()->user_type == 'lawyer') {
-        if($register) {
+    // dd($directs);
+
+    if($register) {
+        if(request()->user_type == 'lawyer') {
             $link = $host . 'api/lawyer/google/callback?user_type=lawyer&register=true';
         } else {
-            $link = $host . 'api/lawyer/google/callback?user_type=lawyer&register=false';
+            $link = $host . 'api/google/callback?user_type=client&register=true';
         }
     } else {
-        if($register) {
-            $link = $host . 'api/google/callback?user_type=client&register=true';
+        if(!$callback) {
+            if(request()->user_type == 'lawyer') {
+                $link = $host . 'api/lawyer/google/callback?user_type=lawyer&register=false';
+            } else {
+                $link = $host . 'api/google/callback?user_type=client&register=false';
+            }
         } else {
-            $link = $host . 'api/google/callback?user_type=client&register=false';
+            $link = request()->url()
+                . '?user_type='
+                . request()->user_type
+                . '&'
+                . (request()->register == 'true' ? 'register=true' : 'register=false');
         }
     }
 }
@@ -57,7 +68,7 @@ return [
     'google' => [
         'client_id' => '851641971720-qrle12rssaal27g3qfk3gus31ldiueka.apps.googleusercontent.com',
         'client_secret' => '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',
-        'redirect' => isset($link) ? $link : '',
+        'redirect' => !is_null($link) ? $link : $host,
     ],
 
 ];

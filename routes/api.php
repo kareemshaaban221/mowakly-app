@@ -81,5 +81,6 @@ Route::get('/lawyers/delete/{email}', [LawyerController::class, 'delete'])->name
 
 //? This route for any invalid request ;)
 Route::any('{any}', function () {
+    // dd(request()->getUri());
     return (new Response)->notFound(NULL, 'resource');
 })->where('any', '.*');

@@ -9,15 +9,14 @@ abstract class UserRepository {
         return Socialite::driver($driver)->stateless()->redirect()->getTargetUrl();
     }
 
-    public function socialiteRegisterCallback(string $driver) {
+    public function socialiteRegisterCallback(string $driver, bool $avatar = true) {
         $user = Socialite::driver($driver)->stateless()->user()->user;
 
-        return [
+        return array_merge([
             'fname' => $user['given_name'],
             'lname' => $user['family_name'],
-            'avatar' => $user['picture'],
             'email' => $user['email'],
-        ];
+        ], $avatar ? ['avatar' => $user['picture']] : []);
     }
 
     public function socialiteLoginCallback(String $driver) {

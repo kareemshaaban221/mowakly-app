@@ -20,5 +20,6 @@ use App\Helpers\Response;
 
 //? This route for any invalid request ;)
 Route::any('{any}', function () {
+    // dd(request()->getUri());
     return (new Response)->notFound(NULL, 'resource');
 })->where('any', '.*');

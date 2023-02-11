@@ -203,11 +203,13 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
 	}
 
 	public function addAttachment($file, Lawyer &$lawyer) {
-        $no_attachments = $lawyer->attachments()->count();
+        $filename = $lawyer->attachments()->latest()->first()->attachment;
+
+        $file_index = (int) explode("_", $filename)[2];
 
         $attachment = LawyerAttachment::create([
             'lawyer_id' => $lawyer->id,
-            'attachment' => $this->storeFile('attach_'.$no_attachments + 1, $file, $lawyer)
+            'attachment' => $this->storeFile('attach_'.$file_index + 1, $file, $lawyer)
         ]);
 
         return $attachment;
@@ -226,10 +228,15 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
 	}
 
 	public function deleteAttachment($filename, Lawyer &$lawyer) {
-        $attachment = $lawyer->attachments()->where('attachment', $filename)->first();
+        $attachments = $lawyer->attachments();
+        if($attachments->count() <= 1) {
+            return 1;
+        }
+
+        $attachment = $attachments->where('attachment', $filename)->first();
 
         if(!$attachment) {
-            return null;
+            return 0;
         }
 
         DB::table('lawyer_attachments')

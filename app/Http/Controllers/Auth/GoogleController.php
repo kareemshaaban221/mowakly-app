@@ -35,7 +35,16 @@ class GoogleController extends Controller
         if(request()->user_type == 'lawyer') {
             if(request()->register == 'true') {
                 // lawyer register with google data
-                $data = $this->lawyerRepository->socialiteRegisterCallback('google');
+                $data = $this->lawyerRepository->socialiteRegisterCallback('google', false);
+
+                $lawyer = Lawyer::where('email', $data['email'])->first();
+
+                if($lawyer)
+                    return $response->badRequest(
+                        msg: 'Data is not Valid',
+                        err: ['email' => 'This email already exists.'],
+                        old: ['email' => $lawyer->email]
+                    );
 
                 return $response->ok([
                     'message' => 'Data fetched successfully. Complete data and send it again!',
@@ -47,7 +56,10 @@ class GoogleController extends Controller
 
                 DB::beginTransaction();
                 try{
-                    $lawyer = Lawyer::where('email', $user['email'])->firstOrFail();
+                    $lawyer = Lawyer::where('email', $user['email'])->first();
+
+                    if (!$lawyer)
+                        return $response->badRequest('This email is not found!');
 
                     $token = $this->lawyerRepository->generateToken($lawyer);
 
@@ -70,6 +82,15 @@ class GoogleController extends Controller
                 // client register with google data
                 $data = $this->clientRepository->socialiteRegisterCallback('google');
 
+                $client = Client::where('email', $data['email'])->first();
+
+                if($client)
+                    return $response->badRequest(
+                        msg: 'Data is not Valid',
+                        err: ['email' => 'This email already exists.'],
+                        old: ['email' => $client->email]
+                    );
+
                 return $response->ok([
                     'message' => 'Data fetched successfully. Complete data and send it again!',
                     'data' => $data
@@ -80,7 +101,10 @@ class GoogleController extends Controller
 
                 DB::beginTransaction();
                 try{
-                    $client = Client::where('email', $user['email'])->firstOrFail();
+                    $client = Client::where('email', $user['email'])->first();
+
+                    if (!$client)
+                        return $response->badRequest('This email is not found!');
 
                     $token = $this->clientRepository->generateToken($client);
 

@@ -6,7 +6,7 @@ interface SocialiteAuthRepositoryInterface {
 
     public function socialiteAccessLink(String $driver);
 
-    public function socialiteRegisterCallback(String $driver);
+    public function socialiteRegisterCallback(String $driver, bool $avatar);
 
     public function socialiteLoginCallback(String $driver);
 

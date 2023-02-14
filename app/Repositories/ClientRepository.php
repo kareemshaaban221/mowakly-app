@@ -12,6 +12,7 @@ use App\Helpers\Functions;
 use App\Helpers\Path;
 use App\Helpers\Response;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ClientRepository extends UserRepository implements ClientRepositoryInterface {
     use Path, Functions;
@@ -132,7 +133,7 @@ class ClientRepository extends UserRepository implements ClientRepositoryInterfa
 
             return $filename;
         } else {
-            throw new \Exception('File not found');
+            return null;
         }
 	}
 
@@ -142,5 +143,33 @@ class ClientRepository extends UserRepository implements ClientRepositoryInterfa
         $client->avatar = null;
 
         return $client;
+	}
+
+	public function addPaymentMethod($method, Client &$client) {
+        if($client->paymentMethods()->where('method', $method)->first()) {
+            return null;
+        }
+
+        return ClientPaymentMethod::create([
+            'client_id' => $client->id,
+            'method' => $method
+        ]);
+	}
+
+	public function deletePaymentMethod($method, Client &$client) {
+        $methods = $client->paymentMethods();
+
+        $method = $methods->where('method', $method)->first();
+
+        if(!$method) {
+            return false;
+        }
+
+        DB::table('client_payment_methods')
+            ->where('client_id', $client->id)
+            ->where('method', $method->method)
+            ->delete();
+
+        return $method;
 	}
 }

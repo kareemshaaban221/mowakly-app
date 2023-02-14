@@ -216,13 +216,22 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
 	}
 
 	public function deletePhone($phone, Lawyer &$lawyer) {
-        $phone = $lawyer->phones()->where('phone_number', $phone)->first();
+        $phones = $lawyer->phones();
 
-        if(!$phone) {
-            return null;
+        if($phones->count() <= 1) {
+            return 1;
         }
 
-        $phone->delete();
+        $phone = $phones->where('phone_number', $phone)->first();
+
+        if(!$phone) {
+            return 0;
+        }
+
+        DB::table('lawyer_phones')
+            ->where('lawyer_id', $lawyer->id)
+            ->where('phone_number', $phone->phone_number)
+            ->delete();
 
         return $phone;
 	}

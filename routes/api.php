@@ -8,6 +8,8 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Lawyer\LawyerController;
 use App\Http\Controllers\Lawyer\ProfileController as LawyerProfileController;
 use App\Http\Controllers\Client\ProfileController as ClientProfileController;
+use App\Http\Controllers\Lawyer\MainCategoryController;
+use App\Http\Controllers\Lawyer\SubcategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,6 +84,12 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
 });
+
+// categories routes
+Route::post('/categories', [MainCategoryController::class, 'store'])->name('main_category.store');
+
+// subcategories routes
+Route::post('/subcategories', [SubcategoryController::class, 'store'])->name('main_category.store');
 
 // Route::get('/lawyers', [LawyerController::class, 'index'])->name('lawyer.index');
 // Route::get('/lawyers/show/{email}', [LawyerController::class, 'show'])->name('lawyer.show');

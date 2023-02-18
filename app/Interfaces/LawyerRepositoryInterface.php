@@ -20,4 +20,12 @@ interface LawyerRepositoryInterface extends UserRepositoryInterface {
     public function deletePhone($phone, Lawyer &$user);
 
     public function deleteAttachment($filename, Lawyer &$user);
+
+    public function storeCategory($category, Lawyer &$user);
+
+    public function deleteCategory($category, Lawyer &$user);
+
+    public function storeSubcategory($subcategory, Lawyer &$user);
+
+    public function deleteSubcategory($subcategory, Lawyer &$user);
 }

@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('lawyer_subcategories', function (Blueprint $table) {
-            $table->foreignId('subcategory_id')->constrained('subcategories');
-            $table->foreignId('lawyer_id')->constrained('lawyers');
+            $table->foreignId('subcategory_id')->constrained('subcategories')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('lawyer_id')->constrained('lawyers')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
             // constraints
             $table->primary(['subcategory_id', 'lawyer_id']);

@@ -44,6 +44,17 @@ class AuthLawyerController extends Controller
             $this->lawyerRepository->storePhones($request->phones, $lawyer);
             $this->lawyerRepository->storeAttachments($request->attachments, $lawyer);
 
+            if(isset($request->subcategories))
+                foreach ($request->subcategories as $subcategory) {
+                    $this->lawyerRepository->storeSubcategory($subcategory, $lawyer);
+                }
+
+            foreach ($request->categories as $category) {
+                if(is_null($this->lawyerRepository->storeCategory($category, $lawyer))) {
+                    throw new \Exception('This category is not found!');
+                }
+            }
+
             $token = $this->lawyerRepository->generateToken($lawyer);
 
             DB::commit();
@@ -81,7 +92,7 @@ class AuthLawyerController extends Controller
             ]);
         } catch (\Throwable $th) {
             DB::rollback();
-            return $response->badRequest('An error occured!', $th->getMessage());
+            return $response->internalServerError($th->getMessage());
         }
     }
 

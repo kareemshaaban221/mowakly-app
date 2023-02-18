@@ -24,4 +24,12 @@ class Lawyer extends Authenticatable
     public function attachments() {
         return $this->hasMany(LawyerAttachment::class);
     }
+
+    // public function categories() {
+    //     return $this->morphToMany(MainCategory::class, 'lawyer_main_category', );
+    // }
+
+    // public function subcategories() {
+    //     return $this->morphToMany(SubCategory::class, 'lawyer_subcategory');
+    // }
 }

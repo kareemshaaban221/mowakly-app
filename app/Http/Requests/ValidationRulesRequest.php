@@ -129,10 +129,26 @@ class ValidationRulesRequest extends FormRequest
         return ['required', 'numeric', 'between:' . $min . ',' . $max];
     }
 
+    protected function categoryRule($table = 'main_categories', $store = false, $exists = false) {
+        $rules = ['required', 'string'];
+
+        if($store) array_push($rules, 'min:3', "unique:$table,name");
+
+        if($exists) array_push($rules, "exists:$table,name");
+
+        return $rules;
+    }
+
+    protected function subcategoryRule($store = false) {
+        return ['required', 'string'];
+    }
+
     public function messages() {
         return [
             'email.exists' => 'The email doesn\'t exist.',
             'filename.exists' => 'The file does\'t exist.',
+            'categories.exists' => 'The category does\'t exist.',
+            'subcategoies.exists' => 'The subcategory does\'t exist.',
         ];
     }
 }

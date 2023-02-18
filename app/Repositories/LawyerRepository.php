@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Interfaces\LawyerRepositoryInterface;
+use App\Models\MainCategory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Lawyer;
 use App\Models\LawyerPhone;
@@ -10,6 +11,9 @@ use App\Models\LawyerAttachment;
 use Illuminate\Http\Request;
 use App\Helpers\Functions;
 use App\Helpers\Path;
+use App\Models\LawyerMainCategory;
+use App\Models\LawyerSubcategory;
+use App\Models\Subcategory;
 use App\Models\VerifyEmail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -256,5 +260,84 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
         $this->deleteFile($filename);
 
         return $attachment;
+	}
+
+    public function storeCategory($category, Lawyer &$lawyer) {
+        // condition the existence of this input category in main_categories table
+        $category = is_string($category) ? MainCategory::where('name', $category)->first() : $category;
+        if(!$category) {
+            return null;
+        }
+
+        // add record in lawyer_main_categories table
+        $lawyer_category = LawyerMainCategory::create([
+            'lawyer_id' => $lawyer->id,
+            'm_category_id' => $category->id,
+        ]);
+
+        // return the category
+        return $lawyer_category;
+    }
+    public function deleteCategory($category, Lawyer &$lawyer) {
+        // get lawyer categories
+        $categories = $lawyer->categories();
+
+        // check if this not the last category in lawyer categories
+        if($categories->count() >= 1) return 1;
+
+        // check if this category on them
+        $category = $categories->where('name', $category)->first();
+        if(!$category) return 0;
+
+        $lawyer->subcategories()
+            ->where('m_category_id', $category->id)
+            ->delete();
+
+        // delete if exists
+        DB::table('lawyer_main_categories')
+            ->where('lawyer_id', $lawyer->id)
+            ->where('m_category_id', $category->id)
+            ->delete();
+
+        return $category;
+    }
+
+    public function storeSubcategory($subcategory, Lawyer &$lawyer) {
+        // condition the existence of this input subcategory in subcategories table
+        $subcategory = Subcategory::where('name', $subcategory)->first();
+        if(!$subcategory) {
+            return null;
+        }
+
+        // add record in lawyer_subcategories table
+        $lawyer_subcategory = LawyerSubcategory::create([
+            'lawyer_id' => $lawyer->id,
+            'subcategory_id' => $subcategory->id,
+        ]);
+
+        // check if main category exists in lawyer main category table
+        // add record in lawyer_main_category table
+        $maincategory = $lawyer->categories()->where('id', $subcategory->mainCategory()->id)->first();
+        if(!$maincategory) $this->storeCategory($maincategory, $lawyer);
+
+        // return the category
+        return $lawyer_subcategory;
+    }
+
+	public function deleteSubcategory($subcategory, Lawyer &$lawyer) {
+        // get lawyer subcategories
+        $subcategories = $lawyer->subcategories();
+
+        // check if this subcategory on them
+        $subcategory = $subcategories->where('name', $subcategory)->first();
+        if(!$subcategory) return 0;
+
+        // delete if exists
+        DB::table('lawyer_subcategories')
+            ->where('lawyer_id', $lawyer->id)
+            ->where('subcategory_id', $subcategory->id)
+            ->delete();
+
+        return $subcategory;
 	}
 }

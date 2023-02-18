@@ -37,6 +37,10 @@ class LawyerRegisterRequest extends ValidationRulesRequest
             'attachments.*' => parent::attachmentRule(),
             'phones' => 'required',
             'phones.*' => parent::phoneRule(),
+            'categories' => 'required|exists:main_categories,name',
+            'categoires.*' => parent::categoryRule(),
+            'subcategories' => 'exists:subcategories,name',
+            'subcategories.*' => parent::subcategoryRule(),
         ];
     }
 }

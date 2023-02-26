@@ -37,19 +37,24 @@ class GoogleController extends Controller
                 // lawyer register with google data
                 $data = $this->lawyerRepository->socialiteRegisterCallback('google', false);
 
-                $lawyer = Lawyer::where('email', $data['email'])->first();
+                try {
+                    $lawyer = Lawyer::where('email', $data['email'])->first();
 
-                if($lawyer)
-                    return $response->badRequest(
-                        msg: 'Data is not Valid',
-                        err: ['email' => 'This email already exists.'],
-                        old: ['email' => $lawyer->email]
-                    );
+                    if($lawyer)
+                        return $response->badRequest(
+                            msg: 'Data is not Valid',
+                            err: ['email' => 'This email already exists.'],
+                            old: ['email' => $lawyer->email]
+                        );
 
-                return $response->ok([
-                    'message' => 'Data fetched successfully. Complete data and send it again!',
-                    'data' => $data
-                ]);
+                    return $response->ok([
+                        'message' => 'Data fetched successfully. Complete data and send it again!',
+                        'data' => $data
+                    ]);
+                } catch (\Throwable $th) {
+                    return $response->internalServerError($th->getMessage());
+                }
+
             } else {
                 // lawyer login with google credentials
                 $user = $this->lawyerRepository->socialiteLoginCallback('google');
@@ -82,19 +87,23 @@ class GoogleController extends Controller
                 // client register with google data
                 $data = $this->clientRepository->socialiteRegisterCallback('google');
 
-                $client = Client::where('email', $data['email'])->first();
+                try {
+                    $client = Client::where('email', $data['email'])->first();
 
-                if($client)
-                    return $response->badRequest(
-                        msg: 'Data is not Valid',
-                        err: ['email' => 'This email already exists.'],
-                        old: ['email' => $client->email]
-                    );
+                    if($client)
+                        return $response->badRequest(
+                            msg: 'Data is not Valid',
+                            err: ['email' => 'This email already exists.'],
+                            old: ['email' => $client->email]
+                        );
 
-                return $response->ok([
-                    'message' => 'Data fetched successfully. Complete data and send it again!',
-                    'data' => $data
-                ]);
+                    return $response->ok([
+                        'message' => 'Data fetched successfully. Complete data and send it again!',
+                        'data' => $data
+                    ]);
+                } catch (\Throwable $th) {
+                    return $response->internalServerError($th->getMessage());
+                }
             } else {
                 // client login with google credentials
                 $user = $this->clientRepository->socialiteLoginCallback('google');

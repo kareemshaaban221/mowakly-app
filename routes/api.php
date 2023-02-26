@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Lawyer\LawyerController;
 use App\Http\Controllers\Lawyer\ProfileController as LawyerProfileController;
 use App\Http\Controllers\Client\ProfileController as ClientProfileController;
+use App\Http\Controllers\Lawyer\LawyerCategoryDetailsController;
 use App\Http\Controllers\Lawyer\MainCategoryController;
 use App\Http\Controllers\Lawyer\SubcategoryController;
 
@@ -64,6 +65,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('profile/attachments/delete', [LawyerProfileController::class, 'destroyAttachment'])->name('lawyer.profile.attachments.delete');
         Route::post('profile/phones/add', [LawyerProfileController::class, 'addPhone'])->name('lawyer.profile.phones.add');
         Route::post('profile/phones/delete', [LawyerProfileController::class, 'destroyPhone'])->name('lawyer.profile.phones.delete');
+
+        Route::post('addConsultationDetails', [LawyerCategoryDetailsController::class, 'store'])->name('lawyer.add.consultation.details');
     });
 
     // clients routes

@@ -143,6 +143,18 @@ class ValidationRulesRequest extends FormRequest
         return ['required', 'string'];
     }
 
+    protected function MeansRule($store = false) {
+        return ['required', 'in:call,chat,appointment'];
+    }
+
+    protected function nationalIdRule(Int $digits = 14, String $regex = '/\d{14}/u', $update = false) {
+        if ($update) {
+            return ['digits:' . $digits, 'regex:' . $regex];
+        }
+
+        return ['required', 'digits:' . $digits, 'regex:' . $regex];
+    }
+
     public function messages() {
         return [
             'email.exists' => 'The email doesn\'t exist.',

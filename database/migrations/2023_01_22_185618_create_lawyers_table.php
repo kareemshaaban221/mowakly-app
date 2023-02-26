@@ -27,10 +27,8 @@ return new class extends Migration
             $table->string('card');
             $table->string('card_id')->nullable();
             $table->string('avatar');
-            $table->double('chat_price', 8, 2);
-            $table->double('video_price', 8, 2);
-            $table->double('phone_price', 8, 2);
-            // $table->string('national_id', 14);
+            $table->integer('count_of_consultations')->default(0);
+            $table->string('national_id', 14);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -33,9 +33,7 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
         $lawyer->date_of_birth = $data['date_of_birth'];
         $lawyer->description = $data['description'];
         $lawyer->card_id = $data['card_id'];
-        $lawyer->chat_price = (double) $data['chat_price'];
-        $lawyer->video_price = (double) $data['video_price'];
-        $lawyer->phone_price = (double) $data['phone_price'];
+        $lawyer->national_id = (string) $data['national_id'];
 
         return $lawyer;
     }

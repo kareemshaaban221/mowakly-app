@@ -13,11 +13,13 @@ class LawyerMainCategory extends Model
 
     protected $hidden = ['lawyer_id', 'm_category_id'];
 
+    protected $with = ['category', ];
+
     public function lawyer() {
-        return $this->belongsTo(Lawyer::class);
+        return $this->belongsTo(Lawyer::class, 'lawyer_id');
     }
 
     public function category() {
-        return $this->belongsTo(MainCategory::class);
+        return $this->belongsTo(MainCategory::class, 'm_category_id');
     }
 }

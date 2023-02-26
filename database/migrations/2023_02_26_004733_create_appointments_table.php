@@ -13,13 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('schedule_appointments', function (Blueprint $table) {
-            $table->dateTime('appointment');
+        Schema::create('appointments', function (Blueprint $table) {
+            $table->dateTime('from');
+            $table->dateTime('to');
+            $table->string('subject');
             $table->foreignId('schedule_id')->constrained('schedules');
+            $table->unsignedBigInteger('appointment_id');
             $table->timestamps();
 
             // constraints
-            $table->primary(['appointment', 'schedule_id']);
+            $table->primary(['appointment_id', 'schedule_id']);
         });
     }
 
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('schedule_appointments');
+        Schema::dropIfExists('appointments');
     }
 };

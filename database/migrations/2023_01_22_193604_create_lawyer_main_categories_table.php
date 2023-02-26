@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('lawyer_main_categories', function (Blueprint $table) {
             $table->foreignId('m_category_id')->constrained('main_categories')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('lawyer_id')->constrained('lawyers')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->double('price_of_consultation', 8, 2)->nullable();
+            $table->enum('mean_of_consultation', ['call', 'chat', 'appointment'])->nullable();
             $table->timestamps();
             // constraints
             $table->primary(['m_category_id', 'lawyer_id']);

@@ -23,7 +23,10 @@ class PhoneStoreRequest extends ValidationRulesRequest
      */
     public function rules()
     {
+        if(auth()->check())
+            $this->request->set('email', auth()->user()->email);
         return [
+            'email' => parent::emailRule(),
             'phone' => parent::phoneRule()
         ];
     }

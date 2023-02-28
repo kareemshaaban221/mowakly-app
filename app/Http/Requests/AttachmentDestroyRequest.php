@@ -23,7 +23,10 @@ class AttachmentDestroyRequest extends ValidationRulesRequest
      */
     public function rules()
     {
+        if(auth()->check())
+            $this->request->set('email', auth()->user()->email);
         return [
+            'email' => parent::emailRule(),
             'filename' => ['exists:lawyer_attachments,attachment', 'required'],
         ];
     }

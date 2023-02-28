@@ -9,28 +9,29 @@ use App\Interfaces\LawyerRepositoryInterface;
 use App\Models\Client;
 use App\Models\Lawyer;
 use Illuminate\Support\Facades\DB;
-use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
 {
 
-    public LawyerRepositoryInterface $lawyerRepository;
-    public ClientRepositoryInterface $clientRepository;
+    private LawyerRepositoryInterface $lawyerRepository;
+    private ClientRepositoryInterface $clientRepository;
+    private Response $response;
 
     public function __construct(LawyerRepositoryInterface $lawyerRepository, ClientRepositoryInterface $clientRepository) {
         $this->lawyerRepository = $lawyerRepository;
         $this->clientRepository = $clientRepository;
+        $this->response = new Response;
     }
-    public function access($response = new Response) {
+    public function access() {
         $link = $this->lawyerRepository->socialiteAccessLink('google');
 
-        return $response->ok([
+        return $this->response->ok([
             'message' => 'Successful access request. redirect user to attached link below.',
             'link' => $link,
         ]);
     }
 
-    public function callback($response = new Response) {
+    public function callback() {
 
         if(request()->user_type == 'lawyer') {
             if(request()->register == 'true') {
@@ -41,18 +42,18 @@ class GoogleController extends Controller
                     $lawyer = Lawyer::where('email', $data['email'])->first();
 
                     if($lawyer)
-                        return $response->badRequest(
+                        return $this->response->badRequest(
                             msg: 'Data is not Valid',
                             err: ['email' => 'This email already exists.'],
                             old: ['email' => $lawyer->email]
                         );
 
-                    return $response->ok([
+                    return $this->response->ok([
                         'message' => 'Data fetched successfully. Complete data and send it again!',
                         'data' => $data
                     ]);
                 } catch (\Throwable $th) {
-                    return $response->internalServerError($th->getMessage());
+                    return $this->response->internalServerError($th->getMessage());
                 }
 
             } else {
@@ -64,19 +65,19 @@ class GoogleController extends Controller
                     $lawyer = Lawyer::where('email', $user['email'])->first();
 
                     if (!$lawyer)
-                        return $response->badRequest('This email is not found!');
+                        return $this->response->badRequest('This email is not found!');
 
                     $token = $this->lawyerRepository->generateToken($lawyer);
 
                     DB::commit();
 
-                    return $response->ok([
+                    return $this->response->ok([
                         'message' => 'Signed in successfully!',
                         'token' => $token,
                         'data' => $lawyer
                     ]);
                 } catch (\Throwable $th) {
-                    return $response->internalServerError($th->getMessage());
+                    return $this->response->internalServerError($th->getMessage());
                 }
             }
         }
@@ -85,24 +86,24 @@ class GoogleController extends Controller
         else if (request()->user_type == 'client') {
             if(request()->register == 'true') {
                 // client register with google data
-                $data = $this->clientRepository->socialiteRegisterCallback('google');
+                $data = $this->clientRepository->socialiteRegisterCallback('google', true);
 
                 try {
                     $client = Client::where('email', $data['email'])->first();
 
                     if($client)
-                        return $response->badRequest(
+                        return $this->response->badRequest(
                             msg: 'Data is not Valid',
                             err: ['email' => 'This email already exists.'],
                             old: ['email' => $client->email]
                         );
 
-                    return $response->ok([
+                    return $this->response->ok([
                         'message' => 'Data fetched successfully. Complete data and send it again!',
                         'data' => $data
                     ]);
                 } catch (\Throwable $th) {
-                    return $response->internalServerError($th->getMessage());
+                    return $this->response->internalServerError($th->getMessage());
                 }
             } else {
                 // client login with google credentials
@@ -113,19 +114,19 @@ class GoogleController extends Controller
                     $client = Client::where('email', $user['email'])->first();
 
                     if (!$client)
-                        return $response->badRequest('This email is not found!');
+                        return $this->response->badRequest('This email is not found!');
 
                     $token = $this->clientRepository->generateToken($client);
 
                     DB::commit();
 
-                    return $response->ok([
+                    return $this->response->ok([
                         'message' => 'Signed in successfully!',
                         'token' => $token,
                         'data' => $client
                     ]);
                 } catch (\Throwable $th) {
-                    return $response->internalServerError($th->getMessage());
+                    return $this->response->internalServerError($th->getMessage());
                 }
             }
         }

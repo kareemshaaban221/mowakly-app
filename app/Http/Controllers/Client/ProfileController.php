@@ -17,10 +17,10 @@ class ProfileController extends ClientController
     }
 
     public function addPaymentMethod(PaymentMethodStoreRequest $request) {
-        return (new PaymentMethodController(new ClientRepository))->store(auth()->user()->email, $request);
+        return (new PaymentMethodController(new ClientRepository))->store($request);
     }
 
     public function destroyPaymentMethod(PaymentMethodStoreRequest $request) {
-        return (new PaymentMethodController(new ClientRepository))->destroy(auth()->user()->email, $request);
+        return (new PaymentMethodController(new ClientRepository))->destroy($request);
     }
 }

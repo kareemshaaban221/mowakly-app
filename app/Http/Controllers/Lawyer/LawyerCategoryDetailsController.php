@@ -11,10 +11,15 @@ use Illuminate\Support\Facades\DB;
 
 class LawyerCategoryDetailsController extends Controller
 {
-    public function store(LawyerCategoryDetailsRequest $request, $response = new Response) {
+    private Response $response;
+
+    public function __construct() {
+        $this->response = new Response;
+    }
+    public function store(LawyerCategoryDetailsRequest $request) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
-            return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->all());
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
         }
 
         DB::beginTransaction();
@@ -22,7 +27,7 @@ class LawyerCategoryDetailsController extends Controller
         try {
             $lawyer = Lawyer::where('email', $request->email)->first();
             if(!$lawyer)
-                return $response->badRequest('Lawyer email is not found!');
+                return $this->response->badRequest('Lawyer email is not found!');
 
             $lawyer_categories = LawyerMainCategory::where('lawyer_id', $lawyer->id)->get();
             $lawyer_category_target = NULL;
@@ -35,7 +40,7 @@ class LawyerCategoryDetailsController extends Controller
             }
 
             if(is_null($lawyer_category_target))
-                return $response->badRequest('This category is not found for this lawyer!');
+                return $this->response->badRequest('This category is not found for this lawyer!');
 
             DB::table('lawyer_main_categories')
                 ->where('m_category_id', $lawyer_category_target->category->id)
@@ -47,10 +52,10 @@ class LawyerCategoryDetailsController extends Controller
 
             DB::commit();
 
-            return $response->ok(['message' => 'Consultation details was added successfully!']);
+            return $this->response->ok(['message' => 'Consultation details was added successfully!']);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return $response->internalServerError($th->getMessage());
+            return $this->response->internalServerError($th->getMessage());
         }
     }
 }

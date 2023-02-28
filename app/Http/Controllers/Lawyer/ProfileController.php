@@ -20,18 +20,18 @@ class ProfileController extends LawyerController
     }
 
     public function addAttachment(AttachmentStoreRequest $request) {
-        return (new AttachmentController(new LawyerRepository))->store(auth()->user()->email, $request);
+        return (new AttachmentController(new LawyerRepository))->store($request);
     }
 
     public function destroyAttachment(AttachmentDestroyRequest $request) {
-        return (new AttachmentController(new LawyerRepository))->destroy(auth()->user()->email, $request);
+        return (new AttachmentController(new LawyerRepository))->destroy($request);
     }
 
     public function addPhone(PhoneStoreRequest $request) {
-        return (new PhoneController(new LawyerRepository))->store(auth()->user()->email, $request);
+        return (new PhoneController(new LawyerRepository))->store($request);
     }
 
     public function destroyPhone(PhoneStoreRequest $request) {
-        return (new PhoneController(new LawyerRepository))->destroy(auth()->user()->email, $request);
+        return (new PhoneController(new LawyerRepository))->destroy($request);
     }
 }

@@ -16,15 +16,17 @@ class AuthClientController extends Controller
     use Functions;
 
     private ClientRepositoryInterface $clientRepository;
+    private Response $response;
 
     public function __construct(ClientRepositoryInterface $clientRepository) {
         $this->clientRepository = $clientRepository;
+        $this->response = new Response;
     }
 
-    public function register(ClientRegisterRequest $request, $response = new Response) {
+    public function register(ClientRegisterRequest $request) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
-            return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->except(['password', 'password_confirmation', 'avatar']));
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->except(['password', 'password_confirmation', 'avatar']));
         }
 
         DB::beginTransaction();
@@ -50,18 +52,18 @@ class AuthClientController extends Controller
 
             DB::commit();
 
-            return $response->created(['data' => $client, 'token' => $token], 'client');
+            return $this->response->created(['data' => $client, 'token' => $token], 'client');
 
         } catch (\Throwable $th) {
             DB::rollback();
-            return $response->internalServerError($th->getMessage());
+            return $this->response->internalServerError($th->getMessage());
         }
     }
 
-    public function login(ClientLoginRequest $request, $response = new Response) {
+    public function login(ClientLoginRequest $request) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
-            return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->except(['password']));
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->except(['password']));
         }
 
         DB::beginTransaction();
@@ -71,14 +73,14 @@ class AuthClientController extends Controller
             $client = $this->clientRepository->checkCredentials($request->validated());
 
             if(!$client) {
-                return $response->forbidden('Wrong password!');
+                return $this->response->forbidden('Wrong password!');
             }
 
             $token = $this->clientRepository->generateToken($client);
 
             DB::commit();
 
-            return $response->ok([
+            return $this->response->ok([
                 'message' => 'Signed in successfully!',
                 'token' => $token,
                 'data' => $client
@@ -86,60 +88,60 @@ class AuthClientController extends Controller
 
         } catch (\Throwable $th) {
             DB::rollback();
-            return $response->internalServerError($th->getMessage());
+            return $this->response->internalServerError($th->getMessage());
         }
     }
 
-    public function logout($response = new Response) {
+    public function logout() {
         $query = auth()->user()->tokens()->where('name', 'client-'.auth()->user()->id);
         $tokens = $query->get();
 
         if($tokens->isEmpty())
-            return $response->notAuthorized('Unauthenticated. (Wrong user type)');
+            return $this->response->notAuthorized('Unauthenticated. (Wrong user type)');
 
         $query->delete();
-        return $response->ok([
+        return $this->response->ok([
             'message' => 'Signed out successfully!',
         ]);
     }
 
-    public function verificationLink($response = new Response) {
+    public function verificationLink() {
         $result = $this->sendVerificationLink(auth()->user(), auth: 'client');
         if($result) {
             if($result == 'verified') {
-                return $response->ok([
+                return $this->response->ok([
                     'message' => 'This account was verified!'
                 ]);
             } else {
-                return $response->ok([
+                return $this->response->ok([
                     'message' => 'Verification link has been sent successfully!'
                 ]);
             }
         }
 
-        return $response->internalServerError('Error while sending verification link!');
+        return $this->response->internalServerError('Error while sending verification link!');
     }
 
-    public function verify(Request $request, $token, $response = new Response) {
+    public function verify(Request $request, $token) {
         DB::beginTransaction();
 
         try {
             $client = $this->clientRepository->verifyEmail($request, $token);
 
             if(!$client)
-                return $response->badRequest('Token is invalid!');
+                return $this->response->badRequest('Token is invalid!');
 
             $client->save();
 
             DB::commit();
 
-            return $response->ok([
+            return $this->response->ok([
                'message' => 'Email verified successfully!',
                'data' => $client
             ]);
         } catch (\Throwable $th) {
             DB::rollback();
-            return $response->internalServerError($th->getMessage());
+            return $this->response->internalServerError($th->getMessage());
         }
     }
 }

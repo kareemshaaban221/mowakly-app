@@ -14,26 +14,28 @@ use Illuminate\Support\Facades\DB;
 class LawyerController extends Controller
 {
     public LawyerRepositoryInterface $lawyerRepository;
+    private Response $response;
 
     public function __construct(LawyerRepositoryInterface $lawyerRepository) {
         $this->lawyerRepository = $lawyerRepository;
+        $this->response = new Response;
     }
 
-    public function index($response = new Response)
+    public function index()
     {
         $lawyers = Lawyer::all();
 
-        return $response->ok([
+        return $this->response->ok([
             'data' => $lawyers,
             'message' => 'All lawyers!'
         ]);
     }
 
-    public function store(LawyerRegisterRequest $request, $response = new Response)
+    public function store(LawyerRegisterRequest $request)
     {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
-            return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->except(['password', 'password_confirmation', 'card', 'avatar', 'attachments']));
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->except(['password', 'password_confirmation', 'card', 'avatar', 'attachments']));
         }
 
         DB::beginTransaction();
@@ -51,32 +53,32 @@ class LawyerController extends Controller
 
             DB::commit();
 
-            return $response->created(['data' => $lawyer], 'lawyer');
+            return $this->response->created(['data' => $lawyer], 'lawyer');
         } catch (\Throwable $th) {
             DB::rollback();
-            return $response->internalServerError($th->getMessage());
+            return $this->response->internalServerError($th->getMessage());
         }
     }
 
-    public function show($email, $response = new Response)
+    public function show($email)
     {
         $lawyer = Lawyer::where('email', $email)->first();
 
         if(!$lawyer) {
-            return $response->notFound(obj: 'lawyer');
+            return $this->response->notFound(obj: 'lawyer');
         }
 
-        return $response->ok([
+        return $this->response->ok([
             'data' => $lawyer,
             'message' => 'Lawyer is found!',
         ]);
     }
 
-    public function update(LawyerUpdateRequest $request, $email, $response = new Response)
+    public function update(LawyerUpdateRequest $request, $email)
     {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
-            return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->except(['password', 'password_confirmation', 'card', 'avatar', 'attachments']));
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->except(['password', 'password_confirmation', 'card', 'avatar', 'attachments']));
         }
 
         DB::beginTransaction();
@@ -91,17 +93,17 @@ class LawyerController extends Controller
 
             DB::commit();
 
-            return $response->ok([
+            return $this->response->ok([
                 'data' => $lawyer,
                 'message' => 'Lawyer has been updated successfully!'
             ]);
         } catch (\Throwable $th) {
             DB::rollback();
-            return $response->internalServerError($th->getMessage());
+            return $this->response->internalServerError($th->getMessage());
         }
     }
 
-    public function destroy($email, $response = new Response)
+    public function destroy($email)
     {
         DB::beginTransaction();
 
@@ -114,10 +116,10 @@ class LawyerController extends Controller
 
             DB::commit();
 
-            return $response->ok(['data' => $lawyer, 'message' => 'Lawyer has been deleted successfully!']);
+            return $this->response->ok(['data' => $lawyer, 'message' => 'Lawyer has been deleted successfully!']);
         } catch (\Throwable $th) {
             DB::rollback();
-            return $response->internalServerError($th->getMessage());
+            return $this->response->internalServerError($th->getMessage());
         }
     }
 }

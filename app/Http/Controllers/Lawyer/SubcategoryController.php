@@ -11,15 +11,17 @@ use Illuminate\Support\Facades\DB;
 class SubcategoryController extends Controller
 {
     private SubcategoryRepositoryInterface $subcategoryRepository;
+    private Response $response;
 
     public function __construct(SubcategoryRepositoryInterface $subcategoryRepository) {
         $this->subcategoryRepository = $subcategoryRepository;
+        $this->response = new Response;
     }
 
-    public function store(SubcategoryStoreRequest $request, $response = new Response) {
+    public function store(SubcategoryStoreRequest $request) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
-            return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->all());
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
         }
 
         DB::beginTransaction();
@@ -32,11 +34,11 @@ class SubcategoryController extends Controller
 
             DB::commit();
 
-            return $response->created(['subcategory' => $subcategory], 'subcategory');
+            return $this->response->created(['subcategory' => $subcategory], 'subcategory');
 
         } catch (\Throwable $th) {
             DB::rollback();
-            return $response->internalServerError($th->getMessage());
+            return $this->response->internalServerError($th->getMessage());
         }
     }
 }

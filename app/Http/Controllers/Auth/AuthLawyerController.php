@@ -15,15 +15,17 @@ class AuthLawyerController extends Controller
     use \App\Helpers\Functions;
 
     private LawyerRepositoryInterface $lawyerRepository;
+    private Response $response;
 
     public function __construct(LawyerRepositoryInterface $lawyerRepository) {
         $this->lawyerRepository = $lawyerRepository;
+        $this->response = new Response;
     }
 
-    public function register(LawyerRegisterRequest $request, $response = new Response) {
+    public function register(LawyerRegisterRequest $request) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
-            return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->except(['password', 'password_confirmation', 'card', 'avatar', 'attachments']));
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->except(['password', 'password_confirmation', 'card', 'avatar', 'attachments']));
         }
 
         DB::beginTransaction();
@@ -59,17 +61,17 @@ class AuthLawyerController extends Controller
 
             DB::commit();
 
-            return $response->created(['data' => $lawyer, 'token' => $token], 'lawyer');
+            return $this->response->created(['data' => $lawyer, 'token' => $token], 'lawyer');
         } catch (\Throwable $th) {
             DB::rollback();
-            return $response->internalServerError($th->getMessage());
+            return $this->response->internalServerError($th->getMessage());
         }
     }
 
-    public function login(LawyerLoginRequest $request, $response = new Response) {
+    public function login(LawyerLoginRequest $request) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
-            return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->except(['password']));
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->except(['password']));
         }
 
         DB::beginTransaction();
@@ -78,21 +80,21 @@ class AuthLawyerController extends Controller
             $lawyer = $this->lawyerRepository->checkCredentials($request->validated());
 
             if(!$lawyer) {
-                return $response->forbidden('Wrong password!');
+                return $this->response->forbidden('Wrong password!');
             }
 
             $token = $this->lawyerRepository->generateToken($lawyer);
 
             DB::commit();
 
-            return $response->ok([
+            return $this->response->ok([
                 'message' => 'Signed in successfully!',
                 'token' => $token,
                 'data' => $lawyer
             ]);
         } catch (\Throwable $th) {
             DB::rollback();
-            return $response->internalServerError($th->getMessage());
+            return $this->response->internalServerError($th->getMessage());
         }
     }
 
@@ -101,10 +103,10 @@ class AuthLawyerController extends Controller
         $tokens = $query->get();
 
         if($tokens->isEmpty())
-            return $response->notAuthorized('Unauthenticated. (Wrong user type)');
+            return $this->response->notAuthorized('Unauthenticated. (Wrong user type)');
 
         $query->delete();
-        return $response->ok([
+        return $this->response->ok([
             'message' => 'Signed out successfully!',
         ]);
     }
@@ -113,39 +115,39 @@ class AuthLawyerController extends Controller
         $result = $this->sendVerificationLink(auth()->user(), auth: 'lawyer');
         if($result) {
             if($result == 'verified') {
-                return $response->ok([
+                return $this->response->ok([
                     'message' => 'This account was verified!'
                 ]);
             } else {
-                return $response->ok([
+                return $this->response->ok([
                     'message' => 'Verification link has been sent successfully!'
                 ]);
             }
         }
 
-        return $response->internalServerError('Error while sending verification link!');
+        return $this->response->internalServerError('Error while sending verification link!');
     }
 
-    public function verify(Request $request, $token, $response = new Response) {
+    public function verify(Request $request, $token) {
         DB::beginTransaction();
 
         try {
             $lawyer = $this->lawyerRepository->verifyEmail($request, $token);
 
             if(!$lawyer)
-                return $response->badRequest('Token is invalid!');
+                return $this->response->badRequest('Token is invalid!');
 
             $lawyer->save();
 
             DB::commit();
 
-            return $response->ok([
+            return $this->response->ok([
                'message' => 'Email verified successfully!',
                'data' => $lawyer
             ]);
         } catch (\Throwable $th) {
             DB::rollback();
-            return $response->internalServerError($th->getMessage());
+            return $this->response->internalServerError($th->getMessage());
         }
     }
 }

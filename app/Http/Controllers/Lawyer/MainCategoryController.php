@@ -11,19 +11,21 @@ use Illuminate\Support\Facades\DB;
 class MainCategoryController extends Controller
 {
     private MainCategoryRepositoryInterface $mainCategoryRepository;
+    private Response $response;
 
     public function __construct(MainCategoryRepositoryInterface $mainCategoryRepository) {
         $this->mainCategoryRepository = $mainCategoryRepository;
+        $this->response = new Response;
     }
 
     public function index() {
         ;
     }
 
-    public function store(CategoryStoreRequest $request, $response = new Response) {
+    public function store(CategoryStoreRequest $request) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
-            return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->all());
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
         }
 
         DB::beginTransaction();
@@ -36,11 +38,11 @@ class MainCategoryController extends Controller
 
             DB::commit();
 
-            return $response->created(['category' => $category], 'main category');
+            return $this->response->created(['category' => $category], 'main category');
 
         } catch (\Throwable $th) {
             DB::rollBack();
-            return $response->internalServerError($th->getMessage());
+            return $this->response->internalServerError($th->getMessage());
         }
     }
 }

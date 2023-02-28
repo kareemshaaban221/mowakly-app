@@ -9,7 +9,13 @@ use Illuminate\Http\Request;
 
 class LawyerMainCategoryController extends Controller
 {
-    public function store($email, CategoryStoreRequest $request, $response = new Response) {
+    private Response $response;
+
+    public function __construct() {
+        $this->response = new Response;
+    }
+    
+    public function store($email, CategoryStoreRequest $request) {
 
     }
 

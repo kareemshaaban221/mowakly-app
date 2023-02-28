@@ -13,69 +13,71 @@ use Illuminate\Support\Facades\DB;
 class PhoneController extends Controller
 {
     public LawyerRepositoryInterface $lawyerRepository;
+    private Response $response;
 
     public function __construct(LawyerRepositoryInterface $lawyerRepository) {
         $this->lawyerRepository = $lawyerRepository;
+        $this->response = new Response;
     }
 
-    public function destroy($email, PhoneStoreRequest $request, $response = new Response) {
+    public function destroy(PhoneStoreRequest $request) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
-            return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->all());
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
         }
 
         DB::beginTransaction();
 
         try {
-            $lawyer = Lawyer::where('email', $email)->firstOrFail();
+            $lawyer = Lawyer::where('email', $request->email)->firstOrFail();
             $phone = $this->lawyerRepository->deletePhone($request->phone, $lawyer);
 
             if(is_int($phone) && $phone == 0) {
-                return $response->badRequest('Phone is not found!');
+                return $this->response->badRequest('Phone is not found!');
             }
 
             if(is_int($phone) && $phone == 1) {
-                return $response->badRequest('Phones cannot be less than one!');
+                return $this->response->badRequest('Phones cannot be less than one!');
             }
 
             DB::commit();
 
-            return $response->ok([
+            return $this->response->ok([
                 'data' => $phone,
                 'message' => 'Phone has been deleted successfully!'
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return $response->internalServerError($th->getMessage());
+            return $this->response->internalServerError($th->getMessage());
         }
     }
 
-    public function store($email, PhoneStoreRequest $request, $response = new Response) {
+    public function store(PhoneStoreRequest $request) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
-            return $response->badRequest('Data is not valid!', $request->validator->messages(), $request->except(['attachment']));
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->except(['attachment']));
         }
 
         DB::beginTransaction();
 
         try {
-            $lawyer = Lawyer::where('email', $email)->firstOrFail();
+            $lawyer = Lawyer::where('email', $request->email)->firstOrFail();
 
             $phone = $this->lawyerRepository->addPhone($request->phone, $lawyer);
 
             if(!$phone) {
-                return $response->badRequest('Phone is not added!');
+                return $this->response->badRequest('Phone is not added!');
             }
 
             DB::commit();
 
-            return $response->ok([
+            return $this->response->ok([
                 'data' => $phone,
                 'message' => 'Phone has been added successfully!'
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return $response->internalServerError($th->getMessage());
+            return $this->response->internalServerError($th->getMessage());
         }
     }
 }

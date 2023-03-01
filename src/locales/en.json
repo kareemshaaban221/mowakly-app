@@ -1,0 +1,161 @@
+{
+    "nav" : {
+      "home" : "Home",
+      "stores" : "Stores",
+      "offers" : "Offers",
+      "favs" : "favourites" ,
+      "who" : "About Us",
+      "contact" : "Contact Us",
+      "account" : "Profile",
+      "logout" : "Log Out",
+      "searchOffer" : "Search For Offer ....",
+      "storeDepend" : "filter depend on ",
+      "governorate" : "governorate",
+      "city" : "city",
+      "new" : "newest",
+      "old" : "oldest",
+      "near" : "nearest",
+      "searchForCats" : "search for Categories....",
+    "searchForStore" : "search for stores ..."
+    },
+    "footer" : {
+      "about" : "About",
+      "contactUS" : "Contact Us",
+      "commonQues" : "Common Questions",
+      "WhoWe" : "Who Are We" ,
+      "conditions" : "Conditions",
+      "followUs" : "follow us to keep in touch via email",
+      "callUs" : "Call Us",
+      "email" : "E-mail",
+      "sub" : "subscribe",
+      "download" : "download app now",
+      "copyRight" : "All Rights Reserved By Offer Box 2022",
+      "awamer" : "Awamer El-Shabaka",
+      "desin" : "Designed By"
+    },
+    "home":{
+      "parts" : "Parts",
+      "currentOffs" : "Modern Offers",
+      "allStores" : "All Stores",
+      "famousStore" : "Famous Stores",
+      "showStore" : "Show The Store",
+      "offers" : "Offers",
+      "allOffers" : "All Offers"
+    },
+    "contact" : {
+      "name" : "username",
+      "nameplc" : "please , enter username",
+      "mail" : "email",
+      "mailplc" : "please, enter email",
+      "spec" : "specific filed",
+      "selcspec" : "please, enter your filed",
+      "message" : "message",
+      "messageplc" : "leave your message",
+      "send" : "send",
+      "subject" : "message subject"
+
+    },
+    "profile" : {
+      "personal" : "Personal Profile",
+      "privacy" : "Privacy Policy",
+      "conditions" : "Conditions And Terms",
+      "howWork" : "How Site Works ?",
+      "alertSet" : "Alerts Settings",
+      "commionQues" : "Common Questions",
+      "siteLang" : "Site Language",
+
+      "username" : "Username",
+      "phone" : "Phone",
+      "password" : "Password",
+      "confirmPass" : "Confirm Password",
+      "save" : "Save",
+      "enterUser" : "please, enter username",
+      "enterPhone" : "please, enter phone",
+      "enterPass" : "please, enter password",
+      "enterConfirm" : "please , confirm password",
+
+
+      "alertSetting" : "advertisements , offers and more",
+      "ads" : "Advertisements",
+      "welcome" : "Welcome",
+      "chooseLang" : "please , select the language that you want",
+      "arabic" : "Arabic",
+      "english" : "English",
+      "changePassword" : "change password",
+      "pleaseChange" : "please , change password",
+      "currentPass" : "current password",
+      "newPassword" : "new password",
+      "sendActiveCode" : "please , sent activation code sent to your phone",
+      "deleteAccount" : "delete account",
+      "deleteAcc" : "Delete",
+      "revenge" : "GoBack",
+      "deleteAccTitle"  : "Delete Account",
+      "deleteAccEnsure"  : "Are You Sure That You Want To Delete Your Account"
+
+
+    },
+    "common" : 
+    {
+      "more" : "More",
+      "appStats" : "App Statistics",
+      "statisText" : "we show the statistics of offer box app",
+      "notFound" : "No Data Found",
+      "open" : "open",
+      "close" : "close",
+      "pleaseLogin" : "please , login first",
+      "confirm" : "confirm",
+      "downloads" : "downloads",
+      "clients" : "clients",
+      "stores" : "stores",
+      "downloadApp" : "you can download the application and keep in touch with latest Advertisements",
+      "noData" : "no data found",
+      "loadMore"  : "load more",
+      "loginSuccess" : "login successfully , welcome to your page",
+      "loginFailed" : " something went wrong",
+      "regSuccess" : "Your Account has been registered"  ,
+      "activeAcc" : "your account has been registered successfully",
+
+      "copyUrl" : "th URL copied successfully"
+  
+
+
+
+    },
+    "offers" : 
+    {
+      "additionDate" : "published",
+      "AdDescription" : "Description",
+      "Similar" : "Similar advertisements"
+    },
+    "auth" : 
+    {
+      "wellcome" : "Welcome",
+      "userName" : "User Name",
+      "password" : "Password",
+      "confirmPassword" : "confirm password",
+      "phone" : "Phone Number",
+      "dataLogin" : "Please enter your account information to log in",
+      "dataRegester" : "Please enter account information for a new registration",
+      "insert" : "Please enter",
+      "login" : "login",
+      "signup" : "sign up",
+      "forgitPassword" : "forget your password ?",
+      "notsigned" : "Don't have an account?",
+      "signed" : "Already have an account?",
+      "confirm" : "confirm",
+      "dataConfirm" : "Please enter the verification code sent to your mobile",
+      "resetPassword" : "Reset Password",
+      "dataChangePass" : "please, change your password"
+
+    },
+    "store":{
+      "follow" : "Follow the store",
+      "followed" : "Followed",
+      "desc" : "description",
+      "branches" : "branches",
+      "storeLinks" : "store links",
+      "socialMedia" : "social media",
+      "parts" : "Categories",
+      "phone" : "phone"
+    }
+}

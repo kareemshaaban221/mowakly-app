@@ -6,6 +6,7 @@ use App\Helpers\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientRegisterRequest;
 use App\Http\Requests\ClientUpdateRequest;
+use App\Http\Requests\UserDestroyRequest;
 use App\Interfaces\ClientRepositoryInterface;
 use App\Models\Client;
 use App\Models\VerifyEmail;
@@ -99,16 +100,17 @@ class ClientController extends Controller
         }
     }
 
-    public function destroy($email)
+    public function destroy(UserDestroyRequest $request)
     {
+        // if fails
+        if(isset($request->validator) && $request->validator->fails()) {
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
+        }
+        
         DB::beginTransaction();
 
         try {
-            $client = Client::where('email', $email)->first();
-            $client->tokens()->where('name', 'client-' . $client->id)->delete();
-            VerifyEmail::where('email', $email)->where('user_type', 'client')->delete();
-
-            $client->delete();
+            $client = $this->clientRepository->destroy($request->email);
 
             DB::commit();
 

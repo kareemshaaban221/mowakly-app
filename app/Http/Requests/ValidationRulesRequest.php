@@ -155,6 +155,11 @@ class ValidationRulesRequest extends FormRequest
         return ['required', 'digits:' . $digits, 'regex:' . $regex];
     }
 
+    protected function checkEmailRule() {
+        if(auth()->check() && !$this->request->has('email'))
+            $this->request->set('email', auth()->user()->email);
+    }
+
     public function messages() {
         return [
             'email.exists' => 'The email doesn\'t exist.',

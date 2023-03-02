@@ -24,24 +24,32 @@ return new class extends Migration
             $table->enum('gender', ['male', 'female']);
             $table->string('description');
             $table->date('date_of_birth');
-            $table->string('card');
+            $table->string('card')->nullable();
             $table->string('card_id')->nullable();
-            $table->string('avatar');
+            $table->string('avatar')->nullable();
             $table->integer('count_of_consultations')->default(0);
             $table->string('national_id', 14);
             $table->rememberToken();
             $table->timestamps();
         });
 
-        $files = glob($this->uploads_path('lawyers'). '/*');
-        $filess = glob($this->uploads_path('clients'). '/*');
-        foreach($files as $file) {
-            if(is_file($file))
-                unlink($file);
+        $dirs = glob($this->uploads_path('lawyers'). '/*');
+        $dirss = glob($this->uploads_path('clients'). '/*');
+
+        foreach ($dirs as $dir) {
+            $files = glob($dir . '/*');
+            foreach($files as $file) {
+                if(is_file($file))
+                    unlink($file);
+            }
         }
-        foreach($filess as $file) {
-            if(is_file($file))
-                unlink($file);
+
+        foreach ($dirss as $dir) {
+            $filess = glob($dir . '/*');
+            foreach($filess as $file) {
+                if(is_file($file))
+                    unlink($file);
+            }
         }
     }
 

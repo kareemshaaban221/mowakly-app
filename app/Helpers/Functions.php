@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Mail\VerficationMail;
 use App\Models\VerifyEmail;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -26,7 +27,7 @@ Trait Functions
         return $prefix . $this->removeSpecialCharacters($email, '_') . '.' . $this->getFileExtension($filename);
     }
 
-    public function sendVerificationLink($user, $response = new Response, $auth = null) {
+    public function sendVerificationLink($user, $auth = null) {
         $token = '';
         if($auth) {
             $record = null;
@@ -55,4 +56,41 @@ Trait Functions
 
         return Mail::to($user->email)->send(new VerficationMail($user, request()->user_type, $token));
     }
+
+    public function storeFile(String $fieldname, $file, Model &$user, $user_type) {
+        $uploads_path = NULL;
+
+        if ($user_type == 'lawyer')
+            $uploads_path = $this->uploads_path('lawyers');
+        else if ($user_type == 'client')
+            $uploads_path = $this->uploads_path('clients');
+        else
+            throw new \Exception('App\Helpers\Functions::storeFile() Invalid User Type!');
+
+        $filename = $this->concatFilenameWithEmail('_'.$fieldname.'_', $user->email, $file->getClientOriginalName());
+
+        $file->move($uploads_path . '/' . $user->id, $filename);
+
+        return $filename;
+    }
+
+    public function deleteFile($filename, Model &$user, $user_type) {
+        $uploads_path = NULL;
+
+        if ($user_type == 'lawyer')
+            $uploads_path = $this->uploads_path('lawyers');
+        else if ($user_type == 'client')
+            $uploads_path = $this->uploads_path('clients');
+        else
+            throw new \Exception('App\Helpers\Functions::deleteFile() Invalid User Type!');
+
+        $uploads_path = $uploads_path . '/' . $user->id;
+
+        if(file_exists($uploads_path . '/' . $filename)) {
+            unlink($uploads_path . '/' . $filename);
+            return $filename;
+        } else {
+            throw new \Exception('File not found');
+        }
+	}
 }

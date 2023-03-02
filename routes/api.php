@@ -65,6 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('profile/attachments/delete', [LawyerProfileController::class, 'destroyAttachment'])->name('lawyer.profile.attachments.delete');
         Route::post('profile/phones/add', [LawyerProfileController::class, 'addPhone'])->name('lawyer.profile.phones.add');
         Route::post('profile/phones/delete', [LawyerProfileController::class, 'destroyPhone'])->name('lawyer.profile.phones.delete');
+        Route::post('profile/delete', [LawyerProfileController::class, 'destroy'])->name('lawyer.profile.destroy');
 
         Route::post('addConsultationDetails', [LawyerCategoryDetailsController::class, 'store'])->name('lawyer.add.consultation.details');
     });
@@ -83,6 +84,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('profile/update', [ClientProfileController::class, 'updateProfile'])->name('client.profile.update');
         Route::post('profile/payment_methods/add', [ClientProfileController::class, 'addPaymentMethod'])->name('client.profile.payment_methods.add');
         Route::post('profile/payment_methods/delete', [ClientProfileController::class, 'destroyPaymentMethod'])->name('client.profile.payment_methods.delete');
+        Route::post('profile/delete', [ClientProfileController::class, 'destroy'])->name('client.profile.destroy');
 
     });
 

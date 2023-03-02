@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Lawyer;
 
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LawyerDestroyRequest;
 use App\Http\Requests\LawyerRegisterRequest;
 use App\Http\Requests\LawyerUpdateRequest;
+use App\Http\Requests\UserDestroyRequest;
+use App\Interfaces\AttachmentRepositoryInterface;
 use App\Interfaces\LawyerRepositoryInterface;
 use App\Models\Lawyer;
 use App\Models\VerifyEmail;
@@ -13,11 +16,13 @@ use Illuminate\Support\Facades\DB;
 
 class LawyerController extends Controller
 {
-    public LawyerRepositoryInterface $lawyerRepository;
+    private LawyerRepositoryInterface $lawyerRepository;
+    private AttachmentRepositoryInterface $attachmentRepository;
     private Response $response;
 
-    public function __construct(LawyerRepositoryInterface $lawyerRepository) {
+    public function __construct(LawyerRepositoryInterface $lawyerRepository, AttachmentRepositoryInterface $attachmentRepository) {
         $this->lawyerRepository = $lawyerRepository;
+        $this->attachmentRepository = $attachmentRepository;
         $this->response = new Response;
     }
 
@@ -49,7 +54,7 @@ class LawyerController extends Controller
 
             // phones and attachments
             $this->lawyerRepository->storePhones($request->phones, $lawyer);
-            $this->lawyerRepository->storeAttachments($request->attachments, $lawyer);
+            $this->attachmentRepository->storeAttachments($request->attachments, $lawyer);
 
             DB::commit();
 
@@ -103,16 +108,12 @@ class LawyerController extends Controller
         }
     }
 
-    public function destroy($email)
+    public function destroy(UserDestroyRequest $request)
     {
         DB::beginTransaction();
 
         try {
-            $lawyer = Lawyer::where('email', $email)->first();
-            $lawyer->tokens()->where('name', 'lawyer-' . $lawyer->id)->delete();
-            VerifyEmail::where('email', $email)->where('user_type', 'lawyer')->delete();
-
-            $lawyer->delete();
+            $lawyer = $this->lawyerRepository->destroy($request->email);
 
             DB::commit();
 

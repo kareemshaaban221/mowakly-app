@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LawyerRegisterRequest;
 use App\Http\Requests\LawyerLoginRequest;
 use App\Helpers\Response;
+use App\Interfaces\AttachmentRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use App\Interfaces\LawyerRepositoryInterface;
 use Illuminate\Http\Request;
@@ -15,10 +16,12 @@ class AuthLawyerController extends Controller
     use \App\Helpers\Functions;
 
     private LawyerRepositoryInterface $lawyerRepository;
+    private AttachmentRepositoryInterface $attachmentRepository;
     private Response $response;
 
-    public function __construct(LawyerRepositoryInterface $lawyerRepository) {
+    public function __construct(LawyerRepositoryInterface $lawyerRepository, AttachmentRepositoryInterface $attachmentRepository) {
         $this->lawyerRepository = $lawyerRepository;
+        $this->attachmentRepository = $attachmentRepository;
         $this->response = new Response;
     }
 
@@ -33,18 +36,20 @@ class AuthLawyerController extends Controller
         try {
             $lawyer = $this->lawyerRepository->store($request);
 
+            $lawyer->save();
+
             $this->lawyerRepository->storeAvatar($request->avatar, $lawyer);
             $this->lawyerRepository->storeCard($request->card, $lawyer);
+
+            $lawyer->save();
 
             if(is_null($this->sendVerificationLink($lawyer))) {
                 throw new \Exception('Error sending verification link!');
             }
 
-            $lawyer->save();
-
             // phones and attachments
             $this->lawyerRepository->storePhones($request->phones, $lawyer);
-            $this->lawyerRepository->storeAttachments($request->attachments, $lawyer);
+            $this->attachmentRepository->storeAttachments($request->attachments, $lawyer);
 
             if(isset($request->subcategories))
                 foreach ($request->subcategories as $subcategory) {
@@ -98,7 +103,7 @@ class AuthLawyerController extends Controller
         }
     }
 
-    public function logout($response = new Response) {
+    public function logout() {
         $query = auth()->user()->tokens()->where('name', 'lawyer-'.auth()->user()->id);
         $tokens = $query->get();
 
@@ -111,7 +116,7 @@ class AuthLawyerController extends Controller
         ]);
     }
 
-    public function verificationLink($response = new Response) {
+    public function verificationLink() {
         $result = $this->sendVerificationLink(auth()->user(), auth: 'lawyer');
         if($result) {
             if($result == 'verified') {

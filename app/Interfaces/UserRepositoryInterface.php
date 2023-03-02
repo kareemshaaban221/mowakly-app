@@ -10,13 +10,11 @@ interface UserRepositoryInterface extends AuthRepositoryInterface, SocialiteAuth
 
     public function update(Request $request, $email) : Model;
 
-    public function storeFile(String $fieldname, $file, Model &$user);
+    public function destroy($email) : Model;
 
     public function storeAvatar($file, Model &$user);
 
     public function updateAvatar($file, Model &$user);
-
-    public function deleteFile($filename);
 
     public function deleteAvatar($filename, Model &$user);
 

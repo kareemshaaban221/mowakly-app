@@ -11,6 +11,7 @@ use App\Models\LawyerAttachment;
 use Illuminate\Http\Request;
 use App\Helpers\Functions;
 use App\Helpers\Path;
+use App\Interfaces\AttachmentRepositoryInterface;
 use App\Models\LawyerMainCategory;
 use App\Models\LawyerSubcategory;
 use App\Models\Subcategory;
@@ -20,6 +21,12 @@ use Illuminate\Support\Facades\DB;
 
 class LawyerRepository extends UserRepository implements LawyerRepositoryInterface {
     use Path, Functions;
+
+    private AttachmentRepositoryInterface $attachmentRepository;
+
+    public function __construct(AttachmentRepositoryInterface $attachmentRepository) {
+        $this->attachmentRepository = $attachmentRepository;
+    }
 
     public function store(Request $request): Lawyer {
         $data = $request->validated();
@@ -58,18 +65,22 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
         return $lawyer;
     }
 
-    public function storeFile(String $fieldname, $file, Model &$lawyer) {
-        $uploads_path = $this->uploads_path('lawyers');
+    public function destroy($email) : Model {
+        $lawyer = Lawyer::where('email', $email)->first();
+        $lawyer->tokens()->where('name', 'lawyer-' . $lawyer->id)->delete();
+        VerifyEmail::where('email', $email)->where('user_type', 'lawyer')->delete();
 
-        $filename = $this->concatFilenameWithEmail('_'.$fieldname.'_', $lawyer->email, $file->getClientOriginalName());
+        $this->attachmentRepository->deleteAttachmentsFiles($lawyer);
+        $this->deleteAvatar($lawyer->avatar, $lawyer);
+        $this->deleteCard($lawyer->card, $lawyer);
 
-        $file->move($uploads_path, $filename);
+        $lawyer->delete();
 
-        return $filename;
+        return $lawyer;
     }
 
     public function storeAvatar($file, Model &$lawyer) {
-        $filename = $this->storeFile('avatar', $file, $lawyer);
+        $filename = $this->storeFile('avatar', $file, $lawyer, 'lawyer');
 
         $lawyer->avatar = $filename;
 
@@ -77,8 +88,8 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
     }
 
     public function storeCard($file, Lawyer &$lawyer) {
-        $filename = $this->storeFile('card', $file, $lawyer);
-
+        $filename = $this->storeFile('card', $file, $lawyer, 'lawyer');
+        
         $lawyer->card = $filename;
 
         return $filename;
@@ -95,25 +106,6 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
         }
 
         $lawyer->phones = $records;
-
-        return $records;
-    }
-
-    public function storeAttachments($attachments, Lawyer &$lawyer) {
-        $records = [];
-        $i = 1;
-        foreach($attachments as $attachment) {
-            $record = LawyerAttachment::create([
-                'lawyer_id' => $lawyer->id,
-                'attachment' => $this->storeFile('attach_'.$i, $attachment, $lawyer)
-            ]);
-
-            array_push($records, $record->attachment);
-
-            $i++;
-        }
-
-        $lawyer->attachments = $records;
 
         return $records;
     }
@@ -166,19 +158,8 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
         return $filename;
 	}
 
-    public function deleteFile($filename) {
-        $uploads_path = $this->uploads_path('lawyers');
-
-        if(file_exists($uploads_path . '/' . $filename)) {
-            unlink($uploads_path . '/' . $filename);
-            return $filename;
-        } else {
-            throw new \Exception('File not found');
-        }
-	}
-
     public function deleteAvatar($filename, Model &$lawyer) {
-        $this->deleteFile($filename);
+        $this->deleteFile($filename, $lawyer, 'lawyer');
 
         $lawyer->avatar = null;
 
@@ -186,7 +167,7 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
     }
 
     public function deleteCard($filename, Model &$lawyer) {
-        $this->deleteFile($filename);
+        $this->deleteFile($filename, $lawyer, 'lawyer');
 
         $lawyer->card = null;
 
@@ -202,19 +183,6 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
             'lawyer_id' => $lawyer->id,
             'phone_number' => $phone
         ]);
-	}
-
-	public function addAttachment($file, Lawyer &$lawyer) {
-        $filename = $lawyer->attachments()->latest()->first()->attachment;
-
-        $file_index = (int) explode("_", $filename)[2];
-
-        $attachment = LawyerAttachment::create([
-            'lawyer_id' => $lawyer->id,
-            'attachment' => $this->storeFile('attach_'.$file_index + 1, $file, $lawyer)
-        ]);
-
-        return $attachment;
 	}
 
 	public function deletePhone($phone, Lawyer &$lawyer) {
@@ -236,28 +204,6 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
             ->delete();
 
         return $phone;
-	}
-
-	public function deleteAttachment($filename, Lawyer &$lawyer) {
-        $attachments = $lawyer->attachments();
-        if($attachments->count() <= 1) {
-            return 1;
-        }
-
-        $attachment = $attachments->where('attachment', $filename)->first();
-
-        if(!$attachment) {
-            return 0;
-        }
-
-        DB::table('lawyer_attachments')
-            ->where('lawyer_id', $lawyer->id)
-            ->where('attachment', $filename)
-            ->delete();
-
-        $this->deleteFile($filename);
-
-        return $attachment;
 	}
 
     public function storeCategory($category, Lawyer &$lawyer) {

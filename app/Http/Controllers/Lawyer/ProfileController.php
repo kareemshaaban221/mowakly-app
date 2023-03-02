@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Lawyer;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\AttachmentDestroyRequest;
 use App\Http\Requests\AttachmentStoreRequest;
 use App\Http\Requests\LawyerUpdateRequest;
 use App\Http\Requests\PhoneStoreRequest;
+use App\Repositories\AttachmentRepository;
 use App\Repositories\LawyerRepository;
 
 class ProfileController extends LawyerController
@@ -20,18 +20,18 @@ class ProfileController extends LawyerController
     }
 
     public function addAttachment(AttachmentStoreRequest $request) {
-        return (new AttachmentController(new LawyerRepository))->store($request);
+        return (new AttachmentController(new AttachmentRepository))->store($request);
     }
 
     public function destroyAttachment(AttachmentDestroyRequest $request) {
-        return (new AttachmentController(new LawyerRepository))->destroy($request);
+        return (new AttachmentController(new AttachmentRepository))->destroy($request);
     }
 
     public function addPhone(PhoneStoreRequest $request) {
-        return (new PhoneController(new LawyerRepository))->store($request);
+        return (new PhoneController(new LawyerRepository(new AttachmentRepository)))->store($request);
     }
 
     public function destroyPhone(PhoneStoreRequest $request) {
-        return (new PhoneController(new LawyerRepository))->destroy($request);
+        return (new PhoneController(new LawyerRepository(new AttachmentRepository)))->destroy($request);
     }
 }

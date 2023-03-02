@@ -6,6 +6,7 @@ use App\Helpers\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AttachmentDestroyRequest;
 use App\Http\Requests\AttachmentStoreRequest;
+use App\Interfaces\AttachmentRepositoryInterface;
 use App\Interfaces\LawyerRepositoryInterface;
 use App\Models\Lawyer;
 use Illuminate\Http\Request;
@@ -13,11 +14,11 @@ use Illuminate\Support\Facades\DB;
 
 class AttachmentController extends Controller
 {
-    public LawyerRepositoryInterface $lawyerRepository;
+    private AttachmentRepositoryInterface $attachmentRepository;
     private Response $response;
 
-    public function __construct(LawyerRepositoryInterface $lawyerRepository) {
-        $this->lawyerRepository = $lawyerRepository;
+    public function __construct(AttachmentRepositoryInterface $attachmentRepository) {
+        $this->attachmentRepository = $attachmentRepository;
         $this->response = new Response;
     }
 
@@ -31,7 +32,7 @@ class AttachmentController extends Controller
 
         try {
             $lawyer = Lawyer::where('email', $request->email)->firstOrFail();
-            $attachment = $this->lawyerRepository->deleteAttachment($request->filename, $lawyer);
+            $attachment = $this->attachmentRepository->deleteAttachment($request->filename, $lawyer);
 
             if(is_int($attachment) && $attachment == 0) {
                 return $this->response->badRequest('Attachment is not found!');
@@ -66,7 +67,7 @@ class AttachmentController extends Controller
         try {
             $lawyer = Lawyer::where('email', $request->email)->firstOrFail();
 
-            $attachment = $this->lawyerRepository->addAttachment($file, $lawyer);
+            $attachment = $this->attachmentRepository->addAttachment($file, $lawyer);
 
             if(!$attachment) {
                 return $this->response->badRequest('Attachment is not added successfully!');

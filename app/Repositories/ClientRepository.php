@@ -48,19 +48,18 @@ class ClientRepository extends UserRepository implements ClientRepositoryInterfa
         return $client;
 	}
 
-    public function storeFile(String $fieldname, $file, Model &$client) {
-        $uploads_path = $this->uploads_path('clients');
+    public function destroy($email) : Client {
+        $client = Client::where('email', $email)->first();
+        $client->tokens()->where('name', 'client-' . $client->id)->delete();
+        VerifyEmail::where('email', $email)->where('user_type', 'client')->delete();
 
-        $filename = $this->concatFilenameWithEmail('_'.$fieldname.'_', $client->email, $file->getClientOriginalName());
+        $client->delete();
 
-        $file->move($uploads_path, $filename);
-
-        return $filename;
+        return $client;
     }
 
-
     public function storeAvatar($file, Model &$client) {
-        $filename = $this->storeFile('avatar', $file, $client);
+        $filename = $this->storeFile('avatar', $file, $client, 'client');
 
         $client->avatar = $filename;
 
@@ -125,20 +124,8 @@ class ClientRepository extends UserRepository implements ClientRepositoryInterfa
         return $filename;
 	}
 
-	public function deleteFile($filename) {
-        $uploads_path = $this->uploads_path('clients');
-
-        if(file_exists($uploads_path . '/' . $filename)) {
-            unlink($uploads_path . '/' . $filename);
-
-            return $filename;
-        } else {
-            return null;
-        }
-	}
-
     public function deleteAvatar($filename, &$client) {
-        $this->deleteFile($filename);
+        $this->deleteFile($filename, $client, 'client');
 
         $client->avatar = null;
 

@@ -35,7 +35,7 @@ if(isset($_REQUEST['user_type'])) {
 }
 
 // deployment
-if($link[4] != 's') {
+if(isset($link[4]) && $link[4] != 's') {
     $link = substr_replace($link, 's', 4, 0);
 }
 

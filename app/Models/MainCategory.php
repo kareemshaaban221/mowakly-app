@@ -11,7 +11,7 @@ class MainCategory extends Model
 
     protected $guarded = [];
 
-    protected $hidden = ['id'];
+    // protected $hidden = ['id'];
 
     public function subcategories() {
         return $this->hasMany(Subcategory::class, 'm_category_id', 'id');

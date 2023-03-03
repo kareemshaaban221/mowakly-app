@@ -8,7 +8,7 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Lawyer\LawyerController;
 use App\Http\Controllers\Lawyer\ProfileController as LawyerProfileController;
 use App\Http\Controllers\Client\ProfileController as ClientProfileController;
-use App\Http\Controllers\Lawyer\LawyerCategoryDetailsController;
+use App\Http\Controllers\Lawyer\LawyerMainCategoryController;
 use App\Http\Controllers\Lawyer\MainCategoryController;
 use App\Http\Controllers\Lawyer\SubcategoryController;
 
@@ -67,7 +67,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('profile/phones/delete', [LawyerProfileController::class, 'destroyPhone'])->name('lawyer.profile.phones.delete');
         Route::post('profile/delete', [LawyerProfileController::class, 'destroy'])->name('lawyer.profile.destroy');
 
-        Route::post('addConsultationDetails', [LawyerCategoryDetailsController::class, 'store'])->name('lawyer.add.consultation.details');
+        Route::post('maincategories', [LawyerMainCategoryController::class, 'show'])->name('lawyer.maincategories.show');
+        Route::post('maincategories/category/{id}', [LawyerMainCategoryController::class, 'showByCategory'])->name('lawyer.maincategories.category.show');
+        Route::post('maincategories/mean/{mean}', [LawyerMainCategoryController::class, 'showByConsultationMean'])->name('lawyer.maincategories.mean.show');
+        Route::post('maincategories/category/{id}/mean/{mean}', [LawyerMainCategoryController::class, 'showSpecific'])->name('lawyer.maincategories.category.mean.show');
+        Route::post('maincategories/store', [LawyerMainCategoryController::class, 'store'])->name('lawyer.maincategories.store');
+        Route::post('maincategories/update', [LawyerMainCategoryController::class, 'update'])->name('lawyer.maincategories.update');
+        Route::post('maincategories/category/{id}/delete', [LawyerMainCategoryController::class, 'destroy'])->name('lawyer.maincategories.category.delete');
+        Route::post('maincategories/category/{id}/mean/{mean}/delete', [LawyerMainCategoryController::class, 'destroySpecific'])->name('lawyer.maincategories.category.mean.delete');
+
     });
 
     // clients routes

@@ -2,7 +2,9 @@
 
 namespace App\Helpers;
 
+use App\Mail\ResetPasswordMail;
 use App\Mail\VerficationMail;
+use App\Models\PasswordReset;
 use App\Models\VerifyEmail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
@@ -55,6 +57,27 @@ Trait Functions
         }
 
         return Mail::to($user->email)->send(new VerficationMail($user, request()->user_type, $token));
+    }
+
+    public function sendResetPasswordLink($user, $user_type) {
+        $record = PasswordReset::where('email', $user->email)
+            ->where('user_type', $user_type)
+            ->first();
+
+        $token = '';
+        if(!$record) {
+            $token = Str::random(64);
+
+            PasswordReset::create([
+                'user_type' => $user_type,
+                'email' => $user->email,
+                'token' => $token
+            ]);
+        } else {
+            $token = $record->token;
+        }
+
+        return Mail::to($user->email)->send(new ResetPasswordMail($user, $user_type, $token));
     }
 
     public function storeFile(String $fieldname, $file, Model &$user, $user_type) {

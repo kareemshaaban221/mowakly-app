@@ -9,4 +9,4 @@ Link:
 @endif
 <br/>
 <br/>
-Mowakly app<br/>
+<b>Mowakly app</b><br/>

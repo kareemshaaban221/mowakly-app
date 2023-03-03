@@ -26,16 +26,24 @@ class ValidationRulesRequest extends FormRequest
         return ['required', 'min:' . $min, 'max:' . $max, 'alpha', 'regex:' . $regex];
     }
 
-    protected function emailRule($update = false) {
+    protected function emailRule($update = false, $exists = NULL) {
+        $rules = ['email', 'max:255'];
+
         if ($update) {
-            return ['email', 'max:255'];
+            return $rules;
         }
 
-        return ['required', 'email', 'max:255'];
+        if(!is_null($exists)) {
+            array_push($rules, "exists:$exists,email");
+        }
+
+        array_push($rules, 'required');
+
+        return $rules;
     }
 
-    protected function passwordRule($case, $update = false) {
-        $rules = $update ? [] : ['required'];
+    protected function passwordRule($case) {
+        $rules = ['required'];
         if($case == 'login') {
             array_push($rules, Password::min(8));
         } else if($case == 'register' || $case == 'update') {

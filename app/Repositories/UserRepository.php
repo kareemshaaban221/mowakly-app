@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Models\PasswordReset;
+use Illuminate\Database\Eloquent\Model;
 use Laravel\Socialite\Facades\Socialite;
 
 abstract class UserRepository {
@@ -21,5 +23,19 @@ abstract class UserRepository {
 
     public function socialiteLoginCallback(String $driver) {
         return Socialite::driver($driver)->stateless()->user()->user;
+    }
+
+    public function resetPassword($new_password, String $token, Model &$user) {
+        $record = PasswordReset::where('email', $user->email)->where('token', $token)->first();
+
+        if(!$record) {
+            return false;
+        }
+
+        $record->delete();
+
+        $user->password = bcrypt($new_password);
+
+        return true;
     }
 }

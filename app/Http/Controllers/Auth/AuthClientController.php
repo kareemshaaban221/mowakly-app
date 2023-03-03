@@ -7,8 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientRegisterRequest;
 use App\Http\Requests\ClientLoginRequest;
 use App\Helpers\Response;
+use App\Http\Requests\ResetPasswordLinkRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use Illuminate\Support\Facades\DB;
 use App\Interfaces\ClientRepositoryInterface;
+use App\Models\Client;
 use Illuminate\Http\Request;
 
 class AuthClientController extends Controller
@@ -137,6 +140,59 @@ class AuthClientController extends Controller
 
             return $this->response->ok([
                'message' => 'Email verified successfully!',
+               'data' => $client
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $this->response->internalServerError($th->getMessage());
+        }
+    }
+
+    public function resetPasswordLink(ResetPasswordLinkRequest $request) {
+        // if fails
+        if(isset($request->validator) && $request->validator->fails()) {
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
+        }
+
+        $user = Client::where('email', $request->email)->first();
+
+        if(!$user) {
+            return $this->response->badRequest('This email doesn\'t exists!');
+        }
+
+        $res = $this->sendResetPasswordLink($user, 'client');
+
+        if(!$res) {
+            return $this->response->internalServerError('Error while sending reset password link!');
+        }
+
+        return $this->response->ok([
+            'message' => 'Reset password link has been sent successfully!'
+        ]);
+    }
+
+    public function resetPassword(ResetPasswordRequest $request, $token) {
+        // if fails
+        if(isset($request->validator) && $request->validator->fails()) {
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
+        }
+        
+        DB::beginTransaction();
+
+        try {
+            $client = Client::where('email', $request->email)->firstOrFail();
+
+            $res = $this->clientRepository->resetPassword($request->new_password, $token, $client);
+
+            if(!$res)
+                return $this->response->badRequest('Token is invalid!');
+
+            $client->save();
+
+            DB::commit();
+
+            return $this->response->ok([
+               'message' => 'Password has been resetted successfully!',
                'data' => $client
             ]);
         } catch (\Throwable $th) {

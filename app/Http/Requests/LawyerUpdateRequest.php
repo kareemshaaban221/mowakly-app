@@ -33,7 +33,7 @@ class LawyerUpdateRequest extends ValidationRulesRequest
             'fname' => parent::nameRule(update: true),
             'lname' => parent::nameRule(update: true),
             'email' => array_merge(['unique:lawyers,email'], parent::emailRule(update: true)),
-            'password' => parent::passwordRule('update', update: true),
+            // 'password' => parent::passwordRule('update', update: true),
             'gender' => parent::genderRule(update: true),
             'description' => parent::descriptionRule(update: true),
             'date_of_birth' => parent::dateOfBirthRule(update: true),

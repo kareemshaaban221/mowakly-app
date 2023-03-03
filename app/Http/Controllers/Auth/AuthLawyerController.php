@@ -6,10 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LawyerRegisterRequest;
 use App\Http\Requests\LawyerLoginRequest;
 use App\Helpers\Response;
+use App\Http\Requests\ResetPasswordLinkRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Interfaces\AttachmentRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use App\Interfaces\LawyerRepositoryInterface;
+use App\Mail\ResetPasswordMail;
+use App\Models\Lawyer;
+use App\Models\PasswordReset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class AuthLawyerController extends Controller
 {
@@ -142,6 +149,59 @@ class AuthLawyerController extends Controller
 
             return $this->response->ok([
                'message' => 'Email verified successfully!',
+               'data' => $lawyer
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $this->response->internalServerError($th->getMessage());
+        }
+    }
+
+    public function resetPasswordLink(ResetPasswordLinkRequest $request) {
+        // if fails
+        if(isset($request->validator) && $request->validator->fails()) {
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
+        }
+
+        $user = Lawyer::where('email', $request->email)->first();
+
+        if(!$user) {
+            return $this->response->badRequest('This email doesn\'t exists!');
+        }
+
+        $res = $this->sendResetPasswordLink($user, 'lawyer');
+
+        if(!$res) {
+            return $this->response->internalServerError('Error while sending reset password link!');
+        }
+
+        return $this->response->ok([
+            'message' => 'Reset password link has been sent successfully!'
+        ]);
+    }
+
+    public function resetPassword(ResetPasswordRequest $request, $token) {
+        // if fails
+        if(isset($request->validator) && $request->validator->fails()) {
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
+        }
+        
+        DB::beginTransaction();
+
+        try {
+            $lawyer = Lawyer::where('email', $request->email)->firstOrFail();
+
+            $res = $this->lawyerRepository->resetPassword($request->new_password, $token, $lawyer);
+
+            if(!$res)
+                return $this->response->badRequest('Token is invalid!');
+
+            $lawyer->save();
+
+            DB::commit();
+
+            return $this->response->ok([
+               'message' => 'Password has been resetted successfully!',
                'data' => $lawyer
             ]);
         } catch (\Throwable $th) {

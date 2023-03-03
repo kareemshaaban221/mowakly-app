@@ -58,9 +58,10 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
         $lawyer->date_of_birth = isset($data['date_of_birth']) ? $data['date_of_birth'] : $lawyer->date_of_birth;
         $lawyer->description = isset($data['description']) ? $data['description'] : $lawyer->description;
         $lawyer->card_id = isset($data['card_id']) ? $data['card_id'] : $lawyer->card_id;
-        $lawyer->chat_price = isset($data['chat_price']) ? (double) $data['chat_price'] : $lawyer->chat_price;
-        $lawyer->video_price = isset($data['video_price']) ? (double) $data['video_price'] : $lawyer->video_price;
-        $lawyer->phone_price = isset($data['phone_price']) ? (double) $data['phone_price'] : $lawyer->phone_price;
+        $lawyer->national_id = isset($data['national_id']) ? $data['national_id'] : $lawyer->national_id;
+        // $lawyer->chat_price = isset($data['chat_price']) ? (double) $data['chat_price'] : $lawyer->chat_price;
+        // $lawyer->video_price = isset($data['video_price']) ? (double) $data['video_price'] : $lawyer->video_price;
+        // $lawyer->phone_price = isset($data['phone_price']) ? (double) $data['phone_price'] : $lawyer->phone_price;
 
         return $lawyer;
     }
@@ -89,7 +90,7 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
 
     public function storeCard($file, Lawyer &$lawyer) {
         $filename = $this->storeFile('card', $file, $lawyer, 'lawyer');
-        
+
         $lawyer->card = $filename;
 
         return $filename;

@@ -40,11 +40,12 @@ class LawyerUpdateRequest extends ValidationRulesRequest
             'card' => parent::cardRule(update: true),
             'card_id' => parent::cardIdRule(update: true),
             'avatar' => parent::avatarRule(),
-            'chat_price' => parent::priceRule(update: true),
-            'video_price' => parent::priceRule(update: true),
-            'phone_price' => parent::priceRule(update: true),
-            'attachments.*' => parent::attachmentRule(update: true),
-            'phones.*' => parent::phoneRule(update: true),
+            'national_id' => parent::nationalIdRule(update: true),
+            // 'chat_price' => parent::priceRule(update: true),
+            // 'video_price' => parent::priceRule(update: true),
+            // 'phone_price' => parent::priceRule(update: true),
+            // 'attachments.*' => parent::attachmentRule(update: true),
+            // 'phones.*' => parent::phoneRule(update: true),
         ];
     }
 }

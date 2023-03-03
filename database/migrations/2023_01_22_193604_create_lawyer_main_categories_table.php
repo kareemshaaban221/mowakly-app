@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('mean_of_consultation', ['call', 'chat', 'appointment'])->nullable();
             $table->timestamps();
             // constraints
-            $table->primary(['m_category_id', 'lawyer_id']);
+            $table->primary(['m_category_id', 'lawyer_id', 'mean_of_consultation']);
         });
     }
 

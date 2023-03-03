@@ -56,12 +56,6 @@ class AuthLawyerController extends Controller
                     $this->lawyerRepository->storeSubcategory($subcategory, $lawyer);
                 }
 
-            foreach ($request->categories as $category) {
-                if(is_null($this->lawyerRepository->storeCategory($category, $lawyer))) {
-                    throw new \Exception('This category is not found!');
-                }
-            }
-
             $token = $this->lawyerRepository->generateToken($lawyer);
 
             DB::commit();

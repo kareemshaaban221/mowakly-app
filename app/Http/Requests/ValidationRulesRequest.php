@@ -136,6 +136,8 @@ class ValidationRulesRequest extends FormRequest
 
         if($exists) array_push($rules, "exists:$table,name");
 
+
+        // dd($rules);
         return $rules;
     }
 
@@ -143,7 +145,7 @@ class ValidationRulesRequest extends FormRequest
         return ['required', 'string'];
     }
 
-    protected function MeansRule($store = false) {
+    protected function meansRule($store = false) {
         return ['required', 'in:call,chat,appointment'];
     }
 

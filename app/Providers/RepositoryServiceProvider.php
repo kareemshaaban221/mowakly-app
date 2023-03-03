@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Interfaces\AttachmentRepositoryInterface;
+use App\Repositories\LawyerMainCategoryRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\LawyerRepositoryInterface;
 use App\Repositories\LawyerRepository;
 use App\Interfaces\ClientRepositoryInterface;
+use App\Interfaces\LawyerMainCategoryRepositoryInterface;
 use App\Interfaces\MainCategoryRepositoryInterface;
 use App\Interfaces\SubcategoryRepositoryInterface;
 use App\Repositories\AttachmentRepository;
@@ -28,6 +30,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(MainCategoryRepositoryInterface::class, MainCategoryRepository::class);
         $this->app->bind(SubcategoryRepositoryInterface::class, SubcategoryRepository::class);
         $this->app->bind(AttachmentRepositoryInterface::class, AttachmentRepository::class);
+        $this->app->bind(LawyerMainCategoryRepositoryInterface::class, LawyerMainCategoryRepository::class);
     }
 
     /**

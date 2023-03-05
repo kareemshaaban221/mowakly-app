@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthLawyerController;
 use App\Http\Controllers\Auth\AuthClientController;
 use App\Helpers\Response;
+use App\Http\Controllers\Auth\FacebookController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Lawyer\LawyerController;
 use App\Http\Controllers\Lawyer\ProfileController as LawyerProfileController;
@@ -31,6 +32,10 @@ Route::prefix('lawyer')->middleware('isLawyer')->group(function () {
     Route::get('/google/register', [GoogleController::class, 'access'])->name('lawyer.google.register');
     Route::get('/google/login', [GoogleController::class, 'access'])->name('lawyer.google.login');
     Route::get('/google/callback', [GoogleController::class, 'callback'])->name('lawyer.google.callback');
+    // facebook auth routes
+    Route::get('/facebook/register', [FacebookController::class, 'access'])->name('lawyer.facebook.register');
+    Route::get('/facebook/login', [FacebookController::class, 'access'])->name('lawyer.facebook.login');
+    Route::get('/facebook/callback', [FacebookController::class, 'callback'])->name('lawyer.facebook.callback');
     // verification action route
     Route::get('/email/verify/{token}', [AuthLawyerController::class, 'verify'])->name('lawyer.email.verify');
     // reset password route
@@ -46,6 +51,10 @@ Route::middleware('isClient')->group(function () {
     Route::get('/google/register', [GoogleController::class, 'access'])->name('client.google.register');
     Route::get('/google/login', [GoogleController::class, 'access'])->name('client.google.login');
     Route::get('/google/callback', [GoogleController::class, 'callback'])->name('client.google.callback');
+    // facebook auth routes
+    Route::get('/facebook/register', [FacebookController::class, 'access'])->name('client.facebook.register');
+    Route::get('/facebook/login', [FacebookController::class, 'access'])->name('client.facebook.login');
+    Route::get('/facebook/callback', [FacebookController::class, 'callback'])->name('client.facebook.callback');
     // verification action route
     Route::get('/email/verify/{token}', [AuthClientController::class, 'verify'])->name('client.email.verify');
     // reset password route

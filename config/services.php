@@ -9,20 +9,24 @@ if(isset($_REQUEST['user_type'])) {
     $register = array_search('register', $directs);
     $callback = array_search('callback', $directs);
 
+    $facebook = array_search('facebook', $directs) ? 'facebook' : '';
+    $google = array_search('google', $directs) ? 'google' : '';
+    $driver = $facebook . $google;
+
     // dd($directs);
 
     if($register) {
         if(request()->user_type == 'lawyer') {
-            $link = $host . 'api/lawyer/google/callback?user_type=lawyer&register=true';
+            $link = $host . "api/lawyer/$driver/callback?user_type=lawyer&register=true";
         } else {
-            $link = $host . 'api/google/callback?user_type=client&register=true';
+            $link = $host . "api/$driver/callback?user_type=client&register=true";
         }
     } else {
         if(!$callback) {
             if(request()->user_type == 'lawyer') {
-                $link = $host . 'api/lawyer/google/callback?user_type=lawyer&register=false';
+                $link = $host . "api/lawyer/$driver/callback?user_type=lawyer&register=false";
             } else {
-                $link = $host . 'api/google/callback?user_type=client&register=false';
+                $link = $host . "api/$driver/callback?user_type=client&register=false";
             }
         } else {
             $link = request()->url()
@@ -73,8 +77,14 @@ return [
     ],
 
     'google' => [
-        'client_id' => '851641971720-qrle12rssaal27g3qfk3gus31ldiueka.apps.googleusercontent.com',
-        'client_secret' => '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',
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => !is_null($link) ? $link : $host,
+    ],
+
+    'facebook' => [
+        'client_id' => env('FACEBOOK_CLIENT_ID'),
+        'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
         'redirect' => !is_null($link) ? $link : $host,
     ],
 

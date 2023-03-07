@@ -1,11 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:fp/screens/loginScreen.dart';
-import 'package:fp/screens/payScreen.dart';
+import 'package:fp/cubit%20App/blocObserver.dart';
+import 'package:fp/network/remote/dio_helper.dart';
+import 'package:fp/screens/splashScreen/splashScreen.dart';
+
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import 'screens/signup2Screen.dart';
-import 'screens/signupScreen.dart';
+
 
 void main (){
   Bloc.observer = MyBlocObserver();
@@ -22,7 +23,7 @@ class MowakleApp extends StatelessWidget {
       return ResponsiveSizer(
       builder: (context, orientation, screenType){
         return const MaterialApp(
-          home: PayScreen(),
+          home: SplashScreen(),
         );
       },
     );

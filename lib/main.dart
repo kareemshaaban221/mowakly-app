@@ -35,6 +35,7 @@ class MowakleApp extends StatelessWidget {
             BlocProvider(create: (context) => SignupScreenCubit(),),
           ],
           child: const MaterialApp(
+            //hellow
             home: SplashScreen(),
           ),
         );

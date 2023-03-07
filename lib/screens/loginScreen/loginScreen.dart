@@ -6,20 +6,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fp/component/components.dart';
 import 'package:fp/screens/loginScreen/cubit/cubitLoginScreen.dart';
 import 'package:fp/screens/loginScreen/cubit/statesCubit.dart';
-import 'package:fp/screens/signupScreen.dart';
+import 'package:fp/screens/signupScreen/signupScreen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 
 
 class LoginScreen extends StatelessWidget {
-   LoginScreen({Key? key}) : super(key: key);
+   LoginScreen({Key? key,this.userType}) : super(key: key);
 
    var emailController=TextEditingController();
    var passwordController=TextEditingController();
    var scaffoldKey=GlobalKey<ScaffoldState>();
    var formKey=GlobalKey<FormState>();
-   static String id = 'login';
+   String ?userType;
+
+
 
   @override
 
@@ -91,10 +93,7 @@ class LoginScreen extends StatelessWidget {
                             builder:(context) => build_button(title: 'تسجيل دخول',
                                 ontap: (){
                               if( formKey.currentState!.validate()){
-                                cubit.userLogin(
-                                    email: emailController.text,
-                                    password: passwordController.text,
-                                );
+                                //cubit.userLogin(userType: userType,email: emailController.text,password: passwordController.text,);
                               }
                             },
                             ),
@@ -144,7 +143,7 @@ class LoginScreen extends StatelessWidget {
                             children: [
                               Text('لا يوجد لك حساب ؟',style: TextStyle(fontSize: 13.5.sp),),
                               InkWell(
-                                  onTap:() => Navigator.pushNamed(context,SignupScreen.id),
+                                  onTap:() => Navigator.push(context, MaterialPageRoute(builder: (context) => SignupScreen(userType: userType),)),
                                   child: Text('سجل من هنا ',style: TextStyle(fontSize: 13.5.sp,color: Color(0xff1BE5BF)),))
                             ],
                           )

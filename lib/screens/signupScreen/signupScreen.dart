@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fp/component/components.dart';
-import 'package:fp/screens/signup2Screen.dart';
+import 'package:fp/screens/signup2Screen/signup2Screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class SignupScreen extends StatelessWidget {
-    SignupScreen({Key? key}) : super(key: key);
+    SignupScreen({Key? key,this.userType}) : super(key: key);
 
    var passwordController=TextEditingController();
-
+    var nameController=TextEditingController();
+    var passwordConfirmController=TextEditingController();
+    var emailController=TextEditingController();
     var scaffoldKey=GlobalKey<ScaffoldState>();
     var formKey=GlobalKey<FormState>();
     static String id = 'signup';
+    String ?userType;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class SignupScreen extends StatelessWidget {
               //
               build_text_filed(label: 'الاسم بالكامل',
                 icon: assetIcons+'Icon material-person.svg',
-                controller: passwordController,
+                controller: nameController,
                 validata: (value) {
                   if (value!.isEmpty) {
                     return 'Title must not empty';
@@ -47,7 +50,7 @@ class SignupScreen extends StatelessWidget {
 
               build_text_filed(label: 'البريد الإلكتروني',
                 icon: assetIcons+'Icon ionic-ios-mail.svg',
-                controller: passwordController,
+                controller: emailController,
                 validata: (value) {
                   if (value!.isEmpty) {
                     return 'Title must not empty';
@@ -70,9 +73,9 @@ class SignupScreen extends StatelessWidget {
                 },
               ),
               SizedBox(height: 4.1.h,),
-              build_text_filed(label: 'كلمة المرور الجديدة',
+              build_text_filed(label: 'تأكيد كلمة المرور ',
                 icon: assetIcons+'Icon awesome-lock.svg',
-                controller: passwordController,
+                controller: passwordConfirmController,
                 validata: (value) {
                   if (value!.isEmpty) {
                     return 'Title must not empty';
@@ -86,7 +89,7 @@ class SignupScreen extends StatelessWidget {
               build_button(title: 'التالــــــي',
                   ontap: (){
                     if( formKey.currentState!.validate()){
-                      Navigator.pushNamed(context,Signup2Screen.id );
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Signup2Screen(userType: userType),));
                     }
                     else{
 

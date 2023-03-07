@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fp/component/components.dart';
-import 'package:fp/screens/payScreen.dart';
+import 'package:fp/screens/cv_lawerScreen/cv_lawerScreen.dart';
+import 'package:fp/screens/payScreen/payScreen.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class Signup2Screen extends StatelessWidget {
-   Signup2Screen({Key? key}) : super(key: key);
+   Signup2Screen({Key? key,this.userType}) : super(key: key);
 
    static String id = 'signup2';
    var passwordController=TextEditingController();
    var dateController=TextEditingController();
+   String ?userType;
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +133,13 @@ class Signup2Screen extends StatelessWidget {
                              //==========================
                              build_button(title: 'التالــــــي',
                              ontap: (){
-                               Navigator.pushNamed(context,PayScreen.id);
+                               if(userType=='client'){
+                                 Navigator.push(context, MaterialPageRoute(builder: (context) => PayScreen(),));
+                               }
+                               else if(userType=='lawer'){
+                                 Navigator.push(context, MaterialPageRoute(builder: (context) => CvLawerScreen(),));
+                               }
+                               
                              }
                              ),
                            ],

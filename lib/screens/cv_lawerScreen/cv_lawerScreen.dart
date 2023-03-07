@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fp/component/components.dart';
+import 'package:fp/screens/cv_lawer2Screen/cv_lawer2Screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 
@@ -212,7 +213,9 @@ class CvLawerScreen extends StatelessWidget {
                             //                                       ),
                             //                                     );
                             build_button(title: 'التالــــــي',
-                                ontap: (){}
+                                ontap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => CvLawer2Screen(),));
+                                }
                             ),
                           ],
                         ),

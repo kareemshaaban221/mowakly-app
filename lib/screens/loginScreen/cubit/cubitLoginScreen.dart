@@ -13,11 +13,8 @@ class LoginScreenCubit extends Cubit<LoginStates>{
 
   static LoginScreenCubit get(context)=>BlocProvider.of(context);
 
-  void userLogin({
-  @required String ?email,
-    @required String ? password,
-    @required String ? userType,
-}){
+  void userLogin({@required String ?email,@required String ? password,@required String ? userType,}){
+
     emit(LoginLoadingState());
     DioHelper.PostData(
         url: LOGIN,

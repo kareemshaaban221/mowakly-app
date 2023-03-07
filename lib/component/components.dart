@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fp/screens/signupScreen/cuibt/cubitSignupScreen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 String assetImage = 'asset/';
 
 String assetIcons = 'asset/icons/';
 
-Widget build_choice_filed(@required icon){
-  String selectValue='ذكر';
+Widget build_choice_filed({@required icon,selectValue='male',context}){
+  //String selectValue='ذكر';
   return SizedBox(
     height: 7.36.h,
     width: 70.11.w,
@@ -42,11 +43,12 @@ Widget build_choice_filed(@required icon){
 
                     value: selectValue ,
                     onChanged: (value) {
+                      SignupScreenCubit.get(context).change();
                       selectValue=value!;
                     },
                     items: const[
-                      DropdownMenuItem(child: Directionality( textDirection: TextDirection.rtl,child: Text("ذكر",)),value: "ذكر"),
-                      DropdownMenuItem(child: Text("انثي"),value: "انثي"),
+                      DropdownMenuItem(child: Text("ذكر",),value: 'male'),
+                      DropdownMenuItem(child: Text("انثي"),value: 'female'),
 
                     ],
                   ),

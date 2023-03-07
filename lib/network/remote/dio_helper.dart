@@ -12,7 +12,7 @@ class DioHelper{
   static init(){
     dio=Dio(
       BaseOptions(
-        baseUrl:'https://f88d-156-217-191-121.eu.ngrok.io',
+        baseUrl:'https://3481-197-43-91-94.ngrok.io',
         receiveDataWhenStatusError: true,
         headers:{
           'Content-Type':'application/json'

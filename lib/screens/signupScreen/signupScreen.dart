@@ -15,6 +15,7 @@ class SignupScreen extends StatelessWidget {
     var formKey=GlobalKey<FormState>();
     static String id = 'signup';
     String ?userType;
+    Map user={};
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +90,13 @@ class SignupScreen extends StatelessWidget {
               build_button(title: 'التالــــــي',
                   ontap: (){
                     if( formKey.currentState!.validate()){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => Signup2Screen(userType: userType),));
+                      user={
+                        'name':nameController.text,
+                        'email':emailController.text,
+                        'password':passwordController.text,
+                        'passwordConfirm':passwordConfirmController.text,
+                      };
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Signup2Screen(userType: userType,user: user),));
                     }
                     else{
 

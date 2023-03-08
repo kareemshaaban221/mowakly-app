@@ -10,8 +10,9 @@ use App\Http\Controllers\Lawyer\LawyerController;
 use App\Http\Controllers\Lawyer\ProfileController as LawyerProfileController;
 use App\Http\Controllers\Client\ProfileController as ClientProfileController;
 use App\Http\Controllers\Lawyer\LawyerMainCategoryController;
-use App\Http\Controllers\Lawyer\MainCategoryController;
-use App\Http\Controllers\Lawyer\SubcategoryController;
+use App\Http\Controllers\Lawyer\LawyerSubcategoryController;
+use App\Http\Controllers\MainCategoryController;
+use App\Http\Controllers\SubcategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -91,6 +92,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('maincategories/category/{id}/delete', [LawyerMainCategoryController::class, 'destroy'])->name('lawyer.maincategories.category.delete');
         Route::post('maincategories/category/{id}/mean/{mean}/delete', [LawyerMainCategoryController::class, 'destroySpecific'])->name('lawyer.maincategories.category.mean.delete');
 
+        Route::post('subcategories', [LawyerSubcategoryController::class, 'show'])->name('lawyer.subcategories.show');
+        Route::post('subcategories/store', [LawyerSubcategoryController::class, 'store'])->name('lawyer.subcategories.store');
+        Route::post('subcategories/category/{id}/delete', [LawyerSubcategoryController::class, 'destroy'])->name('lawyer.subcategories.category.delete');
+
     });
 
     // clients routes
@@ -114,10 +119,12 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // categories routes
-Route::post('/categories', [MainCategoryController::class, 'store'])->name('main_category.store');
+Route::post('/categories', [MainCategoryController::class, 'store'])->name('maincategories.store');
+Route::get('/categories', [MainCategoryController::class, 'index'])->name('maincategories.index');
 
 // subcategories routes
-Route::post('/subcategories', [SubcategoryController::class, 'store'])->name('main_category.store');
+Route::post('/subcategories', [SubcategoryController::class, 'store'])->name('subcategories.store');
+Route::get('/subcategories', [SubcategoryController::class, 'index'])->name('subcategories.index');
 
 // Route::get('/lawyers', [LawyerController::class, 'index'])->name('lawyer.index');
 // Route::get('/lawyers/show/{email}', [LawyerController::class, 'show'])->name('lawyer.show');

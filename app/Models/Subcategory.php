@@ -11,12 +11,10 @@ class Subcategory extends Model
 
     protected $guarded = [];
 
-    protected $hidden = ['id'];
-
     protected $with = ['mainCategory'];
 
     public function mainCategory() {
-        return $this->belongsTo(MainCategory::class);
+        return $this->belongsTo(MainCategory::class, 'm_category_id');
     }
 
     // public function lawyers() {

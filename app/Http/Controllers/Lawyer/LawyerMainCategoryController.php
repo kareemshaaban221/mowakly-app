@@ -42,7 +42,7 @@ class LawyerMainCategoryController extends Controller
 
             if(is_null($created_lawyer_category_fields)) {
                 DB::rollBack();
-                return $this->response->badRequest('This category and mean of consultation were already added together. Try to update!');
+                return $this->response->badRequest('This category and mean of consultation were already added together or duplicated!');
             }
 
             if($created_lawyer_category_fields == -1)

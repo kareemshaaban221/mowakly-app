@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SubcategoryStoreRequest extends ValidationRulesRequest
+class LawyerSubcategoryRequest extends ValidationRulesRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +23,11 @@ class SubcategoryStoreRequest extends ValidationRulesRequest
      */
     public function rules()
     {
-        // TODO: Admin Auth
+        parent::checkEmailRule();
         return [
-            'subcategories' => 'required',
-            'subcategories.*.subcategory' => array_merge(parent::categoryRule('subcategories', true), ['distinct']),
-            'subcategories.*.parent_category' => parent::categoryRule(exists: true),
+            'subcategories' => 'required|distinct',
+            'subcategories.*' => array_merge(['required'], parent::categoryRule(table: 'subcategories', exists: true)),
+            'email' => parent::emailRule(),
         ];
     }
 }

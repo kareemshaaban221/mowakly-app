@@ -185,7 +185,7 @@ class AuthLawyerController extends Controller
         if(isset($request->validator) && $request->validator->fails()) {
             return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
         }
-        
+
         DB::beginTransaction();
 
         try {

@@ -162,7 +162,7 @@ class ValidationRulesRequest extends FormRequest
             return ['digits:' . $digits, 'regex:' . $regex];
         }
 
-        return ['required', 'digits:' . $digits, 'regex:' . $regex];
+        return ['required', 'digits:' . $digits, 'regex:' . $regex, 'unique:lawyers,national_id'];
     }
 
     protected function checkEmailRule() {

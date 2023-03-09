@@ -21,8 +21,7 @@ class PaymentMethodStoreRequest extends ValidationRulesRequest
      */
     public function rules()
     {
-        if(auth()->check())
-            $this->request->set('email', auth()->user()->email);
+        parent::checkEmailRule();
         return [
             'email' => parent::emailRule(),
             'payment_method' => parent::paymentMethodRule()

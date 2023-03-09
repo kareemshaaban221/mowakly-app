@@ -11,7 +11,9 @@ class LawyerSubcategory extends Model
 
     protected $guarded = [];
 
-    protected $hidden = ['id'];
+    protected $hidden = ['subcategory_id', 'lawyer_id'];
+
+    protected $with = ['subcategory'];
 
     public function lawyer() {
         return $this->belongsTo(Lawyer::class);

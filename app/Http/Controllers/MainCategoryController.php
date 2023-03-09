@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Lawyer;
+namespace App\Http\Controllers;
 
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Interfaces\MainCategoryRepositoryInterface;
+use App\Models\MainCategory;
 use Illuminate\Support\Facades\DB;
 
 class MainCategoryController extends Controller
@@ -19,7 +20,7 @@ class MainCategoryController extends Controller
     }
 
     public function index() {
-        ;
+        return MainCategory::all();
     }
 
     public function store(CategoryStoreRequest $request) {
@@ -32,13 +33,13 @@ class MainCategoryController extends Controller
 
         try {
 
-            $category = $this->mainCategoryRepository->storeCategory($request);
-
-            $category->save();
+            if(! $this->mainCategoryRepository->storeCategory($request)) {
+                throw new \Exception('Error while insertting categories!');
+            }
 
             DB::commit();
 
-            return $this->response->created(['category' => $category], 'main category');
+            return $this->response->created([], 'main categories');
 
         } catch (\Throwable $th) {
             DB::rollBack();

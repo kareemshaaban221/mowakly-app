@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Lawyer;
+namespace App\Http\Controllers;
 
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubcategoryStoreRequest;
 use App\Interfaces\SubcategoryRepositoryInterface;
+use App\Models\Subcategory;
 use Illuminate\Support\Facades\DB;
 
 class SubcategoryController extends Controller
@@ -18,6 +19,10 @@ class SubcategoryController extends Controller
         $this->response = new Response;
     }
 
+    public function index() {
+        return Subcategory::all();
+    }
+
     public function store(SubcategoryStoreRequest $request) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
@@ -28,13 +33,11 @@ class SubcategoryController extends Controller
 
         try {
 
-            $subcategory = $this->subcategoryRepository->storeSubcategory($request);
-
-            $subcategory->save();
+            $this->subcategoryRepository->storeSubcategory($request);
 
             DB::commit();
 
-            return $this->response->created(['subcategory' => $subcategory], 'subcategory');
+            return $this->response->created([], 'subcategories');
 
         } catch (\Throwable $th) {
             DB::rollback();

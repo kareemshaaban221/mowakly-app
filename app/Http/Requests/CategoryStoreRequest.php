@@ -25,7 +25,8 @@ class CategoryStoreRequest extends ValidationRulesRequest
     {
         // TODO: Admin Auth
         return [
-            'category' => parent::categoryRule(store: true),
+            'categories' => 'required',
+            'categories.*' => array_merge(parent::categoryRule(store: true), ['distinct']),
         ];
     }
 }

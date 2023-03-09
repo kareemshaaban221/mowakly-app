@@ -27,7 +27,7 @@ class ClientUpdateRequest extends ValidationRulesRequest
             'fname' => parent::nameRule(update: true),
             'lname' => parent::nameRule(update: true),
             'email' => array_merge(['unique:clients,email'], parent::emailRule(update: true)),
-            'password' => parent::passwordRule('update', update: true),
+            'password' => parent::passwordRule('update'),
             'gender' => parent::genderRule(update: true),
             'date_of_birth' => parent::dateOfBirthRule(update: true),
             'avatar' => parent::avatarRule(),

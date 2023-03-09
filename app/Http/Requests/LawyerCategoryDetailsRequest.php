@@ -23,10 +23,9 @@ class LawyerCategoryDetailsRequest extends ValidationRulesRequest
      */
     public function rules()
     {
-        if(auth()->check())
-            $this->request->set('email', auth()->user()->email);
+        parent::checkEmailRule();
         return [
-            'categories' => 'required|distinct',
+            'categories' => 'required',
             'categories.*.mean_of_consultation' => parent::meansRule(),
             'categories.*.category_name' => parent::categoryRule(exists: true),
             'prices' => 'required',

@@ -7,8 +7,8 @@ class ClientCard extends StatelessWidget {
   String label;
   String asset;
   VoidCallback onPress;
-
-  ClientCard({required this.label, required this. asset, required this.onPress});
+  int backgroundColor ;
+  ClientCard({required this.label, required this. asset, required this.backgroundColor,required this.onPress});
 
 
   @override
@@ -16,10 +16,10 @@ class ClientCard extends StatelessWidget {
     return InkWell(
       onTap: onPress,
       child: Container(
-        height: 20.h,
-        width:  20.h ,
+        height: 18.h,
+        width:  18.h ,
         decoration: BoxDecoration(
-          color:  Color(0xffffffff),
+          color:  Color(backgroundColor),
           borderRadius: BorderRadius.circular(4.pt),
           boxShadow: const [
             BoxShadow(
@@ -31,8 +31,9 @@ class ClientCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(asset),
-            Text(label,style: GoogleFonts.cairo(color: Color(0xff0B3939),fontSize: 28, fontWeight: FontWeight.w800),)
+            SizedBox(height: 8.8.h,
+                child: Image.asset(asset)),
+            Text(label,style: GoogleFonts.cairo(color: Color(0xffffffff),fontSize: 18.sp, fontWeight: FontWeight.w800),)
           ],
         ),
       ),

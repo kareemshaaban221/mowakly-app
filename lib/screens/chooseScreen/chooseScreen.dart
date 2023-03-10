@@ -13,50 +13,54 @@ class ChooseScreen extends StatefulWidget {
 }
 
 class _ChooseScreenState extends State<ChooseScreen> {
-
-
-
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end:  Alignment.bottomCenter,
-          colors: [Color(0xff1BE5BF), Color(0xff1d8181)]
-        )
-      ),
-
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              Image.asset('asset/head.png'),
-
-
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 28),
-                child: Text('برجاء الإختيار', textAlign: TextAlign.center,style: GoogleFonts.cairo(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12.w,
-                  color: Color(0xff0B3939)
-                ),),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            Image.asset('asset/head.png'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30),
+              child: Text(
+                'برجاء الإختيار',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.cairo(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 24.sp,
+                    color: Color(0xff0B3939)),
               ),
-
-              ClientCard(label: 'محامي', asset: 'asset/lawyer.png', onPress: () { Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(userType: 'lawer'),)); } ,),
-
-              SizedBox(height: 6.h,),
-
-              ClientCard(label: 'عميل', asset: 'asset/client.png', onPress: () { Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(userType: 'client'),)); },),
-
-            ],
-          ),
+            ),
+            ClientCard(
+              asset: 'asset/lawyer.png',
+              onPress: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginScreen(userType: 'lawyer'),
+                    ));
+              },
+              backgroundColor: 0xff0B3939, label: 'محامي',
+            ),
+            SizedBox(
+              height: 6.h,
+            ),
+            ClientCard(
+              asset: 'asset/client.png',
+              onPress: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LoginScreen(userType: 'client'),
+                    ));
+              },
+              backgroundColor: 0xff1BE5BF, label: 'عميل',
+            ),
+          ],
         ),
       ),
     );
   }
-
 }

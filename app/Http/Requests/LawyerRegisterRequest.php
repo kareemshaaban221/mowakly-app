@@ -34,7 +34,7 @@ class LawyerRegisterRequest extends ValidationRulesRequest
             'attachments' => 'required',
             'attachments.*' => parent::attachmentRule(),
             'phones' => 'required',
-            'phones.*' => parent::phoneRule(),
+            'phones.*' => parent::phoneRule(distinct: true),
             // 'subcategories' => 'exists:subcategories,name',
             // 'subcategories.*' => parent::subcategoryRule(),
         ];

@@ -89,12 +89,20 @@ class ValidationRulesRequest extends FormRequest
         return ['file', 'mimes:' . $mimes, 'max:' . $max];
     }
 
-    protected function phoneRule(Int $digits = 10, String $regex = '/1[5210]\d{8}/u', $update = false) {
+    protected function phoneRule(Int $digits = 10, String $regex = '/1[5210]\d{8}/u', $update = false, $distinct = false) {
+        $rules = ['digits:' . $digits, 'regex:' . $regex];
+
         if ($update) {
-            return ['digits:' . $digits, 'regex:' . $regex];
+            return $rules;
         }
 
-        return ['required', 'digits:' . $digits, 'regex:' . $regex];
+        if ($distinct) {
+            array_push($rules, 'distinct');
+        }
+
+        array_push($rules, 'required');
+
+        return $rules;
     }
 
     protected function paymentMethodRule(Int $min = 3, Int $max = 255, $update = false) {

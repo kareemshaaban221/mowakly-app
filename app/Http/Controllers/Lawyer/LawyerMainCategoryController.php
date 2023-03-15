@@ -154,6 +154,7 @@ class LawyerMainCategoryController extends Controller
         }
 
         $lawyer = Lawyer::where('email', $request->email)->first();
+        // dd($lawyer->categories->unique()->toarray());
         $data = LawyerMainCategory::where('lawyer_id', $lawyer->id)->get();
 
         return $this->response->ok([

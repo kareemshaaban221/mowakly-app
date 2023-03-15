@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AttachmentStoreRequest extends ValidationRulesRequest
+class ConsultationUpdateRequest extends ValidationRulesRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +25,9 @@ class AttachmentStoreRequest extends ValidationRulesRequest
     {
         parent::checkEmailRule();
         return [
-            'email' => parent::emailRule(exists: 'lawyers'),
-            'attachment' => $this->attachmentRule(),
+            'email' => parent::emailRule(exists: 'clients'),
+            'review' => 'string|min:10|max:255',
+            'rating' => 'numeric|min:0|max:5',
         ];
     }
 }

@@ -19,8 +19,8 @@ return new class extends Migration
             $table->foreignId('lawyer_id')->constrained('lawyers');
             $table->foreignId('m_category_id')->constrained('main_categories');
             $table->enum('mean_of_consultation', ['chat', 'call', 'appointment']);
-            $table->string('review');
-            $table->double('rating', 2, 1);
+            $table->string('review')->nullable();
+            $table->double('rating', 2, 1)->nullable();
             $table->timestamps();
         });
     }

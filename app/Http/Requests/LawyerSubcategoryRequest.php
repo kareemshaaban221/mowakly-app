@@ -27,7 +27,7 @@ class LawyerSubcategoryRequest extends ValidationRulesRequest
         return [
             'subcategories' => 'required|distinct',
             'subcategories.*' => array_merge(['required'], parent::categoryRule(table: 'subcategories', exists: true)),
-            'email' => parent::emailRule(),
+            'email' => parent::emailRule(exists: 'lawyers'),
         ];
     }
 }

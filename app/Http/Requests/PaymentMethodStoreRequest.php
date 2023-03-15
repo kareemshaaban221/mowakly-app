@@ -23,7 +23,7 @@ class PaymentMethodStoreRequest extends ValidationRulesRequest
     {
         parent::checkEmailRule();
         return [
-            'email' => parent::emailRule(),
+            'email' => parent::emailRule(exists: 'clients'),
             'payment_method' => parent::paymentMethodRule()
         ];
     }

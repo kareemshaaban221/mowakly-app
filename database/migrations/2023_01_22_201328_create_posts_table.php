@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->string('body');
+            $table->string('image')->nullable();
             $table->foreignId('lawyer_id')->constrained('lawyers');
             $table->timestamps();
         });

@@ -30,7 +30,7 @@ class LawyerCategoryDetailsRequest extends ValidationRulesRequest
             'categories.*.category_name' => parent::categoryRule(exists: true),
             'prices' => 'required',
             'prices.*' => parent::priceRule(),
-            'email' => parent::emailRule(),
+            'email' => parent::emailRule(exists: 'lawyers'),
         ];
     }
 }

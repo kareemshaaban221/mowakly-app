@@ -25,7 +25,7 @@ class PhoneStoreRequest extends ValidationRulesRequest
     {
         parent::checkEmailRule();
         return [
-            'email' => parent::emailRule(),
+            'email' => parent::emailRule(exists: 'lawyers'),
             'phone' => parent::phoneRule()
         ];
     }

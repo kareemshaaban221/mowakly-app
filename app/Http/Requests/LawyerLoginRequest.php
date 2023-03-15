@@ -25,7 +25,7 @@ class LawyerLoginRequest extends ValidationRulesRequest
     public function rules()
     {
         return [
-            'email' => array_merge(['exists:lawyers,email'], parent::emailRule()),
+            'email' => parent::emailRule(exists: 'lawyers'),
             'password' => parent::passwordRule('login'),
         ];
     }

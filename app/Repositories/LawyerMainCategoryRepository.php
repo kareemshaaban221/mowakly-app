@@ -117,4 +117,11 @@ class LawyerMainCategoryRepository implements LawyerMainCategoryRepositoryInterf
             ->whereIn('subcategory_id', $ids)
             ->delete();
     }
+
+    public function find($lawyer_id, $category_id, $mean_of_consultation) {
+        return LawyerMainCategory::where('lawyer_id', $lawyer_id)
+            ->where('m_category_id', $category_id)
+            ->where('mean_of_consultation', $mean_of_consultation)
+            ->first();
+    }
 }

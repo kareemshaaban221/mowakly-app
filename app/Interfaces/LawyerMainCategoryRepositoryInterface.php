@@ -13,4 +13,6 @@ interface LawyerMainCategoryRepositoryInterface {
     public function deleteByCategoryId($id, Model &$user);
 
     public function deleteSpecific($id, $mean, Model &$user);
+
+    public function find($lawyer_id, $category_id, $mean_of_consultation);
 }

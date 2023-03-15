@@ -33,11 +33,11 @@ class Lawyer extends Authenticatable
         return $this->hasMany(LawyerSubcategory::class);
     }
 
-    // public function categories() {
-    //     return $this->morphToMany(MainCategory::class, 'lawyer_main_category', );
-    // }
+    public function categories() {
+        return $this->belongsToMany(MainCategory::class, 'lawyer_main_categories', 'lawyer_id', 'm_category_id');
+    }
 
-    // public function subcategories() {
-    //     return $this->morphToMany(SubCategory::class, 'lawyer_subcategory');
-    // }
+    public function subcategories() {
+        return $this->belongsToMany(SubCategory::class, 'lawyer_subcategories', 'lawyer_id', 'subcategory_id');
+    }
 }

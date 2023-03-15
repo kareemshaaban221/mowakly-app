@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ConsultationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthLawyerController;
 use App\Http\Controllers\Auth\AuthClientController;
@@ -114,6 +115,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('profile/payment_methods/delete', [ClientProfileController::class, 'destroyPaymentMethod'])->name('client.profile.payment_methods.delete');
         Route::post('profile/delete', [ClientProfileController::class, 'destroy'])->name('client.profile.destroy');
 
+        // consultation
+        Route::post('consultation', [ConsultationController::class, 'store'])->name('client.consultation.store');
+        Route::get('consultation', [ConsultationController::class, 'index'])->name('client.consultation.index');
+        Route::post('consultation/{id}/update', [ConsultationController::class, 'update'])->name('client.consultation.update');
+        Route::get('consultation/show/{id}', [ConsultationController::class, 'show'])->name('client.consultation.show');
+        Route::post('consultation/show', [ConsultationController::class, 'showByUserEmail'])->name('client.consultation.showByEmail');
     });
 
 });

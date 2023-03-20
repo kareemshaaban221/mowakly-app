@@ -15,15 +15,20 @@ use Illuminate\Support\Facades\DB;
 
 class ConsultationController extends Controller
 {
-    private $response;
-    private $consultationRepository;
+    private Response $response;
+    private ConsultationRepositoryInterface $consultationRepository;
 
     public function __construct(ConsultationRepositoryInterface $consultationRepository) {
         $this->response = new Response;
         $this->consultationRepository = $consultationRepository;
     }
 
-    public function index() {
+    public function index(EmailAuthOrGivenRequest $request) {
+        // if fails
+        if(isset($request->validator) && $request->validator->fails()) {
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
+        }
+
         try {
 
             return $this->response->ok([
@@ -59,6 +64,7 @@ class ConsultationController extends Controller
             DB::commit();
 
             return $this->response->ok([
+                'data' => $consultation->toarray(),
                 'message' => 'Consultation relation was added successfully!'
             ]);
 
@@ -101,7 +107,12 @@ class ConsultationController extends Controller
         }
     }
 
-    public function show($id) {
+    public function show(EmailAuthOrGivenRequest $request, $id) {
+        // if fails
+        if(isset($request->validator) && $request->validator->fails()) {
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
+        }
+
         try {
 
             return $this->response->ok([

@@ -12,12 +12,14 @@ use App\Interfaces\ConsultationRepositoryInterface;
 use App\Interfaces\LawyerMainCategoryRepositoryInterface;
 use App\Interfaces\LawyerSubcategoryRepositoryInterface;
 use App\Interfaces\MainCategoryRepositoryInterface;
+use App\Interfaces\ScheduleRepositoryInterface;
 use App\Interfaces\SubcategoryRepositoryInterface;
 use App\Repositories\AttachmentRepository;
 use App\Repositories\ClientRepository;
 use App\Repositories\ConsultationRepository;
 use App\Repositories\LawyerSubcategoryRepository;
 use App\Repositories\MainCategoryRepository;
+use App\Repositories\ScheduleRepository;
 use App\Repositories\SubcategoryRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -37,6 +39,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(LawyerMainCategoryRepositoryInterface::class, LawyerMainCategoryRepository::class);
         $this->app->bind(LawyerSubcategoryRepositoryInterface::class, LawyerSubcategoryRepository::class);
         $this->app->bind(ConsultationRepositoryInterface::class, ConsultationRepository::class);
+        $this->app->bind(ScheduleRepositoryInterface::class, ScheduleRepository::class);
     }
 
     /**

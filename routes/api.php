@@ -13,6 +13,7 @@ use App\Http\Controllers\Client\ProfileController as ClientProfileController;
 use App\Http\Controllers\Lawyer\LawyerMainCategoryController;
 use App\Http\Controllers\Lawyer\LawyerSubcategoryController;
 use App\Http\Controllers\MainCategoryController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SubcategoryController;
 
 /*
@@ -97,6 +98,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('subcategories/store', [LawyerSubcategoryController::class, 'store'])->name('lawyer.subcategories.store');
         Route::post('subcategories/category/{id}/delete', [LawyerSubcategoryController::class, 'destroy'])->name('lawyer.subcategories.category.delete');
 
+        // schedule routes
+        Route::post('schedules', [ScheduleController::class, 'index'])->name('lawyer.schedule.index');
+        Route::post('schedules/show/{id}', [ScheduleController::class, 'show'])->name('lawyer.schedule.show');
+        Route::post('schedules/show', [ScheduleController::class, 'showByUserEmail'])->name('lawyer.schedule.showByEmail');
+        Route::post('schedules/store', [ScheduleController::class, 'store'])->name('lawyer.schedule.store');
+        Route::post('schedules/{id}/update', [ScheduleController::class, 'update'])->name('lawyer.schedule.update');
+
     });
 
     // clients routes
@@ -116,11 +124,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('profile/delete', [ClientProfileController::class, 'destroy'])->name('client.profile.destroy');
 
         // consultation
-        Route::post('consultation', [ConsultationController::class, 'store'])->name('client.consultation.store');
-        Route::get('consultation', [ConsultationController::class, 'index'])->name('client.consultation.index');
-        Route::post('consultation/{id}/update', [ConsultationController::class, 'update'])->name('client.consultation.update');
-        Route::get('consultation/show/{id}', [ConsultationController::class, 'show'])->name('client.consultation.show');
-        Route::post('consultation/show', [ConsultationController::class, 'showByUserEmail'])->name('client.consultation.showByEmail');
+        Route::post('consultations/store', [ConsultationController::class, 'store'])->name('client.consultation.store');
+        Route::post('consultations/show', [ConsultationController::class, 'showByUserEmail'])->name('client.consultation.showByEmail');
+        Route::post('consultations/{id}/update', [ConsultationController::class, 'update'])->name('client.consultation.update');
+        Route::post('consultations/show/{id}', [ConsultationController::class, 'show'])->name('client.consultation.show');
+        Route::post('consultations', [ConsultationController::class, 'index'])->name('client.consultation.index');
+
     });
 
 });

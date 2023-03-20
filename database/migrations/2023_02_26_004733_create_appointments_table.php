@@ -14,15 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('appointments', function (Blueprint $table) {
+            $table->id();
             $table->dateTime('from');
             $table->dateTime('to');
             $table->string('subject');
             $table->foreignId('schedule_id')->constrained('schedules');
-            $table->unsignedBigInteger('appointment_id');
             $table->timestamps();
-
-            // constraints
-            $table->primary(['appointment_id', 'schedule_id']);
         });
     }
 

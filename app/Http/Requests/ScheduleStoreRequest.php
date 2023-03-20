@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EmailAuthOrGivenRequest extends ValidationRulesRequest
+class ScheduleStoreRequest extends ValidationRulesRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,9 @@ class EmailAuthOrGivenRequest extends ValidationRulesRequest
     {
         parent::checkEmailRule();
         return [
-            'email' => parent::emailRule(exists: $_REQUEST['user_type'] . 's')
+            'email' => parent::emailRule(),
+            'title' => 'required|string|min:3|max:255',
+            'description' => parent::descriptionRule(min: 3)
         ];
     }
 }

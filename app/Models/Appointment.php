@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Schedule extends Model
+class Appointment extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
 
-    public function lawyer() {
-        return $this->belongsTo(Lawyer::class);
+    public function schedule() {
+        return $this->belongsTo(Schedule::class);
     }
 }

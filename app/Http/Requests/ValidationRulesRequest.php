@@ -69,12 +69,14 @@ class ValidationRulesRequest extends FormRequest
         return ['required', 'in:male,female'];
     }
 
-    protected function descriptionRule($update = false) {
-        if ($update) {
-            return ['min:50', 'max:255'];
+    protected function descriptionRule($update = false, $min = 50, $max = 255) {
+        $rules = ["min:$min", "max:$max"];
+
+        if (! $update) {
+            array_push($rules, 'required');
         }
 
-        return ['required', 'min:50', 'max:255'];
+        return $rules;
     }
 
     protected function dateOfBirthRule(String $format = 'Y-m-d', $update = false) {

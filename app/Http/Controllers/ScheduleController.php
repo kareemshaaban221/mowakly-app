@@ -9,6 +9,7 @@ use App\Http\Requests\ScheduleUpdateRequest;
 use App\Interfaces\ScheduleRepositoryInterface;
 use App\Models\Lawyer;
 use App\Models\Schedule;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class ScheduleController extends Controller
@@ -81,9 +82,7 @@ class ScheduleController extends Controller
 
             if(!$schedule) {
                 return $this->response->badRequest('Data is not valid!', ['id' => 'Schedule record with this id is not found!']);
-            }
-
-            if($schedule->lawyer->email != $request->email) {
+            } else if ($schedule->lawyer->email != $request->email) {
                 return $this->response->notAuthorized('This lawyer wasn\'t authorized to update this record!');
             }
 
@@ -104,17 +103,19 @@ class ScheduleController extends Controller
         }
     }
 
-    public function show($id) {
+    public function show(EmailAuthOrGivenRequest $request, $id) {
 
         try {
             $schedule = Schedule::with('lawyer')->find($id);
 
             if(!$schedule) {
-                return $this->response->badRequest('Data is not valid!', ['id' => 'Schedule record with this id is not found!']);
+                return $this->response->badRequest('Data is not valid!', ['id' => 'Schedule record with this ID is not found!']);
+            } else if ($schedule->lawyer->email != $request->email) {
+                return $this->response->notAuthorized('This lawyer wasn\'t authorized to access this record!');
             }
 
             return $this->response->ok([
-                'data' =>  $schedule,
+                'data' => $schedule,
                 'message' => 'Schedule by ID!'
             ]);
 
@@ -132,11 +133,15 @@ class ScheduleController extends Controller
         try {
 
             $lawyer = Lawyer::where('email', $request->email)->firstOrFail();
-            $schedules = Schedule::where('lawyer_id', $lawyer->id)->get();
+            $schedules = $this->scheduleRepository->findByLawyerId($lawyer->id);
+
+            if(!$schedules) {
+                return $this->response->badRequest('No schedules found!');
+            }
 
             return $this->response->ok([
                 'data' => $schedules->toarray(),
-                'message' => 'Schedules by ID!'
+                'message' => 'Schedules owned by this lawyer!'
             ]);
 
         } catch (\Throwable $th) {

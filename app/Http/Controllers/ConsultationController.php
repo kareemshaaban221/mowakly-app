@@ -88,6 +88,8 @@ class ConsultationController extends Controller
 
             if(!$consultation) {
                 return $this->response->badRequest('Data is not valid!', ['id' => 'Consultation record with this id is not found!']);
+            } else if ($consultation->client->email != $request->email) {
+                return $this->response->notAuthorized('This client wasn\'t authorized to update this record!');
             }
 
             $consultation = $this->consultationRepository->update($request, $consultation);
@@ -115,6 +117,14 @@ class ConsultationController extends Controller
 
         try {
 
+            $consultation = Consultation::find($id);
+
+            if(!$consultation) {
+                return $this->response->badRequest('Data is not valid!', ['id' => 'Consultation record with this id is not found!']);
+            } else if ($consultation->client->email != $request->email) {
+                return $this->response->notAuthorized('This client wasn\'t authorized to access this record!');
+            }
+
             return $this->response->ok([
                 'data' => Consultation::find($id),
                 'message' => 'Consultation by ID!'
@@ -138,8 +148,11 @@ class ConsultationController extends Controller
             if($consultations == 'lawyer' || $consultations == 'client')
                 return $this->response->badRequest('Data is not valid!', ['email' => ucwords($consultations) . ' email is not found!']);
 
+            if($consultations->isEmpty())
+                return $this->response->badRequest('No consultations found!');
+
             return $this->response->ok([
-                'data' => $consultations,
+                'data' => $consultations->toarray(),
                 'message' => 'Consultations related to this user account!'
             ]);
 

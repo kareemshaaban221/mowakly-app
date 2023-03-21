@@ -7,11 +7,13 @@ use App\Http\Controllers\Auth\AuthClientController;
 use App\Helpers\Response;
 use App\Http\Controllers\Auth\FacebookController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Client\ConsultationController as ClientConsultationController;
 use App\Http\Controllers\Lawyer\LawyerController;
 use App\Http\Controllers\Lawyer\ProfileController as LawyerProfileController;
 use App\Http\Controllers\Client\ProfileController as ClientProfileController;
 use App\Http\Controllers\Lawyer\LawyerMainCategoryController;
 use App\Http\Controllers\Lawyer\LawyerSubcategoryController;
+use App\Http\Controllers\Lawyer\ScheduleController as LawyerScheduleController;
 use App\Http\Controllers\MainCategoryController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SubcategoryController;
@@ -99,11 +101,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('subcategories/category/{id}/delete', [LawyerSubcategoryController::class, 'destroy'])->name('lawyer.subcategories.category.delete');
 
         // schedule routes
-        Route::post('schedules', [ScheduleController::class, 'index'])->name('lawyer.schedule.index');
-        Route::post('schedules/show/{id}', [ScheduleController::class, 'show'])->name('lawyer.schedule.show');
-        Route::post('schedules/show', [ScheduleController::class, 'showByUserEmail'])->name('lawyer.schedule.showByEmail');
-        Route::post('schedules/store', [ScheduleController::class, 'store'])->name('lawyer.schedule.store');
-        Route::post('schedules/{id}/update', [ScheduleController::class, 'update'])->name('lawyer.schedule.update');
+        Route::get('schedules', [LawyerScheduleController::class, 'index'])->name('lawyer.schedule.index');
+        Route::get('schedules/show/{id}', [LawyerScheduleController::class, 'show'])->name('lawyer.schedule.show');
+        Route::post('schedules', [LawyerScheduleController::class, 'store'])->name('lawyer.schedule.store');
+        Route::put('schedules/{id}/update', [LawyerScheduleController::class, 'update'])->name('lawyer.schedule.update');
+        Route::delete('schedules/{id}/delete', [LawyerScheduleController::class, 'destroy'])->name('lawyer.schedule.delete');
 
     });
 
@@ -124,11 +126,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('profile/delete', [ClientProfileController::class, 'destroy'])->name('client.profile.destroy');
 
         // consultation
-        Route::post('consultations/store', [ConsultationController::class, 'store'])->name('client.consultation.store');
-        Route::post('consultations/show', [ConsultationController::class, 'showByUserEmail'])->name('client.consultation.showByEmail');
-        Route::post('consultations/{id}/update', [ConsultationController::class, 'update'])->name('client.consultation.update');
-        Route::post('consultations/show/{id}', [ConsultationController::class, 'show'])->name('client.consultation.show');
-        Route::post('consultations', [ConsultationController::class, 'index'])->name('client.consultation.index');
+        Route::post('consultations', [ClientConsultationController::class, 'store'])->name('client.consultation.store');
+        Route::put('consultations/{id}/update', [ClientConsultationController::class, 'update'])->name('client.consultation.update');
+        Route::get('consultations/show/{id}', [ClientConsultationController::class, 'show'])->name('client.consultation.show');
+        Route::get('consultations', [ClientConsultationController::class, 'index'])->name('client.consultation.index');
 
     });
 

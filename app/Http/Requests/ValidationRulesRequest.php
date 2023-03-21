@@ -79,12 +79,19 @@ class ValidationRulesRequest extends FormRequest
         return $rules;
     }
 
-    protected function dateOfBirthRule(String $format = 'Y-m-d', $update = false) {
+    protected function dateOfBirthRule(String $format = 'Y-m-d', $update = false, $from = null) {
+        $rules = ['date', 'date_format:' . $format];
         if ($update) {
-            return ['date', 'date_format:' . $format];
+            return $rules;
         }
 
-        return ['required', 'date', 'date_format:' . $format];
+        if ($from) {
+            array_push($rules, 'after:' . $from);
+        }
+
+        array_push($rules, 'required');
+
+        return $rules;
     }
 
     protected function avatarRule(String $mimes = 'png,jpg,jpeg', Int $max = 5000) {

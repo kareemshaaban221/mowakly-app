@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Interfaces\AppointmentRepositoryInterface;
 use App\Interfaces\AttachmentRepositoryInterface;
 use App\Repositories\LawyerMainCategoryRepository;
 use Illuminate\Support\ServiceProvider;
@@ -14,6 +15,7 @@ use App\Interfaces\LawyerSubcategoryRepositoryInterface;
 use App\Interfaces\MainCategoryRepositoryInterface;
 use App\Interfaces\ScheduleRepositoryInterface;
 use App\Interfaces\SubcategoryRepositoryInterface;
+use App\Repositories\AppointmentRepository;
 use App\Repositories\AttachmentRepository;
 use App\Repositories\ClientRepository;
 use App\Repositories\ConsultationRepository;
@@ -40,6 +42,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(LawyerSubcategoryRepositoryInterface::class, LawyerSubcategoryRepository::class);
         $this->app->bind(ConsultationRepositoryInterface::class, ConsultationRepository::class);
         $this->app->bind(ScheduleRepositoryInterface::class, ScheduleRepository::class);
+        $this->app->bind(AppointmentRepositoryInterface::class, AppointmentRepository::class);
     }
 
     /**

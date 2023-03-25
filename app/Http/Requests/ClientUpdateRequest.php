@@ -23,11 +23,12 @@ class ClientUpdateRequest extends ValidationRulesRequest
      */
     public function rules()
     {
+        parent::checkEmailRule();
         return [
             'fname' => parent::nameRule(update: true),
             'lname' => parent::nameRule(update: true),
-            'email' => array_merge(['unique:clients,email'], parent::emailRule(update: true)),
-            'password' => parent::passwordRule('update'),
+            'email' => parent::emailRule(update: true, exists: 'clients'),
+            // 'password' => parent::passwordRule('update'),
             'gender' => parent::genderRule(update: true),
             'date_of_birth' => parent::dateOfBirthRule(update: true),
             'avatar' => parent::avatarRule(),

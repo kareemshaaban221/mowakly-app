@@ -85,11 +85,23 @@ class ValidationRulesRequest extends FormRequest
             return $rules;
         }
 
-        if ($from) {
-            array_push($rules, 'after:' . $from);
+        array_push($rules, 'required');
+
+        return $rules;
+    }
+
+    protected function dateRule(String $format = 'Y-m-d H:i', $update = false, $from = null) {
+        $rules = ['date', 'date_format:' . $format];
+
+        if (!$update && !$from) {
+            array_push($rules, 'required');
         }
 
-        array_push($rules, 'required');
+        if ($from) {
+            array_push($rules, 'after:' . $from, 'required');
+        } else {
+            array_push($rules, 'after:' . now()->toDateTimeString());
+        }
 
         return $rules;
     }

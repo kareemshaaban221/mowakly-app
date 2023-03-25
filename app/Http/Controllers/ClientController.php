@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Client;
+namespace App\Http\Controllers;
 
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientRegisterRequest;
 use App\Http\Requests\ClientUpdateRequest;
+use App\Http\Requests\EmailAuthOrGivenRequest;
 use App\Http\Requests\UserDestroyRequest;
 use App\Interfaces\ClientRepositoryInterface;
 use App\Models\Client;
-use App\Models\VerifyEmail;
 use Illuminate\Support\Facades\DB;
 
 class ClientController extends Controller
@@ -58,9 +58,13 @@ class ClientController extends Controller
         }
     }
 
-    public function show($email)
+    public function show(EmailAuthOrGivenRequest $request)
     {
-        $client = Client::where('email', $email)->first();
+        // if fails
+        if(isset($request->validator) && $request->validator->fails()) {
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->except(['password', 'password_confirmation', 'card', 'avatar', 'attachments']));
+        }
+        $client = Client::where('email', $request->email)->first();
 
         if(!$client) {
             return $this->response->notFound(obj: 'client');
@@ -72,7 +76,7 @@ class ClientController extends Controller
         ]);
     }
 
-    public function update(ClientUpdateRequest $request, $email)
+    public function update(ClientUpdateRequest $request)
     {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
@@ -82,7 +86,7 @@ class ClientController extends Controller
         DB::beginTransaction();
 
         try {
-            $client = $this->clientRepository->update($request, $email);
+            $client = $this->clientRepository->update($request, $request->email);
 
             isset($request->avatar) ? $this->clientRepository->updateAvatar($request->avatar, $client) : null;
 
@@ -100,13 +104,13 @@ class ClientController extends Controller
         }
     }
 
-    public function destroy(UserDestroyRequest $request)
+    public function destroy(EmailAuthOrGivenRequest $request)
     {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
             return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
         }
-        
+
         DB::beginTransaction();
 
         try {

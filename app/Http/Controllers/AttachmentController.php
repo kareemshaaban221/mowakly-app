@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Lawyer;
+namespace App\Http\Controllers;
 
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AttachmentDestroyRequest;
 use App\Http\Requests\AttachmentStoreRequest;
+use App\Http\Requests\EmailAuthOrGivenRequest;
 use App\Interfaces\AttachmentRepositoryInterface;
-use App\Interfaces\LawyerRepositoryInterface;
 use App\Models\Lawyer;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AttachmentController extends Controller
@@ -22,7 +21,7 @@ class AttachmentController extends Controller
         $this->response = new Response;
     }
 
-    public function destroy(AttachmentDestroyRequest $request) {
+    public function destroy(EmailAuthOrGivenRequest $request, $filename) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
             return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
@@ -32,7 +31,7 @@ class AttachmentController extends Controller
 
         try {
             $lawyer = Lawyer::where('email', $request->email)->firstOrFail();
-            $attachment = $this->attachmentRepository->deleteAttachment($request->filename, $lawyer);
+            $attachment = $this->attachmentRepository->deleteAttachment($filename, $lawyer);
 
             if(is_int($attachment) && $attachment == 0) {
                 return $this->response->badRequest('Attachment is not found!');

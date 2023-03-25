@@ -14,4 +14,8 @@ class Schedule extends Model
     public function lawyer() {
         return $this->belongsTo(Lawyer::class);
     }
+
+    public function clients() {
+        return $this->belongsToMany(Client::class, 'client_schedules');
+    }
 }

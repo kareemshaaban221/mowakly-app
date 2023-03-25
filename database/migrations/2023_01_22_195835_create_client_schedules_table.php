@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('client_schedules', function (Blueprint $table) {
-            $table->foreignId('client_id')->constrained('clients');
-            $table->foreignId('schedule_id')->constrained('schedules');
+            $table->foreignId('client_id')->constrained('clients')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('schedule_id')->constrained('schedules')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
 
             // constraints

@@ -2,36 +2,60 @@
 
 namespace App\Http\Controllers\Lawyer;
 
-use App\Http\Requests\AttachmentDestroyRequest;
+use App\Http\Controllers\AttachmentController;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\LawyerController;
 use App\Http\Requests\AttachmentStoreRequest;
+use App\Http\Requests\EmailAuthOrGivenRequest;
 use App\Http\Requests\LawyerUpdateRequest;
 use App\Http\Requests\PhoneStoreRequest;
-use App\Repositories\AttachmentRepository;
-use App\Repositories\LawyerRepository;
+use App\Interfaces\AttachmentRepositoryInterface;
+use App\Interfaces\LawyerRepositoryInterface;
 
-class ProfileController extends LawyerController
+class ProfileController extends Controller
 {
-    public function showProfile() {
-        return parent::show(auth()->user()->email);
+
+    private AttachmentController $attachmentController;
+    private PhoneController $phoneController;
+    private EmailAuthOrGivenRequest $request;
+    private LawyerController $lawyerController;
+
+    public function __construct(AttachmentRepositoryInterface $attachmentRepository, LawyerRepositoryInterface $lawyerRepository) {
+        $this->attachmentController = new AttachmentController($attachmentRepository);
+        $this->phoneController = new PhoneController($lawyerRepository);
+        $this->request = new EmailAuthOrGivenRequest;
+        $this->lawyerController = new LawyerController($lawyerRepository, $attachmentRepository);
     }
 
-    public function updateProfile(LawyerUpdateRequest $request) {
-        return parent::update($request, auth()->user()->email);
+    public function index() {
+        $this->request->merge(['email' => auth()->user()->email]);
+        return $this->lawyerController->show($this->request);
+    }
+
+    public function update(LawyerUpdateRequest $request) {
+        return $this->lawyerController->update($request);
     }
 
     public function addAttachment(AttachmentStoreRequest $request) {
-        return (new AttachmentController(new AttachmentRepository))->store($request);
+        return $this->attachmentController->store($request);
     }
 
-    public function destroyAttachment(AttachmentDestroyRequest $request) {
-        return (new AttachmentController(new AttachmentRepository))->destroy($request);
+    public function destroyAttachment($filename) {
+        $this->request->merge(['email' => auth()->user()->email]);
+        return $this->attachmentController->destroy($this->request, $filename);
     }
 
     public function addPhone(PhoneStoreRequest $request) {
-        return (new PhoneController(new LawyerRepository(new AttachmentRepository)))->store($request);
+        return $this->phoneController->store($request);
     }
 
-    public function destroyPhone(PhoneStoreRequest $request) {
-        return (new PhoneController(new LawyerRepository(new AttachmentRepository)))->destroy($request);
+    public function destroyPhone($phone) {
+        $this->request->merge(['email' => auth()->user()->email]);
+        return $this->phoneController->destroy($this->request, $phone);
+    }
+
+    public function destroy() {
+        $this->request->merge(['email' => auth()->user()->email]);
+        return $this->lawyerController->destroy($this->request);
     }
 }

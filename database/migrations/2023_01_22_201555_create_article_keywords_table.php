@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('article_keywords', function (Blueprint $table) {
-            $table->foreignId('article_id')->constrained('articles');
+            $table->foreignId('article_id')->constrained('articles')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('keyword');
             $table->timestamps();
             // constraints

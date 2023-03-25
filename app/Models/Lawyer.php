@@ -15,7 +15,7 @@ class Lawyer extends Authenticatable
     protected $guarded = [];
     protected $with = ['attachments', 'phones'];
 
-    protected $hidden = ['password', 'id'];
+    protected $hidden = ['password'];
 
     public function phones() {
         return $this->hasMany(LawyerPhone::class);
@@ -39,5 +39,9 @@ class Lawyer extends Authenticatable
 
     public function subcategories() {
         return $this->belongsToMany(SubCategory::class, 'lawyer_subcategories', 'lawyer_id', 'subcategory_id');
+    }
+
+    public function appointments() {
+        return $this->hasManyThrough(Appointment::class, Schedule::class);
     }
 }

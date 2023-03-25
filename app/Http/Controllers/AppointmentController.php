@@ -3,18 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Response;
+use App\Http\Requests\AppointmentStoreRequest;
+use App\Http\Requests\AppointmentUpdateRequest;
 use App\Http\Requests\EmailAuthOrGivenRequest;
 use App\Interfaces\AppointmentRepositoryInterface;
 use App\Models\Appointment;
+use App\Models\Lawyer;
+use App\Models\Schedule;
+use Illuminate\Support\Facades\DB;
 
 class AppointmentController extends Controller
 {
-    private AppointmentRepositoryInterface $scheduleRepository;
+    private AppointmentRepositoryInterface $appointmentRepository;
     private Response $response;
 
-    public function __construct(AppointmentRepositoryInterface $scheduleRepository) {
+    public function __construct(AppointmentRepositoryInterface $appointmentRepository) {
         $this->response = new Response;
-        $this->scheduleRepository = $scheduleRepository;
+        $this->appointmentRepository = $appointmentRepository;
     }
 
     public function index(EmailAuthOrGivenRequest $request) {
@@ -24,10 +29,11 @@ class AppointmentController extends Controller
         }
 
         try {
+            $lawyer = Lawyer::where('email', $request->email)->first();
 
             return $this->response->ok([
-                'data' => Appointment::with('schedule')->all(),
-                'message' => 'All Appointments!'
+                'data' => $lawyer->appointments,
+                'message' => 'All Lawyer Appointments!'
             ]);
 
         } catch (\Throwable $th) {
@@ -35,7 +41,7 @@ class AppointmentController extends Controller
         }
     }
 
-    public function store() {
+    public function store(AppointmentStoreRequest $request, $schedule_id) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
             return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
@@ -44,17 +50,64 @@ class AppointmentController extends Controller
         DB::beginTransaction();
 
         try {
+            $schedule = Schedule::find($schedule_id);
+            if($schedule->lawyer->email != $request->email) {
+                $this->response->notAuthorized('Not authorized to use this schedule_id!');
+            }
 
-            $lawyer = Lawyer::where('email', $request->email)->firstOrFail();
-            $schedule = $this->scheduleRepository->store($request, $lawyer);
+            $appointment = $this->appointmentRepository->store($request, $schedule);
 
-            $schedule->save();
+            if(is_int($appointment) && $appointment == -1) {
+                return $this->response->badRequest('From & To dates is invalid!', ['date' => 'date mustn\'t conflict with other lawyer appointment!']);
+            }
+
+            $appointment->save();
+
+            DB::commit();
+
+            return $this->response->created(['data' => $appointment->toarray()], 'appointment');
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->response->internalServerError($th->getMessage());
+        }
+    }
+
+    public function update(AppointmentUpdateRequest $request, $appointment_id) {
+        // if fails
+        if(isset($request->validator) && $request->validator->fails()) {
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $appointment = Appointment::find($appointment_id);
+            if(!$appointment) {
+                return $this->response->badRequest('This appointment is not found!');
+            }
+            
+            if($appointment->lawyer()->email != $request->email) {
+                $this->response->notAuthorized('Not authorized to access this appointment!');
+            }
+
+            $appointment = $this->appointmentRepository->update($request, $appointment);
+
+            if(is_int($appointment) && $appointment == -2) {
+                return $this->response->badRequest('It is not allowed to update an appointment on same or previous day!');
+            }
+
+            if(is_int($appointment) && $appointment == -1) {
+                return $this->response->badRequest('From & To dates is invalid!', ['date' => 'date mustn\'t conflict with other lawyer appointment!']);
+            }
+
+            $appointment->save();
 
             DB::commit();
 
             return $this->response->ok([
-                'data' => $schedule->toarray(),
-                'message' => 'Consultation relation was added successfully!'
+                'data' => $appointment->toarray(),
+                'message' => 'Appointment has been updated successfully!'
             ]);
 
         } catch (\Throwable $th) {
@@ -63,11 +116,66 @@ class AppointmentController extends Controller
         }
     }
 
-    public function show() {
+    public function show(EmailAuthOrGivenRequest $request, $appointment_id) {
+        // if fails
+        if(isset($request->validator) && $request->validator->fails()) {
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
+        }
 
+        try {
+
+            $appointment = Appointment::with('schedule')->find($appointment_id);
+            if(!$appointment) {
+                return $this->response->badRequest('This appointment is not found!');
+            }
+
+            if($appointment->lawyer()->email != $request->email) {
+                $this->response->notAuthorized('Not authorized to access this appointment!');
+            }
+
+            return $this->response->ok([
+                'data' => array_merge($appointment->toarray(), [
+                    'lawyer' => $appointment->lawyer(),
+                    'clients' => $appointment->schedule->clients
+                ]),
+                'message' => 'Appointment By ID!'
+            ]);
+
+        } catch (\Throwable $th) {
+            return $this->response->internalServerError($th->getMessage());
+        }
     }
 
-    public function destroy() {
+    public function destroy(EmailAuthOrGivenRequest $request, $appointment_id) {
+        // if fails
+        if(isset($request->validator) && $request->validator->fails()) {
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
+        }
 
+        DB::beginTransaction();
+
+        try {
+            $appointment = Appointment::find($appointment_id);
+            if(!$appointment) {
+                return $this->response->badRequest('This appointment is not found!');
+            }
+
+            if($appointment->lawyer()->email != $request->email) {
+                $this->response->notAuthorized('Not authorized to delete this appointment!');
+            }
+
+            $appointment->delete();
+
+            DB::commit();
+
+            return $this->response->ok([
+                'data' => $appointment->toarray(),
+                'message' => 'Appointment has been deleted successfully!'
+            ]);
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->response->internalServerError($th->getMessage());
+        }
     }
 }

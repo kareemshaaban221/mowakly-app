@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Lawyer;
+namespace App\Http\Controllers;
 
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LawyerDestroyRequest;
+use App\Http\Requests\EmailAuthOrGivenRequest;
 use App\Http\Requests\LawyerRegisterRequest;
 use App\Http\Requests\LawyerUpdateRequest;
 use App\Http\Requests\UserDestroyRequest;
 use App\Interfaces\AttachmentRepositoryInterface;
 use App\Interfaces\LawyerRepositoryInterface;
 use App\Models\Lawyer;
-use App\Models\VerifyEmail;
 use Illuminate\Support\Facades\DB;
 
 class LawyerController extends Controller
@@ -65,9 +64,13 @@ class LawyerController extends Controller
         }
     }
 
-    public function show($email)
+    public function show(EmailAuthOrGivenRequest $request)
     {
-        $lawyer = Lawyer::where('email', $email)->first();
+        // if fails
+        if(isset($request->validator) && $request->validator->fails()) {
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->except(['password', 'password_confirmation', 'card', 'avatar', 'attachments']));
+        }
+        $lawyer = Lawyer::where('email', $request->email)->first();
 
         if(!$lawyer) {
             return $this->response->notFound(obj: 'lawyer');
@@ -79,7 +82,7 @@ class LawyerController extends Controller
         ]);
     }
 
-    public function update(LawyerUpdateRequest $request, $email)
+    public function update(LawyerUpdateRequest $request)
     {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
@@ -89,7 +92,7 @@ class LawyerController extends Controller
         DB::beginTransaction();
 
         try {
-            $lawyer = $this->lawyerRepository->update($request, $email);
+            $lawyer = $this->lawyerRepository->update($request, $request->email);
 
             isset($request->avatar) ? $this->lawyerRepository->updateAvatar($request->avatar, $lawyer) : null;
             isset($request->card) ? $this->lawyerRepository->updateCard($request->card, $lawyer) : null;
@@ -108,7 +111,7 @@ class LawyerController extends Controller
         }
     }
 
-    public function destroy(UserDestroyRequest $request)
+    public function destroy(EmailAuthOrGivenRequest $request)
     {
         DB::beginTransaction();
 

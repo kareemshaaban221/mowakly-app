@@ -5,12 +5,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthLawyerController;
 use App\Http\Controllers\Auth\AuthClientController;
 use App\Helpers\Response;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\Auth\FacebookController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Client\ConsultationController as ClientConsultationController;
-use App\Http\Controllers\Lawyer\LawyerController;
 use App\Http\Controllers\Lawyer\ProfileController as LawyerProfileController;
 use App\Http\Controllers\Client\ProfileController as ClientProfileController;
+use App\Http\Controllers\Lawyer\AppointmentController as LawyerAppointmentController;
 use App\Http\Controllers\Lawyer\LawyerMainCategoryController;
 use App\Http\Controllers\Lawyer\LawyerSubcategoryController;
 use App\Http\Controllers\Lawyer\ScheduleController as LawyerScheduleController;
@@ -79,26 +80,26 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/email/send/verify/link', [AuthLawyerController::class, 'verificationLink'])->name('lawyer.email.verification.link');
 
         // profile management routes
-        Route::get('/profile', [LawyerProfileController::class, 'showProfile'])->name('lawyer.profile');
-        Route::post('profile/update', [LawyerProfileController::class, 'updateProfile'])->name('lawyer.profile.update');
+        Route::get('/profile', [LawyerProfileController::class, 'index'])->name('lawyer.profile.index');
+        Route::put('profile/update', [LawyerProfileController::class, 'update'])->name('lawyer.profile.update');
         Route::post('profile/attachments/add', [LawyerProfileController::class, 'addAttachment'])->name('lawyer.profile.attachments.add');
-        Route::post('profile/attachments/delete', [LawyerProfileController::class, 'destroyAttachment'])->name('lawyer.profile.attachments.delete');
+        Route::delete('profile/attachments/{filename}/delete', [LawyerProfileController::class, 'destroyAttachment'])->name('lawyer.profile.attachments.delete');
         Route::post('profile/phones/add', [LawyerProfileController::class, 'addPhone'])->name('lawyer.profile.phones.add');
-        Route::post('profile/phones/delete', [LawyerProfileController::class, 'destroyPhone'])->name('lawyer.profile.phones.delete');
-        Route::post('profile/delete', [LawyerProfileController::class, 'destroy'])->name('lawyer.profile.destroy');
+        Route::delete('profile/phones/{phone_num}/delete', [LawyerProfileController::class, 'destroyPhone'])->name('lawyer.profile.phones.delete');
+        Route::delete('profile/delete', [LawyerProfileController::class, 'destroy'])->name('lawyer.profile.destroy');
 
-        Route::post('maincategories', [LawyerMainCategoryController::class, 'show'])->name('lawyer.maincategories.show');
-        Route::post('maincategories/category/{id}', [LawyerMainCategoryController::class, 'showByCategory'])->name('lawyer.maincategories.category.show');
-        Route::post('maincategories/mean/{mean}', [LawyerMainCategoryController::class, 'showByConsultationMean'])->name('lawyer.maincategories.mean.show');
-        Route::post('maincategories/category/{id}/mean/{mean}', [LawyerMainCategoryController::class, 'showSpecific'])->name('lawyer.maincategories.category.mean.show');
-        Route::post('maincategories/store', [LawyerMainCategoryController::class, 'store'])->name('lawyer.maincategories.store');
-        Route::post('maincategories/update', [LawyerMainCategoryController::class, 'update'])->name('lawyer.maincategories.update');
-        Route::post('maincategories/category/{id}/delete', [LawyerMainCategoryController::class, 'destroy'])->name('lawyer.maincategories.category.delete');
-        Route::post('maincategories/category/{id}/mean/{mean}/delete', [LawyerMainCategoryController::class, 'destroySpecific'])->name('lawyer.maincategories.category.mean.delete');
+        Route::get('maincategories', [LawyerMainCategoryController::class, 'index'])->name('lawyer.maincategories.index');
+        Route::get('maincategories/category/{id}', [LawyerMainCategoryController::class, 'showByCategory'])->name('lawyer.maincategories.category.show');
+        Route::get('maincategories/mean/{mean}', [LawyerMainCategoryController::class, 'showByConsultationMean'])->name('lawyer.maincategories.mean.show');
+        Route::get('maincategories/category/{id}/mean/{mean}', [LawyerMainCategoryController::class, 'show'])->name('lawyer.maincategories.category.mean.show');
+        Route::post('maincategories', [LawyerMainCategoryController::class, 'store'])->name('lawyer.maincategories.store');
+        Route::put('maincategories/update', [LawyerMainCategoryController::class, 'update'])->name('lawyer.maincategories.update');
+        Route::delete('maincategories/category/{id}/delete', [LawyerMainCategoryController::class, 'destroyByCategory'])->name('lawyer.maincategories.category.delete');
+        Route::delete('maincategories/category/{id}/mean/{mean}/delete', [LawyerMainCategoryController::class, 'destroy'])->name('lawyer.maincategories.category.mean.delete');
 
-        Route::post('subcategories', [LawyerSubcategoryController::class, 'show'])->name('lawyer.subcategories.show');
-        Route::post('subcategories/store', [LawyerSubcategoryController::class, 'store'])->name('lawyer.subcategories.store');
-        Route::post('subcategories/category/{id}/delete', [LawyerSubcategoryController::class, 'destroy'])->name('lawyer.subcategories.category.delete');
+        Route::get('subcategories', [LawyerSubcategoryController::class, 'index'])->name('lawyer.subcategories.index');
+        Route::post('subcategories', [LawyerSubcategoryController::class, 'store'])->name('lawyer.subcategories.store');
+        Route::delete('subcategories/{subcategory_id}/delete', [LawyerSubcategoryController::class, 'destroy'])->name('lawyer.subcategories.delete');
 
         // schedule routes
         Route::get('schedules', [LawyerScheduleController::class, 'index'])->name('lawyer.schedule.index');
@@ -107,6 +108,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('schedules/{id}/update', [LawyerScheduleController::class, 'update'])->name('lawyer.schedule.update');
         Route::delete('schedules/{id}/delete', [LawyerScheduleController::class, 'destroy'])->name('lawyer.schedule.delete');
 
+        // appointment routes
+        Route::get('appointments', [LawyerAppointmentController::class, 'index'])->name('lawyer.appointment.index');
+        Route::post('appointments/schedule/{schedule_id}', [LawyerAppointmentController::class, 'store'])->name('lawyer.appointment.store');
+        Route::put('appointments/{appointment_id}/update', [LawyerAppointmentController::class, 'update'])->name('lawyer.appointment.update');
+        Route::get('appointments/{appointment_id}', [LawyerAppointmentController::class, 'show'])->name('lawyer.appointment.show');
+        Route::delete('appointments/{appointment_id}/delete', [LawyerAppointmentController::class, 'destroy'])->name('lawyer.appointment.delete');
     });
 
     // clients routes
@@ -119,11 +126,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/email/send/verify/link', [AuthClientController::class, 'verificationLink'])->name('client.email.verification.link');
 
         // profile management routes
-        Route::get('/profile', [ClientProfileController::class, 'showProfile'])->name('client.profile');
-        Route::post('profile/update', [ClientProfileController::class, 'updateProfile'])->name('client.profile.update');
+        Route::get('/profile', [ClientProfileController::class, 'index'])->name('client.profile.index');
+        Route::put('profile/update', [ClientProfileController::class, 'update'])->name('client.profile.update');
         Route::post('profile/payment_methods/add', [ClientProfileController::class, 'addPaymentMethod'])->name('client.profile.payment_methods.add');
-        Route::post('profile/payment_methods/delete', [ClientProfileController::class, 'destroyPaymentMethod'])->name('client.profile.payment_methods.delete');
-        Route::post('profile/delete', [ClientProfileController::class, 'destroy'])->name('client.profile.destroy');
+        Route::delete('profile/payment_methods/{payment_method}/delete', [ClientProfileController::class, 'destroyPaymentMethod'])->name('client.profile.payment_methods.delete');
+        Route::delete('profile/delete', [ClientProfileController::class, 'destroy'])->name('client.profile.destroy');
 
         // consultation
         Route::post('consultations', [ClientConsultationController::class, 'store'])->name('client.consultation.store');

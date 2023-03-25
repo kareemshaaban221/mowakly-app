@@ -18,7 +18,7 @@ return new class extends Migration
             $table->dateTime('from');
             $table->dateTime('to');
             $table->string('subject');
-            $table->foreignId('schedule_id')->constrained('schedules');
+            $table->foreignId('schedule_id')->constrained('schedules')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }

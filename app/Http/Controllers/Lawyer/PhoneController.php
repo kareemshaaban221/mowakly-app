@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Lawyer;
 
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EmailAuthOrGivenRequest;
 use App\Http\Requests\PhoneStoreRequest;
 use App\Interfaces\LawyerRepositoryInterface;
 use App\Models\Lawyer;
@@ -20,7 +21,7 @@ class PhoneController extends Controller
         $this->response = new Response;
     }
 
-    public function destroy(PhoneStoreRequest $request) {
+    public function destroy(EmailAuthOrGivenRequest $request, $phone_num) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
             return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
@@ -30,7 +31,7 @@ class PhoneController extends Controller
 
         try {
             $lawyer = Lawyer::where('email', $request->email)->firstOrFail();
-            $phone = $this->lawyerRepository->deletePhone($request->phone, $lawyer);
+            $phone = $this->lawyerRepository->deletePhone($phone_num, $lawyer);
 
             if(is_int($phone) && $phone == 0) {
                 return $this->response->badRequest('Phone is not found!');

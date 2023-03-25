@@ -14,4 +14,8 @@ class Appointment extends Model
     public function schedule() {
         return $this->belongsTo(Schedule::class);
     }
+
+    public function lawyer() {
+        return $this->schedule->lawyer;
+    }
 }

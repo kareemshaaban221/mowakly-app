@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Helpers\Response;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EmailAuthOrGivenRequest;
 use App\Http\Requests\PaymentMethodStoreRequest;
 use App\Interfaces\ClientRepositoryInterface;
 use App\Models\Client;
@@ -19,7 +20,7 @@ class PaymentMethodController extends Controller
         $this->response = new Response;
     }
 
-    public function destroy(PaymentMethodStoreRequest $request) {
+    public function destroy(EmailAuthOrGivenRequest $request, $payment_method) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
             return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
@@ -29,7 +30,7 @@ class PaymentMethodController extends Controller
 
         try {
             $client = Client::where('email', $request->email)->firstOrFail();
-            $method = $this->clientRepository->deletePaymentMethod($request->payment_method, $client);
+            $method = $this->clientRepository->deletePaymentMethod($payment_method, $client);
 
             if(!$method) {
                 return $this->response->badRequest('Payment method is not found!');

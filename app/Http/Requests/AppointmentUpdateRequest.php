@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class AppointmentStoreRequest extends ValidationRulesRequest
+class AppointmentUpdateRequest extends ValidationRulesRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +14,7 @@ class AppointmentStoreRequest extends ValidationRulesRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -25,10 +26,10 @@ class AppointmentStoreRequest extends ValidationRulesRequest
     {
         parent::checkEmailRule();
         return [
-            'email' => parent::emailRule(),
-            'subject' => 'required|string|min:3|max:255',
-            'from' => parent::dateRule(),
-            'to' => parent::dateRule(from: request()->from)
+            'email' => parent::emailRule(exists: 'lawyers'),
+            'subject' => 'string|min:3|max:255',
+            'from' => parent::dateRule(update: true),
+            'to' => parent::dateRule(update: true, from: request()->has('from') ? request()->from : null),
         ];
     }
 }

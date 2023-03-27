@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LawyerRegisterRequest;
 use App\Http\Requests\LawyerLoginRequest;
 use App\Helpers\Response;
-use App\Http\Requests\ResetPasswordLinkRequest;
+use App\Http\Requests\ResetPasswordCodeRequest;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\ResetPasswordTokenRequest;
 use App\Interfaces\AttachmentRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use App\Interfaces\LawyerRepositoryInterface;
@@ -157,27 +158,68 @@ class AuthLawyerController extends Controller
         }
     }
 
-    public function resetPasswordLink(ResetPasswordLinkRequest $request) {
+    public function resetPasswordCode(ResetPasswordCodeRequest $request) {
         // if fails
         if(isset($request->validator) && $request->validator->fails()) {
             return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
         }
 
-        $user = Lawyer::where('email', $request->email)->first();
+        DB::beginTransaction();
 
-        if(!$user) {
-            return $this->response->badRequest('This email doesn\'t exists!');
+        try {
+            $user = Lawyer::where('email', $request->email)->first();
+
+            $res = $this->sendResetPasswordCode($user, 'lawyer');
+
+            if(!$res) {
+                throw new \Exception('Error while sending reset password code!');
+            }
+
+            DB::commit();
+
+            return $this->response->ok([
+                'message' => 'Reset password code has been sent successfully!'
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $this->response->internalServerError($th->getMessage());
+        }
+    }
+
+    public function resetPasswordToken(ResetPasswordTokenRequest $request) {
+        // if fails
+        if(isset($request->validator) && $request->validator->fails()) {
+            return $this->response->badRequest('Data is not valid!', $request->validator->errors(), $request->all());
         }
 
-        $res = $this->sendResetPasswordLink($user, 'lawyer');
+        DB::beginTransaction();
 
-        if(!$res) {
-            return $this->response->internalServerError('Error while sending reset password link!');
+        try {
+            $user = Lawyer::where('email', $request->email)->first();
+
+            $res = $this->checkResetPasswordCode($user, $request->code, 'lawyer');
+
+            if(is_int($res)) {
+                if($res == -1)
+                    return $this->response->badRequest('Request code or email is invalid!');
+
+                if($res == -2)
+                    return $this->response->badRequest('Code is wrong! Check email and try again!');
+
+                if($res == -3)
+                    return $this->response->badRequest('Code is expired!');
+            }
+
+            DB::commit();
+
+            return $this->response->ok([
+                'token' => $res->token,
+                'message' => 'Reset password token has been sent successfully!'
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $this->response->internalServerError($th->getMessage());
         }
-
-        return $this->response->ok([
-            'message' => 'Reset password link has been sent successfully!'
-        ]);
     }
 
     public function resetPassword(ResetPasswordRequest $request, $token) {
@@ -189,11 +231,13 @@ class AuthLawyerController extends Controller
         DB::beginTransaction();
 
         try {
-            $lawyer = Lawyer::where('email', $request->email)->firstOrFail();
+            $lawyer = Lawyer::where('email', $request->email)->first();
 
-            $res = $this->lawyerRepository->resetPassword($request->new_password, $token, $lawyer);
+            $res = $this->lawyerRepository->resetPassword($request->new_password, $token, $lawyer, request()->user_type);
 
-            if(!$res)
+            if($res == -1)
+                return $this->response->badRequest('Email is invalid! Please generate code/token first!');
+            if($res == -2)
                 return $this->response->badRequest('Token is invalid!');
 
             $lawyer->save();

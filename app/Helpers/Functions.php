@@ -6,12 +6,14 @@ use App\Mail\ResetPasswordMail;
 use App\Mail\VerficationMail;
 use App\Models\PasswordReset;
 use App\Models\VerifyEmail;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 Trait Functions
 {
+
     public function explodeAndPop(string $str, string $delimiter = ' ') {
         $arr = explode($delimiter, $str);
         return array_pop($arr);
@@ -59,25 +61,55 @@ Trait Functions
         return Mail::to($user->email)->send(new VerficationMail($user, request()->user_type, $token));
     }
 
-    public function sendResetPasswordLink($user, $user_type) {
+    public function sendResetPasswordCode($user, $user_type) {
         $record = PasswordReset::where('email', $user->email)
             ->where('user_type', $user_type)
             ->first();
 
-        $token = '';
-        if(!$record) {
-            $token = Str::random(64);
-
-            PasswordReset::create([
-                'user_type' => $user_type,
-                'email' => $user->email,
-                'token' => $token
-            ]);
-        } else {
-            $token = $record->token;
+        if($record) {
+            $delete_at = Carbon::parse($record->delete_at);
+            if(now()->isAfter($delete_at)) {
+                $record->delete();
+                $record = null;
+            }
         }
 
-        return Mail::to($user->email)->send(new ResetPasswordMail($user, $user_type, $token));
+        $code = '';
+        if(!$record) {
+            $code = Str::random(6);
+            $token = Str::random(64);
+
+            $record = PasswordReset::create([
+                'user_type' => $user_type,
+                'email' => $user->email,
+                'code' => $code,
+                'token' => $token,
+                'delete_at' => now()->addHours(8)
+            ]);
+        } else {
+            $code = $record->code;
+        }
+
+        $remain = Carbon::parse($record->delete_at)->diff(now())->h;
+        return Mail::to($user->email)->send(new ResetPasswordMail($user, $code, $remain));
+    }
+
+    public function checkResetPasswordCode($user, $code, $user_type) {
+        $record = PasswordReset::where('email', $user->email)
+            ->where('user_type', $user_type)
+            ->first();
+
+        if(!$record) return -1;
+        else {
+            if($code == $record->code) {
+                if(now()->isAfter($record->delete_at)) {
+                    $record->delete();
+                    return -3;
+                }
+                return $record;
+            }
+            else return -2;
+        }
     }
 
     public function storeFile(String $fieldname, $file, Model &$user, $user_type) {

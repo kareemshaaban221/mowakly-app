@@ -20,5 +20,5 @@ interface UserRepositoryInterface extends AuthRepositoryInterface, SocialiteAuth
 
     public function verifyEmail(Request $request, String $token);
 
-    public function resetPassword($new_password, String $token, Model &$user);
+    public function resetPassword($new_password, String $token, Model &$user, $user_type);
 }

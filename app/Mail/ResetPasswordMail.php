@@ -13,18 +13,20 @@ class ResetPasswordMail extends Mailable
     use Queueable, SerializesModels;
 
     private $user;
-    private $token;
-    private $user_type;
+    private $code;
+    private $remain;
+
+    // private $user_type;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user, $user_type, String $token)
+    public function __construct($user, String $code, $remain)
     {
-        $this->token = $token;
+        $this->code = $code;
         $this->user = $user;
-        $this->user_type = $user_type;
+        $this->remain = $remain;
     }
 
     /**
@@ -50,9 +52,10 @@ class ResetPasswordMail extends Mailable
             view: 'mails.reset_password',
             with: [
                 'name' => $this->user->fname,
-                'token' => $this->token,
-                'email' => $this->user->email,
-                'user_type' => $this->user_type
+                'code' => $this->code,
+                'remain' => $this->remain,
+                // 'email' => $this->user->email,
+                // 'user_type' => $this->user_type
             ],
         );
     }

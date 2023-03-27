@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ResetPasswordLinkRequest extends ValidationRulesRequest
+class ResetPasswordCodeRequest extends ValidationRulesRequest
 {
     /**
      * Determine if the user is authorized to make this request.

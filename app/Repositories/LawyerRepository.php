@@ -111,7 +111,7 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
         return $records;
     }
 
-    public function checkCredentials(array $credentials): Model {
+    public function checkCredentials(array $credentials): Model|NULL {
         $lawyer = Lawyer::where('email', $credentials['email'])->firstOrFail();
 
         return password_verify($credentials['password'], $lawyer->password) ? $lawyer : NULL;

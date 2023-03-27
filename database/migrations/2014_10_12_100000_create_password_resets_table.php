@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('user_type');
             $table->string('email');
             $table->string('token');
+            $table->string('code');
             $table->timestamps();
+            $table->timestamp('delete_at')->nullable();
         });
     }
 

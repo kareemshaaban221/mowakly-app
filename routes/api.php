@@ -45,7 +45,8 @@ Route::prefix('lawyer')->middleware('isLawyer')->group(function () {
     // verification action route
     Route::get('/email/verify/{token}', [AuthLawyerController::class, 'verify'])->name('lawyer.email.verify');
     // reset password route
-    Route::post('/password/reset/link', [AuthLawyerController::class, 'resetPasswordLink'])->name('lawyer.password.reset.link');
+    Route::post('/password/reset/code', [AuthLawyerController::class, 'resetPasswordCode'])->name('lawyer.password.reset.code');
+    Route::post('/password/reset/token', [AuthLawyerController::class, 'resetPasswordToken'])->name('lawyer.password.reset.token');
     Route::post('/password/reset/{token}', [AuthLawyerController::class, 'resetPassword'])->name('lawyer.password.reset');
 });
 
@@ -64,7 +65,8 @@ Route::middleware('isClient')->group(function () {
     // verification action route
     Route::get('/email/verify/{token}', [AuthClientController::class, 'verify'])->name('client.email.verify');
     // reset password route
-    Route::post('/password/reset/link', [AuthClientController::class, 'resetPasswordLink'])->name('client.password.reset.link');
+    Route::post('/password/reset/code', [AuthClientController::class, 'resetPasswordCode'])->name('client.password.reset.code');
+    Route::post('/password/reset/token', [AuthClientController::class, 'resetPasswordToken'])->name('client.password.reset.token');
     Route::post('/password/reset/{token}', [AuthClientController::class, 'resetPassword'])->name('client.password.reset');
 });
 

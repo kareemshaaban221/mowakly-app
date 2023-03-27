@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class ResetPasswordRequest extends ValidationRulesRequest
+class ResetPasswordTokenRequest extends ValidationRulesRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +24,9 @@ class ResetPasswordRequest extends ValidationRulesRequest
      */
     public function rules()
     {
-        // dd(parent::passwordRule(case: 'update'));
         return [
             'email' => parent::emailRule(exists: $_REQUEST['user_type'] . 's'),
-            'new_password' => parent::passwordRule(case: 'update'),
+            'code' => 'required|string|exists:password_resets,code'
         ];
     }
 }

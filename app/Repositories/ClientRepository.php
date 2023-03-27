@@ -66,7 +66,7 @@ class ClientRepository extends UserRepository implements ClientRepositoryInterfa
         return $filename;
     }
 
-    public function checkCredentials(array $credentials) : Model {
+    public function checkCredentials(array $credentials) : Model|NULL {
         $client = Client::where('email', $credentials['email'])->firstOrFail();
 
         return password_verify($credentials['password'], $client->password) ? $client : NULL;

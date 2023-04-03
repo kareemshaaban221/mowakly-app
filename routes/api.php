@@ -1,22 +1,23 @@
 <?php
 
-use App\Http\Controllers\ConsultationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthLawyerController;
 use App\Http\Controllers\Auth\AuthClientController;
 use App\Helpers\Response;
-use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\Auth\FacebookController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Client\ClientLawyerChatController as ClientClientLawyerChatController;
 use App\Http\Controllers\Client\ConsultationController as ClientConsultationController;
 use App\Http\Controllers\Lawyer\ProfileController as LawyerProfileController;
 use App\Http\Controllers\Client\ProfileController as ClientProfileController;
+use App\Http\Controllers\ClientLawyerChatController;
 use App\Http\Controllers\Lawyer\AppointmentController as LawyerAppointmentController;
+use App\Http\Controllers\Lawyer\LawyerClientChatController as LawyerLawyerClientChatController;
 use App\Http\Controllers\Lawyer\LawyerMainCategoryController;
 use App\Http\Controllers\Lawyer\LawyerSubcategoryController;
 use App\Http\Controllers\Lawyer\ScheduleController as LawyerScheduleController;
+use App\Http\Controllers\LawyerClientChatController;
 use App\Http\Controllers\MainCategoryController;
-use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SubcategoryController;
 
 /*
@@ -116,6 +117,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('appointments/{appointment_id}/update', [LawyerAppointmentController::class, 'update'])->name('lawyer.appointment.update');
         Route::get('appointments/{appointment_id}', [LawyerAppointmentController::class, 'show'])->name('lawyer.appointment.show');
         Route::delete('appointments/{appointment_id}/delete', [LawyerAppointmentController::class, 'destroy'])->name('lawyer.appointment.delete');
+
+        // client chat
+        Route::get('chat/{user_id}', [LawyerLawyerClientChatController::class, 'index'])->name('lawyer.chat.index');
+        Route::post('chat/{user_id}', [LawyerLawyerClientChatController::class, 'store'])->name('lawyer.chat.store');
     });
 
     // clients routes
@@ -139,6 +144,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('consultations/{id}/update', [ClientConsultationController::class, 'update'])->name('client.consultation.update');
         Route::get('consultations/show/{id}', [ClientConsultationController::class, 'show'])->name('client.consultation.show');
         Route::get('consultations', [ClientConsultationController::class, 'index'])->name('client.consultation.index');
+
+        // client chat
+        Route::get('chat/{user_id}', [ClientClientLawyerChatController::class, 'index'])->name('lawyer.chat.index');
+        Route::post('chat/{user_id}', [ClientClientLawyerChatController::class, 'store'])->name('lawyer.chat.store');
 
     });
 

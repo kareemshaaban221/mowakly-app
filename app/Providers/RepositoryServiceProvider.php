@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Interfaces\AppointmentRepositoryInterface;
 use App\Interfaces\AttachmentRepositoryInterface;
+use App\Interfaces\ChatRepositoryInterface;
 use App\Repositories\LawyerMainCategoryRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\LawyerRepositoryInterface;
@@ -17,6 +18,7 @@ use App\Interfaces\ScheduleRepositoryInterface;
 use App\Interfaces\SubcategoryRepositoryInterface;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\AttachmentRepository;
+use App\Repositories\ChatRepository;
 use App\Repositories\ClientRepository;
 use App\Repositories\ConsultationRepository;
 use App\Repositories\LawyerSubcategoryRepository;
@@ -43,6 +45,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ConsultationRepositoryInterface::class, ConsultationRepository::class);
         $this->app->bind(ScheduleRepositoryInterface::class, ScheduleRepository::class);
         $this->app->bind(AppointmentRepositoryInterface::class, AppointmentRepository::class);
+        $this->app->bind(ChatRepositoryInterface::class, ChatRepository::class);
     }
 
     /**

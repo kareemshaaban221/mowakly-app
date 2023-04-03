@@ -26,7 +26,7 @@ class ConsultationController extends Controller
     }
 
     public function index() {
-        $this->request->email = auth()->user()->email;
+        $this->request->merge(['email' => auth()->user()->email]);
         return $this->consultationController->showByUserEmail($this->request);
     }
 
@@ -39,7 +39,7 @@ class ConsultationController extends Controller
     }
 
     public function show($id) {
-        $this->request->email = auth()->user()->email;
+        $this->request->merge(['email' => auth()->user()->email]);
         return $this->consultationController->show($this->request, $id);
     }
 

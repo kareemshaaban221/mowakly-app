@@ -18,7 +18,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 88,
             ),
             Padding(
@@ -35,12 +35,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
                     style: GoogleFonts.cairo(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xff0B3939),
+                      color: const Color(0xff0B3939),
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: const BoxDecoration(
                         color: Color(0xffE6EBEB),
                         borderRadius: BorderRadius.all(Radius.circular(28))),
                     child: Text(
@@ -50,7 +50,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                       style: GoogleFonts.cairo(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xff0B3939),
+                        color: const Color(0xff0B3939),
                       ),
                     ),
                   )
@@ -99,8 +99,8 @@ Widget NotificationItem({
               Row(
                 textDirection: TextDirection.rtl,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0),
                     child: CircleAvatar(
                       backgroundColor: Color(0xff0B3939),
                       radius: 7,
@@ -113,7 +113,7 @@ Widget NotificationItem({
                     style: GoogleFonts.cairo(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xff0B3939),
+                      color: const Color(0xff0B3939),
                     ),
                   ),
                 ],
@@ -125,7 +125,7 @@ Widget NotificationItem({
                   Icon(
                     Icons.calendar_today_rounded,
                     size: 14.sp,
-                    color: Color(0xffCDD6D6),
+                    color: const Color(0xffCDD6D6),
                   ),
                   Text(
                     dayWeek,
@@ -133,7 +133,7 @@ Widget NotificationItem({
                     style: GoogleFonts.cairo(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xffCDD6D6),
+                      color: const Color(0xffCDD6D6),
                     ),
                   ),
                   SizedBox(
@@ -145,7 +145,7 @@ Widget NotificationItem({
                     style: GoogleFonts.cairo(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xffCDD6D6),
+                      color: const Color(0xffCDD6D6),
                     ),
                   ),
                   SizedBox(
@@ -154,7 +154,7 @@ Widget NotificationItem({
                   Icon(
                     Icons.access_time_rounded,
                     size: 14.sp,
-                    color: Color(0xffCDD6D6),
+                    color: const Color(0xffCDD6D6),
                   ),
                   Text(
                     hour,
@@ -162,7 +162,7 @@ Widget NotificationItem({
                     style: GoogleFonts.cairo(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xffCDD6D6),
+                      color: const Color(0xffCDD6D6),
                     ),
                   )
                 ],
@@ -172,7 +172,7 @@ Widget NotificationItem({
 
           // avatar
           CircleAvatar(
-            backgroundColor: Color(0xff0B3939),
+            backgroundColor: const Color(0xff0B3939),
             radius: 34,
             child: ClipOval(
                 child: Image.asset(

@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('article_client_comments', function (Blueprint $table) {
-            $table->id();
-            $table->string('comment');
-            $table->foreignId('client_id')->constrained('clients')->cascadeOnDelete()->cascadeOnUpdate();
+        Schema::create('article_keywords', function (Blueprint $table) {
             $table->foreignId('article_id')->constrained('articles')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('keyword_id')->constrained('keywords')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
+            // constraints
+            $table->primary(['article_id', 'keyword_id']);
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('article_client_comments');
+        Schema::dropIfExists('article_keywords');
     }
 };

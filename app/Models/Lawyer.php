@@ -44,4 +44,9 @@ class Lawyer extends Authenticatable
     public function appointments() {
         return $this->hasManyThrough(Appointment::class, Schedule::class);
     }
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
 }

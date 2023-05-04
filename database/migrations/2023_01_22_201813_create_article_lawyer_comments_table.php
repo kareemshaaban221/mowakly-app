@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('article_lawyer_comments', function (Blueprint $table) {
             $table->id();
             $table->string('comment');
-            $table->foreignId('lawyer_id')->constrained('lawyers');
-            $table->foreignId('article_id')->constrained('articles');
+            $table->foreignId('lawyer_id')->constrained('lawyers')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('article_id')->constrained('articles')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }

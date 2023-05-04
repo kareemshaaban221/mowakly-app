@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('article_keywords', function (Blueprint $table) {
-            $table->foreignId('article_id')->constrained('articles')->cascadeOnDelete()->cascadeOnUpdate();
+        Schema::create('keywords', function (Blueprint $table) {
+            $table->id();
             $table->string('keyword');
             $table->timestamps();
-            // constraints
-            $table->primary(['article_id', 'keyword']);
         });
     }
 
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('article_keywords');
+        Schema::dropIfExists('keywords');
     }
 };

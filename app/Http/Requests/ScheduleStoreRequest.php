@@ -26,7 +26,7 @@ class ScheduleStoreRequest extends ValidationRulesRequest
         parent::checkEmailRule();
         return [
             'email' => parent::emailRule(),
-            'title' => 'required|string|min:3|max:255',
+            'title' => parent::titleRule(),
             'description' => parent::descriptionRule(min: 3)
         ];
     }

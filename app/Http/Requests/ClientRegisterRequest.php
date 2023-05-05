@@ -31,7 +31,7 @@ class ClientRegisterRequest extends ValidationRulesRequest
             'password' => parent::passwordRule('register'),
             'gender' => parent::genderRule(),
             'date_of_birth' => parent::dateOfBirthRule(),
-            'avatar' => parent::avatarRule(),
+            'avatar' => parent::imageRule(),
             'phone' => parent::phoneRule(),
             'payment_methods.*' => parent::paymentMethodRule(),
         ];

@@ -12,6 +12,7 @@ use App\Http\Controllers\Lawyer\ProfileController as LawyerProfileController;
 use App\Http\Controllers\Client\ProfileController as ClientProfileController;
 use App\Http\Controllers\ClientLawyerChatController;
 use App\Http\Controllers\Lawyer\AppointmentController as LawyerAppointmentController;
+use App\Http\Controllers\Lawyer\ArticleController;
 use App\Http\Controllers\Lawyer\LawyerClientChatController as LawyerLawyerClientChatController;
 use App\Http\Controllers\Lawyer\LawyerMainCategoryController;
 use App\Http\Controllers\Lawyer\LawyerSubcategoryController;
@@ -121,6 +122,13 @@ Route::middleware('auth:sanctum')->group(function () {
         // client chat
         Route::get('chat/{user_id}', [LawyerLawyerClientChatController::class, 'index'])->name('lawyer.chat.index');
         Route::post('chat/{user_id}', [LawyerLawyerClientChatController::class, 'store'])->name('lawyer.chat.store');
+
+        // articles
+        Route::get('articles', [ArticleController::class, 'index'])->name('article.index');
+        Route::post('articles', [ArticleController::class, 'store'])->name('article.store');
+        Route::put('articles/{id}', [ArticleController::class, 'update'])->name('article.update');
+        Route::delete('articles/{id}', [ArticleController::class, 'destroy'])->name('article.destroy');
+        Route::get('articles/{id}', [ArticleController::class, 'show'])->name('article.show');
     });
 
     // clients routes

@@ -31,7 +31,7 @@ class ClientUpdateRequest extends ValidationRulesRequest
             // 'password' => parent::passwordRule('update'),
             'gender' => parent::genderRule(update: true),
             'date_of_birth' => parent::dateOfBirthRule(update: true),
-            'avatar' => parent::avatarRule(),
+            'avatar' => parent::imageRule(update: true),
             'phone' => parent::phoneRule(update: true),
             'payment_methods.*' => parent::paymentMethodRule(update: true),
         ];

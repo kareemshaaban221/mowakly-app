@@ -34,8 +34,6 @@ return new class extends Migration
         });
 
         $dirs = glob($this->uploads_path('lawyers'). '/*');
-        $dirss = glob($this->uploads_path('clients'). '/*');
-
         foreach ($dirs as $dir) {
             $files = glob($dir . '/*');
             foreach($files as $file) {
@@ -44,7 +42,17 @@ return new class extends Migration
             }
         }
 
-        foreach ($dirss as $dir) {
+        $dirs = glob($this->uploads_path('clients'). '/*');
+        foreach ($dirs as $dir) {
+            $filess = glob($dir . '/*');
+            foreach($filess as $file) {
+                if(is_file($file))
+                    unlink($file);
+            }
+        }
+
+        $dirs = glob($this->uploads_path('articles'). '/*');
+        foreach ($dirs as $dir) {
             $filess = glob($dir . '/*');
             foreach($filess as $file) {
                 if(is_file($file))

@@ -9,7 +9,7 @@ class ValidationRulesRequest extends FormRequest
 {
     public function authorizeRule($user_type)
     {
-        return request()->user_type = $user_type;
+        return request()->user_type == $user_type;
     }
 
     public $validator = NULL;
@@ -69,8 +69,8 @@ class ValidationRulesRequest extends FormRequest
         return ['required', 'in:male,female'];
     }
 
-    protected function descriptionRule($update = false, $min = 50, $max = 255) {
-        $rules = ["min:$min", "max:$max"];
+    protected function descriptionRule($update = false, $min = 50, $max = 0) {
+        $rules = ["min:$min", $max < $min ? '' : "max:$max"];
 
         if (! $update) {
             array_push($rules, 'required');
@@ -106,10 +106,6 @@ class ValidationRulesRequest extends FormRequest
         return $rules;
     }
 
-    protected function avatarRule(String $mimes = 'png,jpg,jpeg', Int $max = 5000) {
-        return ['file', 'mimes:' . $mimes, 'max:' . $max];
-    }
-
     protected function phoneRule(Int $digits = 10, String $regex = '/1[5210]\d{8}/u', $update = false, $distinct = false) {
         $rules = ['digits:' . $digits, 'regex:' . $regex];
 
@@ -134,8 +130,8 @@ class ValidationRulesRequest extends FormRequest
         return ['required', 'string', 'min:' . $min, 'max:' . $max];
     }
 
-    protected function cardRule(String $mimes = 'png,jpg,jpeg', Int $max = 5000, $update = false) {
-        if ($update) {
+    protected function imageRule(String $mimes = 'png,jpg,jpeg', Int $max = 5000, $update = false, $required = false) {
+        if ($update || !$required) {
             return ['file', 'mimes:' . $mimes, 'max:' . $max];
         }
 
@@ -192,6 +188,16 @@ class ValidationRulesRequest extends FormRequest
         }
 
         return ['required', 'digits:' . $digits, 'regex:' . $regex, 'unique:lawyers,national_id'];
+    }
+
+    protected function titleRule($update = false)
+    {
+        $rules = ['string', 'min:3', 'max:255'];
+        if ($update) {
+            return $rules;
+        }
+
+        return array_merge(['required'], $rules);
     }
 
     protected function checkEmailRule() {

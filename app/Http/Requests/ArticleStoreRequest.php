@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class ScheduleUpdateRequest extends ValidationRulesRequest
+class ArticleStoreRequest extends ValidationRulesRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +14,7 @@ class ScheduleUpdateRequest extends ValidationRulesRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -25,9 +26,10 @@ class ScheduleUpdateRequest extends ValidationRulesRequest
     {
         parent::checkEmailRule();
         return [
-            'email' => parent::emailRule(),
-            'title' => parent::titleRule(update: true),
-            'description' => parent::descriptionRule(update: true, min: 3)
+            'email' => parent::emailRule(exists: 'lawyers'),
+            'title' => parent::titleRule(),
+            'body' => parent::descriptionRule(),
+            'image' => parent::imageRule(required: true)
         ];
     }
 }

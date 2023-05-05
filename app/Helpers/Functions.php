@@ -112,30 +112,37 @@ Trait Functions
         }
     }
 
-    public function storeFile(String $fieldname, $file, Model &$user, $user_type) {
+    public function storeFile(String $fieldname, $file, Model &$model, $dirname) {
         $uploads_path = NULL;
 
-        if ($user_type == 'lawyer')
+        if ($dirname == 'lawyer')
             $uploads_path = $this->uploads_path('lawyers');
-        else if ($user_type == 'client')
+        else if ($dirname == 'client')
             $uploads_path = $this->uploads_path('clients');
+        else if ($dirname == 'article')
+            $uploads_path = $this->uploads_path('articles');
         else
-            throw new \Exception('App\Helpers\Functions::storeFile() Invalid User Type!');
+            throw new \Exception('App\Helpers\Functions::storeFile() Invalid Directory Name!');
 
-        $filename = $this->concatFilenameWithEmail('_'.$fieldname.'_', $user->email, $file->getClientOriginalName());
+        if ($dirname == 'article')
+            $filename = $this->concatFilenameWithEmail('_'.$fieldname.'_', $model->title, $file->getClientOriginalName());
+        else
+            $filename = $this->concatFilenameWithEmail('_'.$fieldname.'_', $model->email, $file->getClientOriginalName());
 
-        $file->move($uploads_path . '/' . $user->id, $filename);
+        $file->move($uploads_path . '/' . $model->id, $filename);
 
         return $filename;
     }
 
-    public function deleteFile($filename, Model &$user, $user_type) {
+    public function deleteFile($filename, Model &$user, $dirname) {
         $uploads_path = NULL;
 
-        if ($user_type == 'lawyer')
+        if ($dirname == 'lawyer')
             $uploads_path = $this->uploads_path('lawyers');
-        else if ($user_type == 'client')
+        else if ($dirname == 'client')
             $uploads_path = $this->uploads_path('clients');
+        else if ($dirname == 'article')
+            $uploads_path = $this->uploads_path('articles');
         else
             throw new \Exception('App\Helpers\Functions::deleteFile() Invalid User Type!');
 
@@ -145,7 +152,7 @@ Trait Functions
             unlink($uploads_path . '/' . $filename);
             return $filename;
         } else {
-            throw new \Exception('File not found');
+            throw new \Exception('App\Helpers\Functions::deleteFile() File not found');
         }
 	}
 }

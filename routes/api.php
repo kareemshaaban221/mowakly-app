@@ -12,6 +12,7 @@ use App\Http\Controllers\Lawyer\ProfileController as LawyerProfileController;
 use App\Http\Controllers\Client\ProfileController as ClientProfileController;
 use App\Http\Controllers\ClientLawyerChatController;
 use App\Http\Controllers\Lawyer\AppointmentController as LawyerAppointmentController;
+use App\Http\Controllers\Lawyer\ArticleCommentController;
 use App\Http\Controllers\Lawyer\ArticleController;
 use App\Http\Controllers\Lawyer\LawyerClientChatController as LawyerLawyerClientChatController;
 use App\Http\Controllers\Lawyer\LawyerMainCategoryController;
@@ -129,6 +130,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('articles/{id}', [ArticleController::class, 'update'])->name('article.update');
         Route::delete('articles/{id}', [ArticleController::class, 'destroy'])->name('article.destroy');
         Route::get('articles/{id}', [ArticleController::class, 'show'])->name('article.show');
+
+        // articles comments
+        Route::get('articles/{article_id}/comments', [ArticleCommentController::class, 'index'])->name('article.comments.index');
+        Route::post('articles/{article_id}/comments', [ArticleCommentController::class, 'store'])->name('article.comments.store');
+        Route::put('articles/comments/{comment_id}', [ArticleCommentController::class, 'update'])->name('article.comments.update');
+        Route::delete('articles/comments/{comment_id}', [ArticleCommentController::class, 'destroy'])->name('article.comments.delete');
     });
 
     // clients routes

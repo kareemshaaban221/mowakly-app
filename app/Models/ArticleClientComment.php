@@ -11,9 +11,9 @@ class ArticleClientComment extends Model
 
     protected $guarded = [];
 
-    public function client()
+    public function user()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(Client::class, 'client_id');
     }
 
     public function article()

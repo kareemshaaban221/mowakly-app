@@ -11,9 +11,9 @@ class ArticleLawyerComment extends Model
 
     protected $guarded = [];
 
-    public function lawyer()
+    public function user()
     {
-        return $this->belongsTo(Lawyer::class);
+        return $this->belongsTo(Lawyer::class, 'lawyer_id');
     }
 
     public function article()

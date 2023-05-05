@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Interfaces\AppointmentRepositoryInterface;
+use App\Interfaces\ArticleLawyerCommentRepositoryInterface;
 use App\Interfaces\ArticleRepositoryInterface;
 use App\Interfaces\AttachmentRepositoryInterface;
 use App\Interfaces\ChatRepositoryInterface;
@@ -18,6 +19,7 @@ use App\Interfaces\MainCategoryRepositoryInterface;
 use App\Interfaces\ScheduleRepositoryInterface;
 use App\Interfaces\SubcategoryRepositoryInterface;
 use App\Repositories\AppointmentRepository;
+use App\Repositories\ArticleLawyerCommentRepository;
 use App\Repositories\ArticleRepository;
 use App\Repositories\AttachmentRepository;
 use App\Repositories\ChatRepository;
@@ -49,6 +51,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(AppointmentRepositoryInterface::class, AppointmentRepository::class);
         $this->app->bind(ChatRepositoryInterface::class, ChatRepository::class);
         $this->app->bind(ArticleRepositoryInterface::class, ArticleRepository::class);
+        $this->app->bind(ArticleLawyerCommentRepositoryInterface::class, ArticleLawyerCommentRepository::class);
     }
 
     /**

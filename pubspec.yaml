@@ -46,7 +46,10 @@ dependencies:
   google_fonts:
   smooth_page_indicator:
   carousel_slider:
-  grouped_list: ^5.1.2
+  grouped_list:
+  http:
+  flutter_spinkit:
+
 
 dev_dependencies:
   flutter_test:

@@ -12,7 +12,7 @@ class DioHelper{
   static init(){
     dio=Dio(
       BaseOptions(
-        baseUrl:'https://3481-197-43-91-94.ngrok.io',
+        baseUrl:'https://ektml.cloud/mowakly/public',
         receiveDataWhenStatusError: true,
         headers:{
           'Content-Type':'application/json'
@@ -23,7 +23,7 @@ class DioHelper{
 
   static Future<Response>PostData({
     @required String ?url,
-    @required Map<String,dynamic> ?data,
+    @required data,
     Map<String,dynamic>? query
 })async{
     return await dio!.post(

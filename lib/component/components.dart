@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fp/screens/signupScreen/cuibt/cubitSignupScreen.dart';
+
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 String assetImage = 'asset/';
 
 String assetIcons = 'asset/icons/';
 
-Widget build_choice_filed({@required icon,selectValue='male',context}){
+Widget build_choice_filed({@required icon,@required void onChange(Object)?,selectValue='male',context}){
   //String selectValue='ذكر';
   return SizedBox(
     height: 7.36.h,
@@ -42,10 +42,7 @@ Widget build_choice_filed({@required icon,selectValue='male',context}){
                     autofocus: false,
 
                     value: selectValue ,
-                    onChanged: (value) {
-                      SignupScreenCubit.get(context).change();
-                      selectValue=value!;
-                    },
+                    onChanged: onChange,
                     items: const[
                       DropdownMenuItem(child: Text("ذكر",),value: 'male'),
                       DropdownMenuItem(child: Text("انثي"),value: 'female'),
@@ -89,7 +86,9 @@ Widget build_text_filed({
   @required label,
   @required icon,
   @required controller,
+  @required textInputType,
  @required String?Function(String?) ?validata,
+  obscureText=false,
   readonly=false,
   ontap=null,
 
@@ -125,10 +124,12 @@ Widget build_text_filed({
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: TextFormField(
                       controller: controller,
+                      obscureText: obscureText,
                       validator : validata ,
                       textAlign: TextAlign.end,
                       readOnly: readonly,
                       onTap: ontap,
+                      keyboardType: textInputType,
                       decoration:  InputDecoration(
 
                         hintText: label,

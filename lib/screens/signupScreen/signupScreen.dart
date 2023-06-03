@@ -36,6 +36,7 @@ class SignupScreen extends StatelessWidget {
               ),
               //
               build_text_filed(label: 'الاسم بالكامل',
+                textInputType: TextInputType.text,
                 icon: assetIcons+'Icon material-person.svg',
                 controller: nameController,
                 validata: (value) {
@@ -50,6 +51,7 @@ class SignupScreen extends StatelessWidget {
               SizedBox(height: 4.1.h,),
 
               build_text_filed(label: 'البريد الإلكتروني',
+                textInputType: TextInputType.emailAddress,
                 icon: assetIcons+'Icon ionic-ios-mail.svg',
                 controller: emailController,
                 validata: (value) {
@@ -62,6 +64,8 @@ class SignupScreen extends StatelessWidget {
                 },),
               SizedBox(height: 4.1.h,),
               build_text_filed(label: 'كلمة المرور',
+                textInputType: TextInputType.visiblePassword,
+                obscureText: true,
                 icon: assetIcons+'Icon awesome-lock.svg',
                 controller: passwordController,
                 validata: (value) {
@@ -75,6 +79,8 @@ class SignupScreen extends StatelessWidget {
               ),
               SizedBox(height: 4.1.h,),
               build_text_filed(label: 'تأكيد كلمة المرور ',
+                textInputType: TextInputType.visiblePassword,
+                obscureText: true,
                 icon: assetIcons+'Icon awesome-lock.svg',
                 controller: passwordConfirmController,
                 validata: (value) {

@@ -4,6 +4,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fp/component/components.dart';
+import 'package:fp/screens/forgetPasswordScreen/forgetPasswordScreen.dart';
 import 'package:fp/screens/loginScreen/cubit/cubitLoginScreen.dart';
 import 'package:fp/screens/loginScreen/cubit/statesCubit.dart';
 import 'package:fp/screens/signupScreen/signupScreen.dart';
@@ -56,6 +57,7 @@ class LoginScreen extends StatelessWidget {
                           ),
 
                           build_text_filed(label: 'الاسم,الايميل',icon: assetIcons+'Icon material-person.svg',
+                            textInputType: TextInputType.emailAddress,
                             controller: emailController,
                             validata: (value) {
                               if (value!.isEmpty) {
@@ -72,6 +74,8 @@ class LoginScreen extends StatelessWidget {
                           build_text_filed(
                             label: 'كلمة السر',
                             icon: assetIcons+'lock.svg',
+                            textInputType: TextInputType.text,
+                            obscureText: true,
                             controller: passwordController,
                             validata: (value) {
                               if (value!.isEmpty) {
@@ -84,7 +88,22 @@ class LoginScreen extends StatelessWidget {
 
                           ),
                           SizedBox(
-                            height: 4.01.h,
+                            height: 3.01.h,
+                          ),
+                          SizedBox(
+                            height: 3.h,
+                              child: Row(
+                                textDirection: TextDirection.rtl,
+                                children: [
+                                  SizedBox(width: 20.w,),
+                                  InkWell(
+                                    onTap:() => Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordScreen(),)),
+                                      child: Text('هل نسيت كلمة السر ؟',style: TextStyle(color: Color(0xff1BE5BF)))),
+                                ],
+                              )
+                          ),
+                          SizedBox(
+                            height: 3.01.h,
                           ),
                           
                           ConditionalBuilder(

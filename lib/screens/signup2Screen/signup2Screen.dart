@@ -110,6 +110,7 @@ class Signup2Screen extends StatelessWidget {
                                     SizedBox(height: 4.5.h,),
                                     //==========================
                                     build_text_filed(label: 'رقم الهاتف',
+                                      textInputType: TextInputType.phone,
                                       icon: assetIcons+'Icon awesome-phone-alt.svg',
                                       controller: phoneController,
                                       validata: (value) {
@@ -142,7 +143,11 @@ class Signup2Screen extends StatelessWidget {
                                        }
                                      },
                                    ),*/
-                                    build_choice_filed(icon: assetIcons+'Ellipse 55.svg',selectValue:gender,context: context ),
+                                    build_choice_filed(icon: assetIcons+'Ellipse 55.svg',selectValue:gender,context: context ,
+                                        onChange: (value) {
+                                      SignupScreenCubit.get(context).change();
+                                      gender=value!;
+                                    }),
 
 
 
@@ -150,16 +155,24 @@ class Signup2Screen extends StatelessWidget {
                                     SizedBox(height: 13.04.h,),
                                     //==========================
                                     build_button(title: 'التالــــــي',
-                                        ontap: (){
+                                        ontap: ()async{
                                           if(formKey.currentState!.validate()){
 
-                                            cuibt.userSignup(user_type: 'client', fname: user!['name'], email:user!['email'], password: user!['password'], password_confirmation: user!['passwordConfirm'], lname: 'nghg', gender: gender, date_of_birth: dateController.text, phone: phoneController.text);
                                             if(userType=='client'){
+                                              cuibt.userSignup(user_type: 'client', fname: user!['name'], email:user!['email'], password: user!['password'], password_confirmation: user!['passwordConfirm'], lname: 'nghg', gender: gender, date_of_birth: dateController.text, phone: phoneController.text);
 
                                               Navigator.push(context, MaterialPageRoute(builder: (context) => PayScreen(),));
                                             }
                                             else if(userType=='lawer'){
-                                              Navigator.push(context, MaterialPageRoute(builder: (context) => CvLawerScreen(),));
+                                              print(user);
+                                              user!.addAll({
+                                                'gender':gender,
+                                                'phone':phoneController.text,
+                                                'date_of_birth':dateController.text,
+                                              });
+                                            await  cuibt.showCategories();
+
+                                              Navigator.push(context, MaterialPageRoute(builder: (context) => CvLawerScreen(user: user),));
                                             }
                                           }
                                       

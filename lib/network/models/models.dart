@@ -1,0 +1,3 @@
+
+String ?tokenPassword;
+List? categories=[];

@@ -41,11 +41,12 @@ dependencies:
   intl:
   bloc:
   flutter_bloc:
-  dio:
+  dio: ^5.0.1
   conditional_builder_null_safety:
   google_fonts:
   smooth_page_indicator:
-
+  file_picker:
+  otp_text_field:
 dev_dependencies:
   flutter_test:
     sdk: flutter

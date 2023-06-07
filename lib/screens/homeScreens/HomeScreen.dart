@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:fp/screens/chatbotScreen/ChatbotScreen.dart';
 import 'package:fp/screens/homeScreens/proflePage.dart';
@@ -48,14 +50,14 @@ String userName =  'أحمد محمد علي';
 
         /// APPBAR
         appBar: AppBar(
-          backgroundColor: Color(0xff1BE5BF),
-          iconTheme: IconThemeData(color: Color(0xff0B3939)),
+          backgroundColor: const Color(0xff1BE5BF),
+          iconTheme: const IconThemeData(color: Color(0xff0B3939)),
           elevation: 0,
           actions: [
             Text(
               userName,
               style: GoogleFonts.cairo(
-                  color: Color(0xff0B3939),
+                  color: const Color(0xff0B3939),
                   fontSize: 16.sp,
                   height: 3.6,
                   fontWeight: FontWeight.w700),
@@ -63,7 +65,7 @@ String userName =  'أحمد محمد علي';
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0,),
               child: CircleAvatar(
-                backgroundColor: Color(0xff0B3939),
+                backgroundColor: const Color(0xff0B3939),
                 radius: 34,
                 child: ClipOval(
                   child: Image.asset('${assetImage}help.png',  fit: BoxFit.cover,)
@@ -120,28 +122,28 @@ String userName =  'أحمد محمد علي';
 
             /// search box
             Container(
-              color: Color(0xff1BE5BF),
+              color: const Color(0xff1BE5BF),
               child: Container(
-                padding: EdgeInsets.all(24),
+                padding: const EdgeInsets.all(24),
                 child: TextField(
                   autocorrect: false,
                   textAlign: TextAlign.right,
-                  style: TextStyle(color: Color(0xff000000)),
+                  style: const TextStyle(color: Color(0xff000000)),
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
                     prefixIcon: Icon(
                       Icons.search_rounded,
-                      color: Color(0xffCDD6D6),
+                      color: const Color(0xffCDD6D6),
                       size: 20.sp,
                     ),
                     hintText: ' ابحث من هنا',
                     hintStyle: GoogleFonts.cairo(
                         fontSize: 14.8.sp,
-                        color: Color(0xffCDD6D6),
+                        color: const Color(0xffCDD6D6),
                         fontWeight: FontWeight.w600),
                     fillColor: Colors.white,
                     border: InputBorder.none,
-                    enabledBorder: OutlineInputBorder(
+                    enabledBorder: const OutlineInputBorder(
                         borderRadius:
                         BorderRadius.all(Radius.circular(28.0)),
                         borderSide: BorderSide(color: Color(0xffffffff))),
@@ -181,8 +183,8 @@ String userName =  'أحمد محمد علي';
                         },
                         child: Column(
                           children: [
-                            Icon(Icons.home_filled, color: onHomePage?Color(0xff1BE5BF):Color(0xffCDD6D6),size: 40,),
-                            Text('الرئيسية', style:TextStyle(color: onHomePage?Color(0xff1BE5BF):Color(0xffCDD6D6),fontSize: 14,),),
+                            Icon(Icons.home_filled, color: onHomePage?const Color(0xff1BE5BF):const Color(0xffCDD6D6),size: 40,),
+                            Text('الرئيسية', style:TextStyle(color: onHomePage?const Color(0xff1BE5BF):const Color(0xffCDD6D6),fontSize: 14,),),
                           ],
                         ),
                       ),
@@ -193,14 +195,14 @@ String userName =  'أحمد محمد علي';
                         },
                         child: Column(
                           children: [
-                            Icon(Icons.notifications_rounded, color: onNotificationsPage?Color(0xff1BE5BF):Color(0xffCDD6D6),size: 40,),
-                            Text('الإشعارات', style:TextStyle(color: onNotificationsPage?Color(0xff1BE5BF):Color(0xffCDD6D6),fontSize: 14,),),
+                            Icon(Icons.notifications_rounded, color: onNotificationsPage?const Color(0xff1BE5BF):const Color(0xffCDD6D6),size: 40,),
+                            Text('الإشعارات', style:TextStyle(color: onNotificationsPage?const Color(0xff1BE5BF):const Color(0xffCDD6D6),fontSize: 14,),),
                           ],
                         ),
                       ),
 
                       //space for chatbot
-                      SizedBox(width: 40,),
+                      const SizedBox(width: 40,),
 
                       /// INDEX = 2 ( messages)
                       InkWell(
@@ -209,8 +211,8 @@ String userName =  'أحمد محمد علي';
                         },
                         child: Column(
                           children: [
-                            Icon(Icons.message_outlined, color: onMessagesPAge?Color(0xff1BE5BF):Color(0xffCDD6D6),size: 40,),
-                            Text('الرسائل', style:  TextStyle(color: onMessagesPAge?Color(0xff1BE5BF):Color(0xffCDD6D6),fontSize: 14,),),
+                            Icon(Icons.message_outlined, color: onMessagesPAge?const Color(0xff1BE5BF):const Color(0xffCDD6D6),size: 40,),
+                            Text('الرسائل', style:  TextStyle(color: onMessagesPAge?const Color(0xff1BE5BF):const Color(0xffCDD6D6),fontSize: 14,),),
                           ],
                         ),
                       ),
@@ -221,8 +223,8 @@ String userName =  'أحمد محمد علي';
                         },
                         child: Column(
                           children: [
-                            Icon(Icons.person_outlined, color: onProfilePage?Color(0xff1BE5BF):Color(0xffCDD6D6),size: 40,),
-                            Text('ملفي', style:  TextStyle(color: onProfilePage?Color(0xff1BE5BF):Color(0xffCDD6D6),fontSize: 14,),),
+                            Icon(Icons.person_outlined, color: onProfilePage?const Color(0xff1BE5BF):const Color(0xffCDD6D6),size: 40,),
+                            Text('ملفي', style:  TextStyle(color: onProfilePage?const Color(0xff1BE5BF):const Color(0xffCDD6D6),fontSize: 14,),),
                           ],
                         ),
                       ),
@@ -258,10 +260,10 @@ String userName =  'أحمد محمد علي';
               alignment: Alignment.bottomCenter,
               child: InkWell(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChatbotScreen(),));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatbotScreen(),));
                 },
                 child: Container(
-                  margin: EdgeInsets.only(bottom: 30),
+                  margin: const EdgeInsets.only(bottom: 30),
                   width: 60,
                   height: 60,
                   decoration: const BoxDecoration(
@@ -275,7 +277,8 @@ String userName =  'أحمد محمد علي';
                       ),
                     ],
                   ),
-                  child: Icon(Icons.smart_toy_outlined, color: Color(0xff1BE5BF), size: 46,)
+                  // child: const Icon(Icons.smart_toy_outlined, color: Color(0xff1BE5BF), size: 46,)
+                  child: Image.asset('asset/chatbot-green.png')
                 ),
               ),
             )

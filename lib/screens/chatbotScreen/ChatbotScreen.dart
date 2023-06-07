@@ -24,6 +24,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
 
   @override
   void initState() {
+    getWelcome();
     textEditingController = TextEditingController();
     _listScrollController = ScrollController();
     focusNode = FocusNode();
@@ -138,15 +139,34 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   }
 
   Future<void> sendMessageFCT() async {
+    if(textEditingController.text.isNotEmpty){
+      try {
+        String msg = textEditingController.text;
+        setState(() {
+          _isTyping = true;
+          chatList.add(ChatModel(msg: textEditingController.text, chatIndex: 0));
+          textEditingController.clear();
+          focusNode.unfocus();
+        });
+        chatList.addAll(await ApiService.sendMessage(message: msg));
+        setState(() {});
+      } catch (e) {
+        log('error: $e');
+      } finally {
+        setState(() {
+          scrollListToEnd();
+          _isTyping = false;
+        });
+      }
+    }
+  }
+
+  Future<void> getWelcome() async {
     try {
-      String msg = textEditingController.text;
       setState(() {
         _isTyping = true;
-        chatList.add(ChatModel(msg: textEditingController.text, chatIndex: 0));
-        textEditingController.clear();
-        focusNode.unfocus();
       });
-      chatList.addAll(await ApiService.sendMessage(message: msg));
+      chatList.addAll(await ApiService.getWelcomeMessage());
       setState(() {});
     } catch (e) {
       log('error: $e');
@@ -157,4 +177,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       });
     }
   }
+
+
+
 }

@@ -1,49 +1,51 @@
-import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
-import 'package:http/http.dart' as http;
 import 'package:fp/screens/chatbotScreen/chat_model.dart';
 import 'api_constant.dart';
+import 'package:dio/dio.dart';
+
 
 class ApiService {
-  // send messages
-  static Future<List<ChatModel>> sendMessage(
-      {required String message}) async {
+  // send message
+  static Future<List<ChatModel>> sendMessage({required String message}) async {
     try {
-      var response = await http.post(Uri.parse('$BASE_URL/chat/completions'),
-          headers: {
-            'Authorization': 'Bearer $API_KEY',
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode({
-            "model": "gpt-3.5-turbo",
-            "messages": [
-              {
-                "role": "user",
-                "content": message,
-              }
-            ],
-            "temperature": 0.7,
+      Dio dio = Dio();
+      dio.options.baseUrl = '$CHATBOT_BASE_URL/chatbot';
+      dio.options.headers['Content-Type'] = 'application/json';
 
-          }));
-      Map jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
+      var response = await dio.post('',
+          data: {
+            'message': message,
+          }
+      );
 
-      if (jsonResponse['error'] != null) {
-        throw HttpException(jsonResponse['error']['message']);
-      }
+      Map jsonResponse = response.data;
 
-      List<ChatModel> chatList = [];
-      if (jsonResponse['choices'].length > 0) {
-        chatList = List.generate(
-            jsonResponse['choices'].length,
-                (index) => ChatModel(
-                msg: jsonResponse['choices'][0]['message']['content'],
-                chatIndex: 1));
-      }
+      List<ChatModel> chatList = List.generate(
+          1, (index) => ChatModel(msg: jsonResponse['data'], chatIndex: 1));
       return chatList;
     } catch (e) {
-      log('error is: $e');
-      rethrow;
+      return [ChatModel(msg: "خطأ في الاتصال بالخادم، برجاء المحاولة في وقت لاحق", chatIndex: 1)];
     }
   }
+
+
+ // get welcome message
+  static Future<List<ChatModel>> getWelcomeMessage() async {
+    try {
+      Dio dio = Dio();
+      dio.options.baseUrl = '$CHATBOT_BASE_URL/chatbot/welcome';
+      dio.options.headers['Content-Type'] = 'application/json';
+
+      var response = await dio.get('');
+
+      Map jsonResponse = response.data;
+
+      List<ChatModel> chatList = List.generate(
+          3, (index) => ChatModel(msg: jsonResponse['data']["$index"], chatIndex: 1));
+
+      return chatList;
+    } catch (e) {
+     return [ChatModel(msg: "خطأ في الاتصال بالخادم، برجاء المحاولة في وقت لاحق", chatIndex: 1)];
+    }
+  }
+
 }

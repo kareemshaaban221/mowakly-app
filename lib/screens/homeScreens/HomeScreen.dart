@@ -278,7 +278,10 @@ String userName =  'أحمد محمد علي';
                     ],
                   ),
                   // child: const Icon(Icons.smart_toy_outlined, color: Color(0xff1BE5BF), size: 46,)
-                  child: Image.asset('asset/chatbot-green.png')
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Image.asset(fit: BoxFit.fill,'asset/chatbot-green.png'),
+                  )
                 ),
               ),
             )

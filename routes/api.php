@@ -1,3 +1,5 @@
+
+text/x-generic api.php ( PHP script, ASCII text )
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -19,6 +21,7 @@ use App\Http\Controllers\Lawyer\LawyerMainCategoryController;
 use App\Http\Controllers\Lawyer\LawyerSubcategoryController;
 use App\Http\Controllers\Lawyer\ScheduleController as LawyerScheduleController;
 use App\Http\Controllers\LawyerClientChatController;
+use App\Http\Controllers\LawyerController;
 use App\Http\Controllers\MainCategoryController;
 use App\Http\Controllers\SubcategoryController;
 
@@ -86,12 +89,16 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // profile management routes
         Route::get('/profile', [LawyerProfileController::class, 'index'])->name('lawyer.profile.index');
-        Route::put('profile/update', [LawyerProfileController::class, 'update'])->name('lawyer.profile.update');
+        Route::post('profile/update', [LawyerProfileController::class, 'update'])->name('lawyer.profile.update');
         Route::post('profile/attachments/add', [LawyerProfileController::class, 'addAttachment'])->name('lawyer.profile.attachments.add');
         Route::delete('profile/attachments/{filename}/delete', [LawyerProfileController::class, 'destroyAttachment'])->name('lawyer.profile.attachments.delete');
         Route::post('profile/phones/add', [LawyerProfileController::class, 'addPhone'])->name('lawyer.profile.phones.add');
         Route::delete('profile/phones/{phone_num}/delete', [LawyerProfileController::class, 'destroyPhone'])->name('lawyer.profile.phones.delete');
         Route::delete('profile/delete', [LawyerProfileController::class, 'destroy'])->name('lawyer.profile.destroy');
+
+        // consultations
+        Route::get('/consultations', [LawyerProfileController::class, 'getAllConsultations'])->name('lawyer.consultations.index');
+        Route::get('/consultations/{id}', [LawyerProfileController::class, 'showConsultation'])->name('lawyer.consultations.show');
 
         Route::get('maincategories', [LawyerMainCategoryController::class, 'index'])->name('lawyer.maincategories.index');
         Route::get('maincategories/category/{id}', [LawyerMainCategoryController::class, 'showByCategory'])->name('lawyer.maincategories.category.show');
@@ -161,8 +168,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('consultations', [ClientConsultationController::class, 'index'])->name('client.consultation.index');
 
         // client chat
-        Route::get('chat/{user_id}', [ClientClientLawyerChatController::class, 'index'])->name('lawyer.chat.index');
-        Route::post('chat/{user_id}', [ClientClientLawyerChatController::class, 'store'])->name('lawyer.chat.store');
+        Route::get('chat/{user_id}', [ClientClientLawyerChatController::class, 'index'])->name('client.chat.index');
+        Route::post('chat/{user_id}', [ClientClientLawyerChatController::class, 'store'])->name('client.chat.store');
 
     });
 
@@ -176,7 +183,7 @@ Route::get('/categories', [MainCategoryController::class, 'index'])->name('mainc
 Route::post('/subcategories', [SubcategoryController::class, 'store'])->name('subcategories.store');
 Route::get('/subcategories', [SubcategoryController::class, 'index'])->name('subcategories.index');
 
-// Route::get('/lawyers', [LawyerController::class, 'index'])->name('lawyer.index');
+Route::get('/lawyers', [LawyerController::class, 'index'])->name('lawyer.index');
 // Route::get('/lawyers/show/{email}', [LawyerController::class, 'show'])->name('lawyer.show');
 // Route::get('/lawyers/update/{email}', [LawyerController::class, 'update'])->name('lawyer.update');
 // Route::get('/lawyers/delete/{email}', [LawyerController::class, 'delete'])->name('lawyer.delete');

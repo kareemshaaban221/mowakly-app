@@ -146,7 +146,11 @@ class LawyerRepository extends UserRepository implements LawyerRepositoryInterfa
 	}
 
     public function updateAvatar($file, Model &$lawyer) {
-        $this->deleteAvatar($lawyer->avatar, $lawyer);
+        try {
+            $this->deleteAvatar($lawyer->avatar, $lawyer);
+        } catch (\Throwable $th) {
+            ;
+        }
         $filename = $this->storeAvatar($file, $lawyer);
 
         return $filename;

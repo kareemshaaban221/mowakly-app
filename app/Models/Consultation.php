@@ -10,7 +10,7 @@ class Consultation extends Model
     use HasFactory;
 
     protected $table = 'client_lawyer_consulting';
-    // protected $with = ['lawyer', 'client', 'mainCategory'];
+    protected $with = ['lawyer', 'client', 'mainCategory'];
 
     public function client() {
         return $this->belongsTo(Client::class);

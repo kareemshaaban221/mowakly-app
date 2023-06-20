@@ -16,4 +16,9 @@ class LawyerAttachment extends Model
     public function lawyer() {
         return $this->belongsTo(Lawyer::class);
     }
+
+    // *** attributes
+    public function getAttachmentAttribute() {
+        return asset($this->attributes['attachment']);
+    }
 }

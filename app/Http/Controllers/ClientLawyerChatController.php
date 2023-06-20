@@ -43,14 +43,24 @@ class ClientLawyerChatController extends Controller
             $data = [
                 'me' => ClientLawyerChat::where('from', $client->id)
                     ->where('to', $user_id)
-                    ->get()->sortBy('created_at')->toarray(),
+                    ->get()
+                    ->setHidden(['id'])
+                    ->each(function ($item) {
+                        $item->context = 'me';
+                    }),
                 'other' => LawyerClientChat::where('from', $user_id)
                     ->where('to', $client->id)
-                    ->get()->sortBy('created_at')->toarray()
+                    ->get()
+                    ->setHidden(['id'])
+                    ->each(function ($item) {
+                        $item->context = 'other';
+                    })
             ];
 
+            $data = $data['me']->toBase()->merge($data['other']);
+
             return $this->response->ok([
-                'data' => $data,
+                'data' => $data->sortBy('created_at')->toarray(),
                 'message' => 'All client messages in chat with lawyer!',
             ]);
 

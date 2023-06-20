@@ -31,9 +31,15 @@ class ConsultationController extends Controller
 
         try {
 
+            $user = null;
+            if (request()->user_type == 'lawyer')
+                $user = Lawyer::where('email', $request->email)->firstOrFail();
+            else
+                $user = Client::where('email', $request->email)->firstOrFail();
+
             return $this->response->ok([
-                'data' => Consultation::all(),
-                'message' => 'All Consultations!'
+                'data' => Consultation::where(request()->user_type . "_id", $user->id)->get(),
+                'message' => "All Consultations! (" . request()->user_type . ")",
             ]);
 
         } catch (\Throwable $th) {
@@ -121,13 +127,13 @@ class ConsultationController extends Controller
 
             if(!$consultation) {
                 return $this->response->badRequest('Data is not valid!', ['id' => 'Consultation record with this id is not found!']);
-            } else if ($consultation->client->email != $request->email) {
+            }/* else if ($consultation->client->email != $request->email) {
                 return $this->response->notAuthorized('This client wasn\'t authorized to access this record!');
-            }
+            }*/
 
             return $this->response->ok([
-                'data' => Consultation::find($id),
-                'message' => 'Consultation by ID!'
+                'data' => $consultation,
+                'message' => 'Consultation by ID! (' . request()->user_type . ')'
             ]);
 
         } catch (\Throwable $th) {

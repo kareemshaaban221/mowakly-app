@@ -27,7 +27,7 @@ class LawyerController extends Controller
 
     public function index()
     {
-        $lawyers = Lawyer::all();
+        $lawyers = Lawyer::with(['categories', 'subcategories'])->get();
 
         return $this->response->ok([
             'data' => $lawyers,
@@ -94,8 +94,8 @@ class LawyerController extends Controller
         try {
             $lawyer = $this->lawyerRepository->update($request, $request->email);
 
-            isset($request->avatar) ? $this->lawyerRepository->updateAvatar($request->avatar, $lawyer) : null;
-            isset($request->card) ? $this->lawyerRepository->updateCard($request->card, $lawyer) : null;
+            $request->has('avatar') ? $this->lawyerRepository->updateAvatar($request->avatar, $lawyer) : null;
+            $request->has('card') ? $this->lawyerRepository->updateCard($request->card, $lawyer) : null;
 
             $lawyer->save();
 

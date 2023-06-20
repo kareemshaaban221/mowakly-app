@@ -125,13 +125,13 @@ Trait Functions
             throw new \Exception('App\Helpers\Functions::storeFile() Invalid Directory Name!');
 
         if ($dirname == 'article')
-            $filename = $this->concatFilenameWithEmail('_'.$fieldname.'_', $model->title, $file->getClientOriginalName());
+            $filename = Str::random(32) . '_' . $file->getClientOriginalName();
         else
-            $filename = $this->concatFilenameWithEmail('_'.$fieldname.'_', $model->email, $file->getClientOriginalName());
+            $filename = Str::random(32) . '_' . $file->getClientOriginalName();
 
-        $file->move($uploads_path . '/' . $model->id, $filename);
+        $file->move($uploads_path, $filename);
 
-        return $filename;
+        return ("uploads/{$dirname}s/{$filename}");
     }
 
     public function deleteFile($filename, Model &$user, $dirname) {
@@ -145,8 +145,6 @@ Trait Functions
             $uploads_path = $this->uploads_path('articles');
         else
             throw new \Exception('App\Helpers\Functions::deleteFile() Invalid User Type!');
-
-        $uploads_path = $uploads_path . '/' . $user->id;
 
         if(file_exists($uploads_path . '/' . $filename)) {
             unlink($uploads_path . '/' . $filename);

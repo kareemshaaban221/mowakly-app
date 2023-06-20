@@ -24,4 +24,12 @@ class Client extends Authenticatable
     public function schedules() {
         return $this->belongsToMany(Schedule::class, 'client_schedules');
     }
+
+    // *** attributes
+    public function getAvatarAttribute() {
+        if (isset($this->attributes['avatar']))
+            return asset($this->attributes['avatar']);
+        else
+            return null;
+    }
 }

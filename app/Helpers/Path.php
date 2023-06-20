@@ -5,8 +5,8 @@ namespace App\Helpers;
 Trait Path {
     protected function uploads_path($subdir = NULL) {
         if($subdir) {
-            return storage_path('app/public/uploads/' . $subdir);
+            return public_path('uploads/' . $subdir);
         }
-        return storage_path('app/public/uploads');
+        return public_path('uploads');
     }
 }

@@ -38,7 +38,7 @@ class Lawyer extends Authenticatable
     }
 
     public function subcategories() {
-        return $this->belongsToMany(SubCategory::class, 'lawyer_subcategories', 'lawyer_id', 'subcategory_id');
+        return $this->belongsToMany(Subcategory::class, 'lawyer_subcategories', 'lawyer_id', 'subcategory_id');
     }
 
     public function appointments() {
@@ -48,5 +48,14 @@ class Lawyer extends Authenticatable
     public function articles()
     {
         return $this->hasMany(Article::class);
+    }
+
+    // **** attributes
+    public function getAvatarAttribute() {
+        return asset($this->attributes['avatar']);
+    }
+
+    public function getCardAttribute() {
+        return asset($this->attributes['card']);
     }
 }

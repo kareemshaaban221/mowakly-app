@@ -11,6 +11,8 @@ class ClientLawyerChat extends Model
 
     protected $guarded = [];
 
+    protected $with = ['client', 'lawyer'];
+
     public function client() {
         return $this->belongsTo(Client::class, 'from');
     }

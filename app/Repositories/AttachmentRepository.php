@@ -18,7 +18,7 @@ class AttachmentRepository implements AttachmentRepositoryInterface {
         foreach($attachments as $attachment) {
             $record = LawyerAttachment::create([
                 'lawyer_id' => $lawyer->id,
-                'attachment' => $this->storeFile('attach_'.$i, $attachment, $lawyer, 'lawyer')
+                'attachment' => $this->storeFile('nil', $attachment, $lawyer, 'lawyer')
             ]);
 
             array_push($records, $record->attachment);
@@ -32,13 +32,9 @@ class AttachmentRepository implements AttachmentRepositoryInterface {
     }
 
 	public function addAttachment($file, Model &$lawyer) {
-        $filename = $lawyer->attachments()->latest()->first()->attachment;
-
-        $file_index = (int) explode("_", $filename)[2] + 1;
-
         $attachment = LawyerAttachment::create([
             'lawyer_id' => $lawyer->id,
-            'attachment' => $this->storeFile('attach_'.$file_index, $file, $lawyer, 'lawyer')
+            'attachment' => $this->storeFile('nil', $file, $lawyer, 'lawyer')
         ]);
 
         return $attachment;
@@ -50,7 +46,7 @@ class AttachmentRepository implements AttachmentRepositoryInterface {
             return 1;
         }
 
-        $attachment = $attachments->where('attachment', $filename)->first();
+        $attachment = $attachments->where('attachment', ("uploads/lawyers/$filename"))->first();
 
         if(!$attachment) {
             return 0;
@@ -58,7 +54,7 @@ class AttachmentRepository implements AttachmentRepositoryInterface {
 
         DB::table('lawyer_attachments')
             ->where('lawyer_id', $lawyer->id)
-            ->where('attachment', $filename)
+            ->where('attachment', ("uploads/lawyers/$filename"))
             ->delete();
 
 

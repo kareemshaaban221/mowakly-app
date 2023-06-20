@@ -117,8 +117,11 @@ class ClientRepository extends UserRepository implements ClientRepositoryInterfa
 	}
 
 	public function updateAvatar($file, Model &$client) {
-        $this->deleteAvatar($client->avatar, $client);
-
+        try {
+            $this->deleteAvatar($client->avatar, $client);
+        } catch (\Throwable $th) {
+            ;
+        }
         $filename = $this->storeAvatar($file, $client);
 
         return $filename;

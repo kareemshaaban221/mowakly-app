@@ -93,6 +93,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('profile/phones/{phone_num}/delete', [LawyerProfileController::class, 'destroyPhone'])->name('lawyer.profile.phones.delete');
         Route::delete('profile/delete', [LawyerProfileController::class, 'destroy'])->name('lawyer.profile.destroy');
 
+        // consultations
+        Route::get('/consultations', [LawyerProfileController::class, 'getAllConsultations'])->name('lawyer.consultations.index');
+        Route::get('/consultations/{id}', [LawyerProfileController::class, 'showConsultation'])->name('lawyer.consultations.show');
+
         Route::get('maincategories', [LawyerMainCategoryController::class, 'index'])->name('lawyer.maincategories.index');
         Route::get('maincategories/category/{id}', [LawyerMainCategoryController::class, 'showByCategory'])->name('lawyer.maincategories.category.show');
         Route::get('maincategories/mean/{mean}', [LawyerMainCategoryController::class, 'showByConsultationMean'])->name('lawyer.maincategories.mean.show');

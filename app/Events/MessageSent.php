@@ -41,9 +41,9 @@ class MessageSent implements ShouldBroadcast
     {
         // * channel name should be chat.[lawyer_id].[client_id]
         if ($this->user_type == 'lawyer')
-            return ['chat.' . $this->from->id . $this->to->id];
+            return ['chat.' . $this->from->id . '.' . $this->to->id];
         else
-            return ['chat.' . $this->to->id . $this->to->id];
+            return ['chat.' . $this->to->id . '.' . $this->from->id];
     }
 
     public function broadcastAs()

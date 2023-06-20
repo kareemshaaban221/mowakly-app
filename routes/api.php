@@ -1,5 +1,3 @@
-
-text/x-generic api.php ( PHP script, ASCII text )
 <?php
 
 use Illuminate\Support\Facades\Route;

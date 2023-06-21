@@ -57,10 +57,11 @@ class ClientLawyerChatController extends Controller
                     })
             ];
 
-            $data = $data['me']->toBase()->merge($data['other']);
-
+            $data = array_merge($data['me']->toarray(), $data['other']->toarray());
+            usort($data, fn($a, $b) => strtotime($a['created_at']) > strtotime($b['created_at']));
+            
             return $this->response->ok([
-                'data' => $data->sortBy('created_at')->toarray(),
+                'data' => $data,
                 'message' => 'All client messages in chat with lawyer!',
             ]);
 

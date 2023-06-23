@@ -1,0 +1,51 @@
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fp/network/models/models.dart';
+import 'package:fp/network/remote/dio_helper.dart';
+import 'package:fp/screens/chatbotScreen/chat_model.dart';
+import 'package:fp/screens/massageScreen/Cubit/statesCubit.dart';
+import 'package:fp/screens/massageScreen/chatModel.dart';
+
+class MassageCubit extends Cubit<MassageStates>{
+  MassageCubit():super(MassageInitialState());
+
+  static MassageCubit get(context)=>BlocProvider.of(context);
+
+
+   Future? geAllMassage({@required int ?id})async{
+    emit(MassageLoadingState());
+    await DioHelper.GetData(url: '/api/chat/$id?user_type=client',tokien: 'Bearer ${loginmodel!.token}').then((value){
+      print(value.data);
+      chatData=ChatData.fromJson(value.data);
+      chatData?.data?.forEach((element) {
+        chat.add( element['message']);
+        chatWho.add(element['context']);
+      });
+      emit(MassageSuccessState());
+      print(chat);
+      print(chatWho);
+
+    }).onError((error, stackTrace){
+      emit(MassageErrorState());
+      print(error);
+    });
+  }
+
+  void sendMassage({@required int ?id,@required String? message,})async{
+     emit(MassageLoadingState());
+   await  DioHelper.PostData(
+         tokien: 'Bearer ${loginmodel!.token}',
+         url: '/api/chat/$id?user_type=client',
+         data: {
+           'message':message
+         }
+     ).then((value){
+       emit(MassageSuccessState());
+     }).onError((error, stackTrace) {
+       print(error);
+       emit(MassageErrorState());
+     });
+  }
+
+}

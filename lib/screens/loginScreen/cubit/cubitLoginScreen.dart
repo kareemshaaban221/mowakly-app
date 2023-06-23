@@ -3,7 +3,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fp/models/classModels.dart';
 import 'package:fp/network/end_point.dart';
+import 'package:fp/network/models/models.dart';
 import 'package:fp/network/remote/dio_helper.dart';
 import 'package:fp/screens/loginScreen/cubit/statesCubit.dart';
 
@@ -13,9 +15,10 @@ class LoginScreenCubit extends Cubit<LoginStates>{
 
   static LoginScreenCubit get(context)=>BlocProvider.of(context);
 
-  void userLogin({@required String ?email,@required String ? password,@required String ? userType,}){
+    Future userLogin({@required String ?email,@required String ? password,@required String ? userType,}){
 
     emit(LoginLoadingState());
+    return
     DioHelper.PostData(
         url: LOGIN,
         data: {
@@ -23,12 +26,21 @@ class LoginScreenCubit extends Cubit<LoginStates>{
           'email':email,
           'password':password,
         },
+
     ).then((value){
       print(value.data);
+      loginmodel=LoginModel.fromJson(value.data);
+
+      print(loginmodel!.message.toString());
       emit(LoginSuccessState());
+
+      return value.data;
     }).catchError((onError){
       print(onError.toString());
       emit(LoginErrorState());
-    });
+      return 'dd';
+    },
+
+    );
   }
 }

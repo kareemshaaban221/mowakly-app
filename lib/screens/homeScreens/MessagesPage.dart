@@ -73,7 +73,7 @@ class MessagesPage extends StatelessWidget {
                         onTap: () async{
                           await Cubit.geAllMassage(id: 1);
 
-                         await Navigator.push(context, MaterialPageRoute(builder: (context) => MassageScreen(),));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => MassageScreen(),));
                         },
                         child: NotificationItem(
                             event: 'لقد نجحت في تغيير كلمة السر الخاصة بك',

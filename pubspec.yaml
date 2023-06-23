@@ -45,6 +45,10 @@ dependencies:
   conditional_builder_null_safety:
   google_fonts:
   smooth_page_indicator:
+  carousel_slider:
+  flutter_spinkit:
+  otp_text_field:
+  file_picker:
 
 dev_dependencies:
   flutter_test:

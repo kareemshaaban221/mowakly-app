@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+class MessagesPage extends StatefulWidget {
+  const MessagesPage({Key? key}) : super(key: key);
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<MessagesPage> createState() => _MessagesPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _MessagesPageState extends State<MessagesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +16,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           children: [
             SizedBox(height: 200,),
-            Center(child: Text('profile')),
+            Center(child: Text('msgs')),
             SizedBox(height: 140,) //خليها دايما مسافة من تحت عشان الاب بار ميغطيش ع الكونتنت
           ],
         ),

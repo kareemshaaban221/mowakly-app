@@ -45,11 +45,10 @@ dependencies:
   conditional_builder_null_safety:
   google_fonts:
   smooth_page_indicator:
+  file_picker:
+  otp_text_field:
   carousel_slider:
   flutter_spinkit:
-  otp_text_field:
-  file_picker:
-  table_calendar:
 
 dev_dependencies:
   flutter_test:

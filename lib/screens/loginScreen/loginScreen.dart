@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fp/component/components.dart';
 import 'package:fp/screens/forgetPasswordScreen/forgetPasswordScreen.dart';
-import 'package:fp/screens/homeScreens/Navigation.dart';
 import 'package:fp/screens/loginScreen/cubit/cubitLoginScreen.dart';
 import 'package:fp/screens/loginScreen/cubit/statesCubit.dart';
 import 'package:fp/screens/signupScreen/signupScreen.dart';
@@ -111,11 +110,9 @@ class LoginScreen extends StatelessWidget {
                             condition: state is! LoginLoadingState,
                             fallback: (context)=> CircularProgressIndicator() ,
                             builder:(context) => build_button(title: 'تسجيل دخول',
-                                ontap: ()async{
+                                ontap: (){
                               if( formKey.currentState!.validate()){
-                               await cubit.userLogin(userType: userType,email: emailController.text,password: passwordController.text,);
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(),));
-                              
+                                //cubit.userLogin(userType: userType,email: emailController.text,password: passwordController.text,);
                               }
                             },
                             ),

@@ -8,7 +8,7 @@ class ClientCard extends StatelessWidget {
   String asset;
   VoidCallback onPress;
   int backgroundColor ;
-  ClientCard({required this.label, required this. asset, required this.backgroundColor,required this.onPress});
+  ClientCard({super.key, required this.label, required this. asset, required this.backgroundColor,required this.onPress});
 
 
   @override

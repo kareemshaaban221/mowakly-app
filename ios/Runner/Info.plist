@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>Application needs to access gallery</string>
 	<key>CFBundleDisplayName</key>
 	<string>Fp</string>
 	<key>CFBundleExecutable</key>

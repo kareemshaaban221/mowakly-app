@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fp/cubit%20App/blocObserver.dart';
 import 'package:fp/network/remote/dio_helper.dart';
+import 'package:fp/screens/appointmentsScreen/appointmentsScreen.dart';
 import 'package:fp/screens/homeScreens/HomeScreen.dart';
 import 'package:fp/screens/loginScreen/cubit/cubitLoginScreen.dart';
 import 'package:fp/screens/payScreen/cubit/cubitPayScreen.dart';
@@ -36,7 +37,7 @@ class MowakleApp extends StatelessWidget {
           ],
           child: const MaterialApp(
             //hellow
-            home: SplashScreen(),
+            home: AppointmentsScreen(),
           ),
         );
       },

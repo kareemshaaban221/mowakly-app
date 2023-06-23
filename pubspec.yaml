@@ -49,6 +49,7 @@ dependencies:
   flutter_spinkit:
   otp_text_field:
   file_picker:
+  table_calendar:
 
 dev_dependencies:
   flutter_test:

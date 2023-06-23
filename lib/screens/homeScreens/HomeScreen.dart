@@ -2,13 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:fp/screens/chatbotScreen/ChatbotScreen.dart';
-import 'package:fp/screens/homeScreens/proflePage.dart';
+// import 'package:fp/screens/homeScreens/proflePage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../component/components.dart';
-import 'homePage.dart';
+// import 'homePage.dart';
 import 'messagesPage.dart';
-import 'notificationsPage.dart';
+// import 'notificationsPage.dart';
 
 ///
 /// THIS ONLY CONTAIN
@@ -111,10 +111,10 @@ String userName =  'أحمد محمد علي';
                 });
               },
               children: const [
-                HomePage(),
-                NotificationsPage(),
+                // HomePage(),
+                // NotificationsPage(),
                 MessagesPage(),
-                ProfilePage(),
+                // ProfilePage(),
               ],
             ),
 

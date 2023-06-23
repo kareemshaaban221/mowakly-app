@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fp/component/components.dart';
+import 'package:fp/screens/clientMainScreens/ClientMainScreen.dart';
 import 'package:fp/screens/cv_lawerScreen/cv_lawerScreen.dart';
 import 'package:fp/screens/payScreen/payScreen.dart';
 import 'package:fp/screens/signupScreen/cuibt/cubitSignupScreen.dart';
@@ -161,9 +162,9 @@ class Signup2Screen extends StatelessWidget {
                                             if(userType=='client'){
                                               cuibt.userSignup(user_type: 'client', fname: user!['name'], email:user!['email'], password: user!['password'], password_confirmation: user!['passwordConfirm'], lname: 'nghg', gender: gender, date_of_birth: dateController.text, phone: phoneController.text);
 
-                                              Navigator.push(context, MaterialPageRoute(builder: (context) => PayScreen(),));
+                                              Navigator.push(context, MaterialPageRoute(builder: (context) => ClientMainScreen(),));
                                             }
-                                            else if(userType=='lawer'){
+                                            else if(userType=='lawyer'){
                                               print(user);
                                               user!.addAll({
                                                 'gender':gender,

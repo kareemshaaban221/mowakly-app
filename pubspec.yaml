@@ -49,6 +49,8 @@ dependencies:
   otp_text_field:
   carousel_slider:
   flutter_spinkit:
+  sleek_circular_slider:
+  table_calendar:
 
 dev_dependencies:
   flutter_test:

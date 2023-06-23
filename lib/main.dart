@@ -1,10 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fp/constants/constant_colors.dart';
 import 'package:fp/cubit%20App/blocObserver.dart';
 import 'package:fp/network/remote/dio_helper.dart';
-import 'package:fp/screens/appointmentsScreen/appointmentsScreen.dart';
-import 'package:fp/screens/homeScreens/HomeScreen.dart';
+import 'package:fp/screens/LawyerMainScreens/LawyerMainScreen.dart';
+import 'package:fp/screens/book_consultation/book_consultation.dart';
+import 'package:fp/screens/clientMainScreens/ClientMainScreen.dart';
 import 'package:fp/screens/loginScreen/cubit/cubitLoginScreen.dart';
 import 'package:fp/screens/payScreen/cubit/cubitPayScreen.dart';
 import 'package:fp/screens/signupScreen/cuibt/cubitSignupScreen.dart';
@@ -25,9 +27,8 @@ class MowakleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-      return ResponsiveSizer(
-      builder: (context, orientation, screenType){
+    return ResponsiveSizer(
+      builder: (context, orientation, screenType) {
         return MultiBlocProvider(
           providers: [
             BlocProvider(create: ((context) => LoginScreenCubit()),),
@@ -35,12 +36,13 @@ class MowakleApp extends StatelessWidget {
             BlocProvider(create: (context) => SignupScreenCubit(),),
             //BlocProvider(create: (context) => ForgotPasswordScreenCubit(),),
           ],
-          child: const MaterialApp(
-            //hellow
-            home: AppointmentsScreen(),
+          child: MaterialApp(
+            theme: ThemeData(
+              primarySwatch: MINT_PRIMARY_COLOR, // Use the custom MaterialColor
+            ),
+            home:  const SplashScreen(),
           ),
         );
       },
     );
-  }
-}
+  }}

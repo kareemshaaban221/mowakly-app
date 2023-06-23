@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChatWidget extends StatelessWidget {
   const ChatWidget({Key? key, required this.msg, required this.chatIndex})
@@ -14,7 +15,7 @@ class ChatWidget extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(8.0),
           child: Align(
               alignment: chatIndex == 0? Alignment.centerRight :Alignment.centerLeft,
               child: Row(
@@ -30,7 +31,7 @@ class ChatWidget extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(12),
-                        child: Text(msg),
+                        child: Text(msg, textAlign: TextAlign.right, style: GoogleFonts.cairo(fontSize: 14)),
                       ),
                     ),
                   ),

@@ -51,8 +51,12 @@ class AppointmentController extends Controller
 
         try {
             $schedule = Schedule::find($schedule_id);
+
+            if (!$schedule)
+                return $this->response->notFound(obj: 'schedule');
+            
             if($schedule->lawyer->email != $request->email) {
-                $this->response->notAuthorized('Not authorized to use this schedule_id!');
+                return $this->response->notAuthorized('Not authorized to use this schedule_id!');
             }
 
             $appointment = $this->appointmentRepository->store($request, $schedule);
@@ -86,7 +90,7 @@ class AppointmentController extends Controller
             if(!$appointment) {
                 return $this->response->badRequest('This appointment is not found!');
             }
-            
+
             if($appointment->lawyer()->email != $request->email) {
                 $this->response->notAuthorized('Not authorized to access this appointment!');
             }

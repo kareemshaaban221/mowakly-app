@@ -24,10 +24,8 @@ class LoginScreenCubit extends Cubit<LoginStates>{
           'password':password,
         },
     ).then((value){
-      print(value.data);
       emit(LoginSuccessState());
     }).catchError((onError){
-      print(onError.toString());
       emit(LoginErrorState());
     });
   }

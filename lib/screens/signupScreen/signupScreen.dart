@@ -32,12 +32,12 @@ class SignupScreen extends StatelessWidget {
               Container(
                 height: 21.81.h,
                 width: 59.07.w,
-                child: SvgPicture.asset(assetImage+'obj.svg',),
+                child: SvgPicture.asset('${assetImage}obj.svg',),
               ),
               //
               build_text_filed(label: 'الاسم بالكامل',
                 textInputType: TextInputType.text,
-                icon: assetIcons+'Icon material-person.svg',
+                icon: '${assetIcons}Icon material-person.svg',
                 controller: nameController,
                 validata: (value) {
                   if (value!.isEmpty) {
@@ -52,7 +52,7 @@ class SignupScreen extends StatelessWidget {
 
               build_text_filed(label: 'البريد الإلكتروني',
                 textInputType: TextInputType.emailAddress,
-                icon: assetIcons+'Icon ionic-ios-mail.svg',
+                icon: '${assetIcons}Icon ionic-ios-mail.svg',
                 controller: emailController,
                 validata: (value) {
                   if (value!.isEmpty) {
@@ -66,7 +66,7 @@ class SignupScreen extends StatelessWidget {
               build_text_filed(label: 'كلمة المرور',
                 textInputType: TextInputType.visiblePassword,
                 obscureText: true,
-                icon: assetIcons+'Icon awesome-lock.svg',
+                icon: '${assetIcons}Icon awesome-lock.svg',
                 controller: passwordController,
                 validata: (value) {
                   if (value!.isEmpty) {
@@ -81,7 +81,7 @@ class SignupScreen extends StatelessWidget {
               build_text_filed(label: 'تأكيد كلمة المرور ',
                 textInputType: TextInputType.visiblePassword,
                 obscureText: true,
-                icon: assetIcons+'Icon awesome-lock.svg',
+                icon: '${assetIcons}Icon awesome-lock.svg',
                 controller: passwordConfirmController,
                 validata: (value) {
                   if (value!.isEmpty) {
@@ -137,9 +137,9 @@ class SignupScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    build_button_icon(icon: assetIcons+'twitter.svg'),
-                    build_button_icon(icon: assetIcons+'facebook.svg'),
-                    build_button_icon(icon: assetIcons+'facebook.svg'),
+                    build_button_icon(icon: '${assetIcons}twitter.svg'),
+                    build_button_icon(icon: '${assetIcons}facebook.svg'),
+                    build_button_icon(icon: '${assetIcons}facebook.svg'),
                   ],
                 ),
               ),

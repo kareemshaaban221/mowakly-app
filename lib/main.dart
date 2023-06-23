@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fp/constants/constants.dart';
+import 'package:fp/constants/constant_colors.dart';
 import 'package:fp/cubit%20App/blocObserver.dart';
 import 'package:fp/network/remote/dio_helper.dart';
 import 'package:fp/screens/LawyerMainScreens/LawyerMainScreen.dart';
@@ -39,7 +39,7 @@ class MowakleApp extends StatelessWidget {
             theme: ThemeData(
               primarySwatch: MINT_PRIMARY_COLOR, // Use the custom MaterialColor
             ),
-            home:  const LawyerMainScreen(),
+            home:  const ClientMainScreen(),
           ),
         );
       },

@@ -1,7 +1,15 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:fp/component/buildButton.dart';
+import 'package:fp/component/text_widget.dart';
+import 'package:fp/constants/constant_colors.dart';
+import 'package:fp/constants/constants.dart';
+import 'package:fp/models/article_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,15 +19,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> categories = [
-    "أسرة",
-    "مجلس الدولة",
-    "جرائم إلكترونية",
-    "قضاء عسكري",
-    "تجاري وشركات",
-    "عمال",
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,22 +26,22 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
-              height: 120,
+            const SizedBox(
+              height: 124,
             ),
 
             /// advertisement slider
             CarouselSlider(
                 options: CarouselOptions(
-                  height: 18.h,
+                  height: 140,
                   aspectRatio: 16 / 9,
                   viewportFraction: 0.8,
                   initialPage: 0,
                   enableInfiniteScroll: true,
                   reverse: true,
-                  autoPlay: true,
-                  autoPlayInterval: Duration(seconds: 4),
-                  autoPlayAnimationDuration: Duration(milliseconds: 800),
+                  autoPlay: false,
+                  autoPlayInterval: const Duration(seconds: 4),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
                   autoPlayCurve: Curves.fastOutSlowIn,
                   enlargeCenterPage: true,
                   enlargeFactor: 0.3,
@@ -50,43 +49,35 @@ class _HomePageState extends State<HomePage> {
                   scrollDirection: Axis.horizontal,
                 ),
                 items: [
-                  AdvertisementCard(),
+                  ArticleSliderCard(articleModel: articlesList[0]),
+                  ArticleSliderCard(articleModel: articlesList[1]),
+                  ArticleSliderCard(articleModel: articlesList[2]),
+                  ArticleSliderCard(articleModel: articlesList[3]),
                 ]),
 
             /// counter (how many lawyers & clients)
-            SizedBox(height: 50,),
+            ///
 
+            UsersCounter(clientsCount: 100, lawyersCount: 35),
+            
             ///Categories
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18,vertical: 8.0),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 18, vertical: 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 textDirection: TextDirection.rtl,
                 children: [
-                  Text('التصنيفات',
+                  Text(
+                    'التصنيفات',
                     textAlign: TextAlign.right,
                     textDirection: TextDirection.rtl,
                     style: GoogleFonts.cairo(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w700,
-                      color: Color(0xff1BE5BF),
+                      color: Color(DARK_GREEN),
                     ),
                   ),
-                  Row(
-                    textDirection: TextDirection.rtl,
-                    children: [
-                      Text('مشاهدة الكل',
-                        textAlign: TextAlign.right,
-                        textDirection: TextDirection.rtl,
-                        style: GoogleFonts.cairo(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xff0B3939),
-                        ),
-                      ),
-                      Icon(Icons.arrow_back_ios_rounded, color: Color(0xff0B3939), size: 16.sp,)
-                    ],
-                  )
                 ],
               ),
             ),
@@ -94,19 +85,18 @@ class _HomePageState extends State<HomePage> {
               width: 96.w,
               height: 52.w,
               child: Container(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 10.w, vertical: 1.h),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 1.h),
                 child: Scrollbar(
                   thickness: 4,
-                  radius: Radius.circular(20),
+                  radius: const Radius.circular(20),
                   scrollbarOrientation: ScrollbarOrientation.right,
                   child: GridView.builder(
                       gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 80,
-                              childAspectRatio: 2.2 / 2,
-                              crossAxisSpacing: 20,
-                              mainAxisSpacing: 20),
+                      const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 80,
+                          childAspectRatio: 2.2 / 2,
+                          crossAxisSpacing: 20,
+                          mainAxisSpacing: 20),
                       itemCount: categories.length,
                       itemBuilder: (BuildContext ctx, index) {
                         return Padding(
@@ -114,14 +104,14 @@ class _HomePageState extends State<HomePage> {
                           child: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                                boxShadow: [
+                                boxShadow: const [
                                   BoxShadow(
                                     color: Color(0xff9c9c9c),
                                     spreadRadius: 0.2,
                                     blurRadius: 4,
                                   ),
                                 ],
-                                color: Color(0xffffffff),
+                                color: const Color(0xffffffff),
                                 borderRadius: BorderRadius.circular(12)),
                             child: Text(
                               categories[index],
@@ -129,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                               textDirection: TextDirection.rtl,
                               textAlign: TextAlign.center,
                               style: GoogleFonts.cairo(
-                                  color: Color(0xff0B3939),
+                                  color: const Color(0xff0B3939),
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.w700),
                             ),
@@ -140,7 +130,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            SizedBox(
+            const SizedBox(
               height: 200,
             )
           ],
@@ -150,121 +140,157 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-Widget AdvertisementCard() {
+Widget UsersCounter({required int clientsCount, required int lawyersCount}){
+  double clientPercentage = (clientsCount/(clientsCount+lawyersCount))* 100 ;
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child:Container(
+      width: double.infinity,
+      child: Stack(
+        children: [
+          Center(
+            child: SleekCircularSlider(
+              appearance: CircularSliderAppearance(
+                size: 100,
+                counterClockwise: true,
+                startAngle: 0,
+                angleRange: 360,
+                customColors: CustomSliderColors(
+                  progressBarColor: Color(MINT_GREEN),
+                  trackColor: Color(DARK_GREEN),
+                ),
+                customWidths: CustomSliderWidths(
+                  progressBarWidth: 14,
+                  trackWidth: 10,
+                  shadowWidth: 10,
+                  handlerSize: 0,
+                ),
+                infoProperties: InfoProperties(
+                  mainLabelStyle: GoogleFonts.cairo(
+                    color: Color(DARK_GREEN),
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  modifier: (percentage) {
+                    return 'مستخدمين \n البرنامج ';
+                  },
+                ),
+              ),
+              min: 0,
+              max: 100,
+              initialValue: clientPercentage,
+            ),
+          ),
+          Positioned(
+            right: 34,
+            top: 60,
+            child: Container(
+              height: 2,
+              width: 100,
+              color: Color(DARK_GREEN),
+            ),
+          ),
+          Positioned(
+            right: 30,
+            top: 50,
+            child: Container(
+              height: 2,
+              width: 100,
+              color: Color(MINT_GREEN),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget ArticleSliderCard({required ArticleModel articleModel}) {
   return Container(
       width: 100.w,
-      margin: EdgeInsets.symmetric(horizontal: 5.0),
+      margin: const EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(
-          color: Color(0xff0B3939),
-          borderRadius: BorderRadius.all(Radius.circular(28))),
+          image: DecorationImage(
+            fit: BoxFit.fill,
+            image: NetworkImage(articleModel.imageUrl),
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(28))),
       child: Center(
         child: Row(
           textDirection: TextDirection.rtl,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'تخفيضات',
-                  style: GoogleFonts.cairo(
-                      fontSize: 24.sp,
-                      height: 1,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600),
-                ),
-                Text(
-                  'على أول خدمة',
-                  style: GoogleFonts.cairo(
-                      fontSize: 18.sp,
-                      height: 1.2,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600),
-                ),
-
-                //button
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Container(
-                      height: 4.h,
-                      width: 30.w,
-                      decoration: BoxDecoration(
-                        color: Color(0xff1BE5BF),
-                        borderRadius: BorderRadius.circular(31.pt),
-                      ),
-                      child: Center(
-                          child: Text(
-                        'احصل عليها الآن',
-                        style: GoogleFonts.cairo(
-                          color: Color(0xff0B3939),
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      )),
-                    ),
-                  ),
-                )
-              ],
-            ),
-
-            //50 % discount
-            Stack(
-              children: [
-                Text(
-                  '50 ',
-                  style: GoogleFonts.cairo(
-                      fontSize: 40.sp,
-                      color: Colors.white,
-                      height: 1.4,
-                      fontWeight: FontWeight.w800),
-                ),
-
-                Positioned(
-                  bottom: 24,
-                  right: 0,
-                  child: Stack(
-                    children: [
-                      // Implement the stroke
-                      Text(
-                        '%',
-                        style: TextStyle(
-                          fontSize: 30.sp,
-                          fontWeight: FontWeight.bold,
-                          foreground: Paint()
-                            ..style = PaintingStyle.stroke
-                            ..strokeWidth = 3
-                            ..color = Color(0xff0B3939),
-                        ),
-                      ),
-                      // The text inside
-                      Text(
-                        '%',
-                        style: TextStyle(
-                          fontSize: 30.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+            Expanded(
+              flex: 2,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius:
+                  const BorderRadius.horizontal(right: Radius.circular(28)),
+                  gradient: LinearGradient(
+                    stops: const [0, 1],
+                    begin: Alignment.centerRight,
+                    end: Alignment.centerLeft,
+                    colors: [
+                      Colors.black.withOpacity(0.7),
+                      Colors.black.withOpacity(0.0),
                     ],
                   ),
                 ),
-
-                // Positioned(
-                //   bottom: 1,
-                //   right: 2,
-                //   child: Text(
-                //     '%',
-                //     style: GoogleFonts.cairo(
-                //         fontSize: 20.sp,
-                //         color: Colors.white,
-                //         height: -3,
-                //         fontWeight: FontWeight.w800),
-                //   ),
-                // ),
-              ],
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      FittedBox(
+                        child: TextWidget(
+                          label: articleModel.label,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Text(
+                        articleModel.paragraph,
+                        textDirection: TextDirection.rtl,
+                        maxLines: 5,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.cairo(
+                          height: 1.4,
+                          fontSize: 8,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 6,
+                      ),
+                      BuildButton(
+                        title: 'تكملة المقال',
+                        onPress: () {},
+                        width: 76,
+                        height: 18,
+                        labelSize: 10,
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ),
+            Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      BuildButton(
+                        title: 'لقراءة المزيد',
+                        onPress: () {},
+                        width: 120,
+                        height: 30,
+                        labelSize: 16,
+                      )
+                    ],
+                  ),
+                ))
           ],
         ),
       ));

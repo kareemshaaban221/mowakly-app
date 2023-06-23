@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:fp/component/text_widget.dart';
+import 'package:fp/constants/constants.dart';
 import 'package:fp/models/article_model.dart';
 import 'package:fp/screens/view_article_screen/view_article_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,15 +11,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../buildButton.dart';
 
-List<ArticleModel> articlesList = List.generate(
-    10,
-    (index) => ArticleModel(
-        label: ' المحامي والمحاماة',
-        paragraph:'سمة المحاماة الأولى هي الوقار, فإن فقد المحامي وقاره, فقد موكله, وفقد قضيته, وفقد قاضيه, وفقد نفسه. إن المحامي البارع ينبغي أن يكون واسع الإيحاء للقاضي بالحجج الكفيلة لكسب القضية وأن يكون هذا الإيحاء من المهارة والكياسة بحيث يشعر القاضي أن هذه الحجج هي التي يؤمن بها وأن ينسى دور المحامي في تصديرها إليه يولد المحامي محامياً, أما القاضي فتصنعه الأيام إن وظيفة المحامي تتطلب من العبقرية والخيال أكثر مما تطلبه وظيفة القاضي, إذ لاشك أن التوفيق إلى استنباط الحجج القوية المؤثرة في الدعوى أصعب فنياً من مجرد اختيار الحجج المناسبة المقدمة من الطرفين لتأسيس الحكم عليها يولد المحامي محامياً, أما القاضي فتصنعه الأيام إن وظيفة المحامي تتطلب من العبقرية والخيال أكثر مما تطلبه وظيفة القاضي, إذ لاشك أن التوفيق إلى استنباط الحجج القوية المؤثرة في الدعوى أصعب فنياً من مجرد اختيار الحجج المناسبة المقدمة من الطرفين لتأسيس الحكم عليها .',
-        imageUrl:
-            'https://verobeachinjurylaw.com/wp-content/uploads/2021/03/Criminal-Defense-Lawyer-Vero-Beach-FL-300x200.jpg',
-        author: 'محمد محمود',
-        date: DateTime.now()));
+
 
 class ArticlesListWidget extends StatefulWidget {
   const ArticlesListWidget({Key? key, })

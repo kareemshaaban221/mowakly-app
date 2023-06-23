@@ -8,7 +8,7 @@ import 'package:fp/component/main_screens_components.dart';
 import 'package:fp/component/side_drawer.dart';
 import 'package:fp/component/text_widget.dart';
 import 'package:fp/component/themes/text_field_theme.dart';
-import 'package:fp/constants/constants.dart';
+import 'package:fp/constants/constant_colors.dart';
 import 'package:fp/constants/dropdown_lists.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';

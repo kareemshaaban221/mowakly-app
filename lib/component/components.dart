@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fp/component/text_widget.dart';
-import 'package:fp/constants/constants.dart';
+import 'package:fp/constants/constant_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -539,5 +539,113 @@ Widget SmallAddButton({required VoidCallback onPress}){
       ),
     ),
   );
+}
+
+
+
+Widget AdvertisementCard() {
+  return Container(
+      width: 100.w,
+      margin: const EdgeInsets.symmetric(horizontal: 5.0),
+      decoration: const BoxDecoration(
+          color: Color(0xff0B3939),
+          borderRadius: BorderRadius.all(Radius.circular(28))),
+      child: Center(
+        child: Row(
+          textDirection: TextDirection.rtl,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'تخفيضات',
+                  style: GoogleFonts.cairo(
+                      fontSize: 24.sp,
+                      height: 1,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600),
+                ),
+                Text(
+                  'على أول خدمة',
+                  style: GoogleFonts.cairo(
+                      fontSize: 18.sp,
+                      height: 1.2,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600),
+                ),
+
+                //button
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      height: 4.h,
+                      width: 30.w,
+                      decoration: BoxDecoration(
+                        color: const Color(0xff1BE5BF),
+                        borderRadius: BorderRadius.circular(31.pt),
+                      ),
+                      child: Center(
+                          child: Text(
+                            'احصل عليها الآن',
+                            style: GoogleFonts.cairo(
+                              color: const Color(0xff0B3939),
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          )),
+                    ),
+                  ),
+                )
+              ],
+            ),
+
+            //50 % discount
+            Stack(
+              children: [
+                Text(
+                  '50 ',
+                  style: GoogleFonts.cairo(
+                      fontSize: 40.sp,
+                      color: Colors.white,
+                      height: 1.4,
+                      fontWeight: FontWeight.w800),
+                ),
+                Positioned(
+                  bottom: 24,
+                  right: 0,
+                  child: Stack(
+                    children: [
+                      // Implement the stroke
+                      Text(
+                        '%',
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                          fontWeight: FontWeight.bold,
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 3
+                            ..color = const Color(0xff0B3939),
+                        ),
+                      ),
+                      // The text inside
+                      Text(
+                        '%',
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ));
 }
 

@@ -6,7 +6,7 @@ import 'package:fp/component/buildButton.dart';
 import 'package:fp/component/form_components.dart';
 import 'package:fp/component/main_screens_components.dart';
 import 'package:fp/component/side_drawer.dart';
-import 'package:fp/constants/constants.dart';
+import 'package:fp/constants/constant_colors.dart';
 
 
 class NewArticleScreen extends StatefulWidget {

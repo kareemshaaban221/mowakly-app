@@ -57,6 +57,7 @@ dependencies:
   flutter_spinkit:
 # to select clock
   flutter_time_picker_spinner:
+  sleek_circular_slider: ^2.0.1
 
 
 dev_dependencies:

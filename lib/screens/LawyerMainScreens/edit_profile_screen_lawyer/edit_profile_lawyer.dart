@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:fp/component/form_components.dart';
 import 'package:fp/component/main_screens_components.dart';
-import 'package:fp/constants/constants.dart';
+import 'package:fp/constants/constant_colors.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../component/buildButton.dart';

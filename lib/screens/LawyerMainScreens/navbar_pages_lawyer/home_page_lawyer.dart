@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fp/component/complete_widgets/articles_list_widget.dart';
 import 'package:fp/component/buildButton.dart';
-import 'package:fp/constants/constants.dart';
+import 'package:fp/constants/constant_colors.dart';
 import 'package:fp/screens/new_article_screen/new_article_screen.dart';
 
 class HomePageLawyer extends StatefulWidget {

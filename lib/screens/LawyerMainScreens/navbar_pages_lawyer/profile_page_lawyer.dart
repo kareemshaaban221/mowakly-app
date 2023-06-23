@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fp/component/components.dart';
 import 'package:fp/component/main_screens_components.dart';
 import 'package:fp/component/text_widget.dart';
-import 'package:fp/constants/constants.dart';
+import 'package:fp/constants/constant_colors.dart';
 import 'package:fp/screens/LawyerMainScreens/edit_profile_screen_lawyer/edit_profile_lawyer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';

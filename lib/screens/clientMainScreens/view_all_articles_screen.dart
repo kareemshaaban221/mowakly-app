@@ -20,7 +20,7 @@ class _ViewAllArticlesScreenState extends State<ViewAllArticlesScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ArticlesListWidget(height: 100.h),
+            ArticlesListWidget(),
           ],
         ),
       ),

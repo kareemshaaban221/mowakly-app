@@ -5,6 +5,7 @@ import 'package:fp/component/components.dart';
 import 'package:fp/component/main_screens_components.dart';
 import 'package:fp/component/text_widget.dart';
 import 'package:fp/constants/constant_colors.dart';
+import 'package:fp/network/models/models.dart';
 import 'package:fp/screens/LawyerMainScreens/edit_profile_screen_lawyer/edit_profile_lawyer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -49,7 +50,7 @@ class _ProfilePageLawyerState extends State<ProfilePageLawyer> {
                     SizedBox(
                       height: 8.h,
                     ),
-                     Center(child: TextWidget(label: 'Mohammed Ashraf')),
+                     Center(child: TextWidget(label: '${loginmodel!.data!.fname} ${loginmodel!.data!.lname}')),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:  [
@@ -111,8 +112,8 @@ class _ProfilePageLawyerState extends State<ProfilePageLawyer> {
                       children: [
                         ServicePrice(
                             major: 'مدني',
-                            channel: 'مكالمة هاتفية',
-                            price: '150 EG'),
+                            channel: 'مكالمة صوتية',
+                            price: '300 EG'),
                         SmallDeleteButton(onPress: () {}),
                         SmallAddButton(onPress: () {}),
                       ],

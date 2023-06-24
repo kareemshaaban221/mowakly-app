@@ -47,7 +47,7 @@ var textEditingController=TextEditingController();
               Padding(
                 padding: EdgeInsets.only(left: 14.w),
                 child: Text(
-                  'شات بوت موكلي',
+                  userTp!='client'?'${clientForLawyer?['fname']} ${clientForLawyer?['lname']}':'${lawyerForUser?['fname']} ${lawyerForUser?['lname']}',
                   style: GoogleFonts.cairo(
                     height: 2.8,
                     color: const Color(0xffffffff),
@@ -125,8 +125,14 @@ var textEditingController=TextEditingController();
                               ),
                               child: IconButton(
                                 onPressed: () async {
-                                   cuibt.sendMassage(id:lawyerForUser?['id'], message: textEditingController?.text);
-                                   textEditingController.clear();
+                                  if(userTp=='client'){
+                                    cuibt.sendMassage(id:lawyerForUser?['id'], message: textEditingController?.text);
+                                    textEditingController.clear();
+                                  }else{
+                                    cuibt.sendMassageLawyer(id: clientForLawyer?['id'], message: textEditingController?.text);
+                                    textEditingController.clear();
+                                  }
+
                                    //cuibt.geAllMassage(id: lawyerForUser?['id']);
                                 },
                                 icon: Transform.rotate(

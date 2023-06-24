@@ -39,7 +39,7 @@ class MessagesPage extends StatelessWidget {
                         },
                         child: MessagesItem(
                             event: '${lawyerForUser?['fname']} ${lawyerForUser?['lname']}',
-                            dayWeek: DateTime.now().toString(),
+                            dayWeek: '20-6-2023',
                             date: '16-3-2-23',
                             hour: '10:15'),
                       );

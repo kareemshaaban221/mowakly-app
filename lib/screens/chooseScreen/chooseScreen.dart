@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fp/component/clientCard.dart';
+import 'package:fp/network/models/models.dart';
 import 'package:fp/screens/loginScreen/loginScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -36,6 +37,7 @@ class _ChooseScreenState extends State<ChooseScreen> {
             ClientCard(
               asset: 'asset/lawyer.png',
               onPress: () {
+                userTp='lawyer';
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -50,6 +52,7 @@ class _ChooseScreenState extends State<ChooseScreen> {
             ClientCard(
               asset: 'asset/client.png',
               onPress: () {
+                userTp='client';
                 Navigator.push(
                     context,
                     MaterialPageRoute(

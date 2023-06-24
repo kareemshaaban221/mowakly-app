@@ -17,6 +17,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 class CvLawerScreen extends StatelessWidget {
    CvLawerScreen({Key? key,this.user}) : super(key: key);
 
+   List active=[Color(0xffFFFFFF),Color(0xffFFFFFF),Color(0xffFFFFFF),Color(0xffFFFFFF),Color(0xffFFFFFF),Color(0xffFFFFFF)];
    var scaffoldKey=GlobalKey<ScaffoldState>();
    var formKey=GlobalKey<FormState>();
    var descriptionController=TextEditingController();
@@ -103,25 +104,33 @@ class CvLawerScreen extends StatelessWidget {
                                         child:GridView.builder(
                                           itemCount: categories?.length,
                                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,
-                                            childAspectRatio: 3,crossAxisSpacing: 6,mainAxisSpacing: 5,),
+                                            childAspectRatio: 3,mainAxisSpacing: 6,crossAxisSpacing: 3
+                                            ),
                                           itemBuilder: (context, index) {
                                             return Padding(
                                               padding: const EdgeInsets.all(2.0),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xffFFFFFF),
-                                                  borderRadius: BorderRadius.circular(15),
-                                                  boxShadow: const [
-                                                    BoxShadow(
-                                                      color: Colors.grey,
-                                                      blurRadius: 4.0,
-                                                    ),
-                                                  ],
+                                              child: InkWell(
+                                                onTap: (){
+                                                  active[index]=Color(0xff1BE5BF);
+                                                  cubit.change();
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: active[index],
+                                                    borderRadius: BorderRadius.circular(15),
+                                                    boxShadow: const [
+                                                      BoxShadow(
+                                                        color: Colors.grey,
+                                                        blurRadius: 4.0,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Center(child: Text(categories?[index])),
                                                 ),
-                                                child: Center(child: Text(categories?[index])),
                                               ),
                                             );
-                                          },)
+                                          },
+                                        )
                                     ),
                                     Container(
                                       height: 0.2.h,
@@ -234,21 +243,27 @@ class CvLawerScreen extends StatelessWidget {
                                           // User canceled the picker
                                         }
                                       },
-                                      child: Container(
-                                        height: 3.744.h,
-                                        width: 37.149.w,
-                                        decoration: BoxDecoration(
-                                          color: Color(0xffFFFFFF),
-                                          borderRadius: BorderRadius.circular(15),
-                                          boxShadow: const [
-                                            BoxShadow(
-                                              color: Colors.grey,
-                                              blurRadius: 4.0,
-                                            ),
-                                          ],),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 50),
+                                        child: Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Container(
+                                            height: 3.744.h,
+                                            width: 37.149.w,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xffFFFFFF),
+                                              borderRadius: BorderRadius.circular(15),
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: Colors.grey,
+                                                  blurRadius: 4.0,
+                                                ),
+                                              ],),
 
-                                        child: Center(child: Text('ادخل الملف من هنا ')),
+                                            child: Center(child: Text('ادخل الملف من هنا ')),
 
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     SizedBox(
@@ -270,25 +285,31 @@ class CvLawerScreen extends StatelessWidget {
                                           // User canceled the picker
                                         }
                                       },
-                                      child: Container(
-                                        height: 3.744.h,
-                                        width: 37.149.w,
-                                        decoration: BoxDecoration(
-                                          color: Color(0xffFFFFFF),
-                                          borderRadius: BorderRadius.circular(15),
-                                          boxShadow: const [
-                                            BoxShadow(
-                                              color: Colors.grey,
-                                              blurRadius: 4.0,
-                                            ),
-                                          ],),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 50,vertical: 5),
+                                        child: Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Container(
+                                            height: 3.744.h,
+                                            width: 37.149.w,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xffFFFFFF),
+                                              borderRadius: BorderRadius.circular(15),
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: Colors.grey,
+                                                  blurRadius: 4.0,
+                                                ),
+                                              ],),
 
-                                        child: Center(child: Text('ادخل الملف من هنا ')),
+                                            child: Center(child: Text('ادخل الملف من هنا ')),
 
+                                          ),
+                                        ),
                                       ),
                                     ),
 
-                                    SizedBox(height: 10.04.h,),
+                                    SizedBox(height: 3.04.h,),
                                     //========================== Padding(
                                     //                                       padding: const EdgeInsets.symmetric(horizontal: 1,vertical: 2),
                                     //                                       child: Container(
@@ -313,16 +334,16 @@ class CvLawerScreen extends StatelessWidget {
                                           date_of_birth: user!['date_of_birth'],
                                           phones0: user!['phone'],
                                           description: descriptionController.text,
-                                          card_id: '165486598',
+                                          card_id: '165486591',
                                           filePathCard: filePath,
                                           fileNameCard: fileName,
                                           filePathAvatar: filePath,
                                           filenameAvatar: fileName,
                                           filePathAttachment: file1Path,
                                           fileNameAttaachment: file1Name,
-                                          phones1: '1584654654',
-                                          national_id: '11111111111111');
-                                          //Navigator.push(context, MaterialPageRoute(builder: (context) => CvLawer2Screen(),));
+                                          phones1: '1584654650',
+                                          national_id: '11111111111118');
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => CvLawer2Screen(),));
                                         }
                                     ),
                                   ],

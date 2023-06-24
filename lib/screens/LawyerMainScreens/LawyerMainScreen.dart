@@ -1,9 +1,11 @@
 // ignore_for_file: non_constant_identifier_names
 import 'package:flutter/material.dart';
+import 'package:fp/component/appoientment_button.dart';
 import 'package:fp/component/chatbot_button.dart';
 import 'package:fp/component/main_screens_components.dart';
 import 'package:fp/component/navigation_bar.dart';
 import 'package:fp/component/side_drawer.dart';
+import 'package:fp/network/models/models.dart';
 import 'package:fp/screens/LawyerMainScreens/navbar_pages_lawyer/home_page_lawyer.dart';
 import 'package:fp/screens/LawyerMainScreens/navbar_pages_lawyer/messages_page_lawyer.dart';
 import 'package:fp/screens/appointmentsScreen/appointmentsScreen.dart';
@@ -42,7 +44,7 @@ class _LawyerMainScreenState extends State<LawyerMainScreen> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: HomeAppBar(hideAppbar: onProfilePage),
+        appBar: HomeAppBar(hideAppbar: onProfilePage,textName: loginmodel!.data!.fname),
         drawer: const SideDrawer(),
         body: Stack(
           children: [
@@ -78,7 +80,7 @@ class _LawyerMainScreenState extends State<LawyerMainScreen> {
                 onProfilePage: onProfilePage),
 
             /// chatbot
-            ChatBotButton(onPressed: () {
+            AppoientmentButton(onPressed: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(

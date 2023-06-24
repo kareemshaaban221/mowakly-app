@@ -74,8 +74,8 @@ Widget MessagesItem({
             radius: 34,
             child: ClipOval(
                 child: Image.asset(
-                  'asset/help.png',
-                  fit: BoxFit.cover,
+                  'asset/user_avatar.png',
+                  fit: BoxFit.fill,
                 )),
           ),
           SizedBox(width: 5.w,),

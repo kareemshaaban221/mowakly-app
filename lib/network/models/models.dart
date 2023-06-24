@@ -4,7 +4,8 @@ import 'package:fp/screens/chatbotScreen/chat_model.dart';
 import 'package:fp/screens/massageScreen/chatModel.dart';
 
 String ?tokenPassword;
-List? categories=[];
+List? categories=['تجاري و شركات','عمال','مجلس الدولة'];
+String ?userTp;
 
 LoginModel ?loginmodel;
 String ?token;
@@ -13,3 +14,5 @@ ChatData?chatData;
 List chat=[];
 List chatWho=[];
 Map ?lawyerForUser;
+Map ?clientForLawyer;
+Map user={};

@@ -4,6 +4,7 @@ import 'package:fp/component/chatbot_button.dart';
 import 'package:fp/component/main_screens_components.dart';
 import 'package:fp/component/navigation_bar.dart';
 import 'package:fp/component/side_drawer.dart';
+import 'package:fp/network/models/models.dart';
 import 'package:fp/screens/chatbotScreen/ChatbotScreen.dart';
 import 'package:fp/component/appbars/HomeAppBar.dart';
 import 'navbar_pages_client/homePage.dart';
@@ -39,7 +40,7 @@ class _ClientMainScreenState extends State<ClientMainScreen> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: HomeAppBar(hideAppbar: onProfilePage),
+        appBar: HomeAppBar(hideAppbar: onProfilePage,textName: loginmodel!.data!.fname),
         drawer: const SideDrawer(),
         body: Stack(
           children: [

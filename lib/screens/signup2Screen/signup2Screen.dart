@@ -65,7 +65,7 @@ class Signup2Screen extends StatelessWidget {
                                   children: [
                                     SizedBox(height: 11.3.h,),
                                     Text(
-                                      'Mohamed Ashraf',
+                                      user?['name'],
                                       style: TextStyle(
                                         fontSize: 22.50.sp,
                                       ),
@@ -171,6 +171,7 @@ class Signup2Screen extends StatelessWidget {
                                                 'phone':phoneController.text,
                                                 'date_of_birth':dateController.text,
                                               });
+                                              print(user);
                                             await  cuibt.showCategories();
 
                                               Navigator.push(context, MaterialPageRoute(builder: (context) => CvLawerScreen(user: user),));
@@ -196,15 +197,16 @@ class Signup2Screen extends StatelessWidget {
                       top: 6.h,
                       right: 33.w,
                       left: 33.w,
-                      child:  const CircleAvatar(
+                      child:   CircleAvatar(
                         radius: 67.0,
                         backgroundColor: Color(0xffFFFFFF),
                         child: CircleAvatar(
                           radius: 63.7,
                           backgroundColor: Color(0xff0B3939),
                           child: CircleAvatar(
-                            backgroundColor: Color(0xffFFFFFF),
+                            backgroundColor: Color(0xff0B3939),
                             radius: 60.0,
+                            child: Image.asset('asset/client.png',fit:BoxFit.none),
 
                           ),
                         ),

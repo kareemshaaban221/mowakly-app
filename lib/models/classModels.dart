@@ -24,6 +24,7 @@ class UserData{
   var date_of_birth;
   var avatar;
   String ?phone;
+  List phones=[];
   var  remember_token ='null';
   String ? created_at ;
   String ?updated_at;
@@ -49,6 +50,7 @@ class UserData{
     gender=json['gender'];
     date_of_birth=json['date_of_birth'];
     phone=json['phone'];
+    phones=json['phones']==null?[]:json['phones'];
     created_at=json['created_at'];
     updated_at=json['updated_at'];
   }

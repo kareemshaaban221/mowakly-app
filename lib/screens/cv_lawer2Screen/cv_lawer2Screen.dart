@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fp/component/buildButton.dart';
 import 'package:fp/component/components.dart';
+import 'package:fp/screens/LawyerMainScreens/LawyerMainScreen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class CvLawer2Screen extends StatelessWidget {
+class CvLawer2Screen extends StatefulWidget {
    CvLawer2Screen({Key? key}) : super(key: key);
-   String selectValue='ذكر';
+
+  @override
+  State<CvLawer2Screen> createState() => _CvLawer2ScreenState();
+}
+
+class _CvLawer2ScreenState extends State<CvLawer2Screen> {
+   String selectValue='أسرة';
+   String selectValue1='محادثة نصية';
+   List selectvalue=['أسرة','أسرة'];
+   List selectvalue1=['محادثة نصية','محادثة نصية'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,10 +50,10 @@ class CvLawer2Screen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
-                              height: 85.h,
+                              height: 55.h,
                               width: 90.w,
                               child: ListView.separated(
-                                itemCount: 8,
+                                itemCount: 2,
                                 separatorBuilder: (context, index) => Container(
                                   height: 0.2.h,
                                   width: 90.w,
@@ -111,14 +123,17 @@ class CvLawer2Screen extends StatelessWidget {
                                                     textDirection: TextDirection.rtl,
                                                     child: DropdownButton(
                                                       underline: SizedBox(),
-
-                                                      value: selectValue ,
+                                                      value: selectvalue[index] ,
                                                       onChanged: (value) {
-                                                        selectValue=value!;
+                                                        setState(() {
+                                                          selectvalue[index]=value!;
+                                                        });
+
                                                       },
                                                       items: const[
-                                                        DropdownMenuItem(child: Text("ذكر",),value: "ذكر"),
-                                                        DropdownMenuItem(child: Text("انثي"),value: "انثي"),
+                                                        DropdownMenuItem(child: Text("أسرة",),value: "أسرة"),
+                                                        DropdownMenuItem(child: Text("مدني"),value: "مدني"),
+                                                        DropdownMenuItem(child: Text("جنائي"),value: "جنائي"),
 
                                                       ],
                                                     ),
@@ -186,19 +201,23 @@ class CvLawer2Screen extends StatelessWidget {
                                               ],
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 20),
+                                              padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 10),
                                               child: Directionality(
                                                 textDirection: TextDirection.rtl,
                                                 child: DropdownButton(
                                                   underline: SizedBox(),
 
-                                                  value: selectValue ,
+                                                  value: selectvalue1[index] ,
                                                   onChanged: (value) {
-                                                    selectValue=value!;
+                                                    setState(() {
+                                                      selectvalue1[index]=value!;
+                                                    });
+
                                                   },
                                                   items: const[
-                                                    DropdownMenuItem(child: Text("ذكر",),value: "ذكر"),
-                                                    DropdownMenuItem(child: Text("انثي"),value: "انثي"),
+                                                    DropdownMenuItem(child: Text("محادثة نصية",),value: "محادثة نصية"),
+                                                    DropdownMenuItem(child: Text("مكالمة صوتية",),value: "مكالمة صوتية"),
+                                                    DropdownMenuItem(child: Text("مقابلة في المكتب"),value: "مقابلة في المكتب"),
 
                                                   ],
                                                 ),
@@ -208,8 +227,6 @@ class CvLawer2Screen extends StatelessWidget {
                                         ),
 
 
-
-
                                       ],
                                     ),
                                   );
@@ -217,6 +234,15 @@ class CvLawer2Screen extends StatelessWidget {
 
                                   ),
                             ),
+                            SizedBox(height: 3.h,),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: BuildButton(title: 'التالي',
+                                  labelSize: 25,
+                                  onPress:(){
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LawyerMainScreen(),));
+                                  } ),
+                            )
                           ],
                         ),
                       ),

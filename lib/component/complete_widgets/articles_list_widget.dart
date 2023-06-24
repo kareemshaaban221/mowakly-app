@@ -90,7 +90,7 @@ class _ArticlesListWidgetState extends State<ArticlesListWidget> {
                             ),
                             TextWidget(
                               label: articleModel.author,
-                              fontSize: 10,
+                              fontSize: 8,
                               color: const Color(0xff555555),
                             ),
                           ],

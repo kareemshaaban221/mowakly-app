@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fp/component/components.dart';
+import 'package:fp/network/models/models.dart';
 import 'package:fp/screens/signup2Screen/signup2Screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -15,7 +16,7 @@ class SignupScreen extends StatelessWidget {
     var formKey=GlobalKey<FormState>();
     static String id = 'signup';
     String ?userType;
-    Map user={};
+
 
   @override
   Widget build(BuildContext context) {

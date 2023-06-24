@@ -90,7 +90,9 @@ class SignupScreenCubit extends Cubit<SignupStates> {
       'national_id': national_id,
     }).then((value) {
       print(value.data);
+
       emit(SignupSuccessState());
+
     }).catchError((onError) {
       emit(SignupErrorState());
       print(onError);
@@ -102,7 +104,7 @@ class SignupScreenCubit extends Cubit<SignupStates> {
     emit(SignupChangeState());
   }
 
-  Future<String> uploadImage({
+  void uploadImage({
     @required user_type,
     @required fname,
     @required email,
@@ -145,13 +147,16 @@ class SignupScreenCubit extends Cubit<SignupStates> {
       'phones[1]': phones1,
       'national_id': national_id,
     });
-    var response = await DioHelper.PostData(url: SIGNUPLAWER, data: formData)
+     await DioHelper.PostData(url: SIGNUPLAWER, data: formData)
         .then((value) {
+       loginmodel=LoginModel.fromJson(value.data);
       emit(SignupSuccessState());
-    });
-    return response.data['id'];
-  }
+    }).onError((error, stackTrace){
+      print(error);
+      emit(SignupErrorState());
+     });
 
+  }
 
 
 

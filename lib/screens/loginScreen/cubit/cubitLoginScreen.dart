@@ -20,7 +20,7 @@ class LoginScreenCubit extends Cubit<LoginStates>{
     emit(LoginLoadingState());
     return
     DioHelper.PostData(
-        url: LOGIN,
+        url: userType=='client'? LOGIN:'/api/lawyer/login',
         data: {
           'user_type':userType,
           'email':email,

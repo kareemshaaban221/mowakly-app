@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fp/component/form_components.dart';
 import 'package:fp/component/main_screens_components.dart';
 import 'package:fp/constants/constant_colors.dart';
+import 'package:fp/network/models/models.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../component/buildButton.dart';
@@ -43,15 +44,15 @@ class _EditProfilePageLawyerState extends State<EditProfilePageLawyer> {
                       height: 10.h,
                     ),
                     TFLabel(label: 'الاسم الأول'),
-                    RegularTextField(initial_value: 'Mohammed'),
+                    RegularTextField(initial_value: loginmodel!.data!.fname),
                     TFLabel(label: 'الاسم الثاني'),
-                    RegularTextField(initial_value: 'Ashraf'),
+                    RegularTextField(initial_value: loginmodel!.data!.lname),
                     TFLabel(label: 'النوع'),
                     DropdownTextField(dropdownList: ['ذكر', 'أنثى'], hint: 'ذكر'),
                     TFLabel(label: 'تاريخ الميلاد'),
-                    DateTextField(context: context, selectedDate: DateTime(2001,8,2)),
+                    DateTextField(context: context, selectedDate: DateTime.parse(loginmodel!.data!.date_of_birth)),
                     TFLabel(label: 'رقم الهاتف'),
-                    TextView(text: '01092279230'),
+                    TextView(text: loginmodel!.data!.phones[0]['phone_number'].toString()),
                     Row(
                       textDirection: TextDirection.rtl,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

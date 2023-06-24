@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fp/component/buildButton.dart';
 import 'package:fp/component/text_widget.dart';
 import 'package:fp/models/article_model.dart';
+import 'package:fp/screens/clientMainScreens/view_all_articles_screen.dart';
 import 'package:fp/screens/view_article_screen/view_article_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -102,7 +103,9 @@ class ArticleSliderCard extends StatelessWidget {
                       children: [
                         BuildButton(
                           title: 'لقراءة المزيد',
-                          onPress: () {},
+                          onPress: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ViewAllArticlesScreen(),));
+                          },
                           width: 120,
                           height: 30,
                           labelSize: 16,

@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:fp/component/text_widget.dart';
@@ -11,11 +11,13 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../buildButton.dart';
 
-
-
 class ArticlesListWidget extends StatefulWidget {
-  const ArticlesListWidget({Key? key, })
-      : super(key: key);
+   ArticlesListWidget({
+    Key? key,
+     this.height,
+  }) : super(key: key);
+
+   double? height;
 
   @override
   State<ArticlesListWidget> createState() => _ArticlesListWidgetState();
@@ -24,13 +26,19 @@ class ArticlesListWidget extends StatefulWidget {
 class _ArticlesListWidgetState extends State<ArticlesListWidget> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 58.h,
-      child: ListView.builder(
-        itemCount: articlesList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return ArticleItem(articleModel: articlesList[index]);
-        },
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: SizedBox(
+        height: widget.height?? 58.h,
+        child: ListView.builder(
+          itemCount: articlesList.length +1,
+          itemBuilder: (BuildContext context, int index) {
+            if(index == articlesList.length){
+              return const SizedBox(height: 160,);
+            }
+            return ArticleItem(articleModel: articlesList[index]);
+          },
+        ),
       ),
     );
   }
@@ -88,11 +96,19 @@ class _ArticlesListWidgetState extends State<ArticlesListWidget> {
                               color: Color(0xffadadad),
                               size: 16,
                             ),
-                            TextWidget(
-                              label: articleModel.author,
-                              fontSize: 10,
-                              color: const Color(0xff555555),
-                            ),
+                            SizedBox(
+                              width: 60,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  articleModel.author,
+                                  style: GoogleFonts.cairo(
+                                    fontSize: 10,
+                                    color: const Color(0xff555555),
+                                  ),
+                                ),
+                              ),
+                            )
                           ],
                         ),
                         Row(
@@ -114,7 +130,13 @@ class _ArticlesListWidgetState extends State<ArticlesListWidget> {
                         BuildButton(
                           title: 'قراءة المزيد',
                           onPress: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) =>  ViewArticleScreen(articleModel: articleModel,),));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ViewArticleScreen(
+                                    articleModel: articleModel,
+                                  ),
+                                ));
                           },
                           width: 64,
                           height: 24,

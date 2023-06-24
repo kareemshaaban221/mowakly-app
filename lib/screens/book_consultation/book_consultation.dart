@@ -125,7 +125,7 @@ class _BookConsultationState extends State<BookConsultation> {
                               const SizedBox(
                                 width: 4,
                               ),
-                              const TextWidget(
+                               TextWidget(
                                 label: '(اختياري)',
                                 color: Color(0xffadadad),
                                 fontSize: 12,

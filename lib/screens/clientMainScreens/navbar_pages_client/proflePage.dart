@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fp/component/main_screens_components.dart';
 import 'package:fp/component/text_widget.dart';
 import 'package:fp/constants/constant_colors.dart';
+import 'package:fp/network/models/models.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -45,10 +46,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       height: 8.h,
                     ),
                     
-                    const Center(child: TextWidget(label: 'Mohammed Ashraf')),
+                    Center(child: TextWidget(label:'${loginmodel?.data?.fname.toString()} ${loginmodel?.data?.lname.toString()}' )),
                      Row(
                        mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children:  [
                         TextWidget(label: 'عميل', fontSize: 16, fontWeight: FontWeight.w600,),
                         Icon(Icons.person, size: 20,)
                       ],
@@ -66,15 +67,15 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                         )),
                     TFLabel(label: 'الاسم الأول'),
-                    TextView(text: 'Mohammed'),
+                    TextView(text: loginmodel!.data!.fname.toString()),
                     TFLabel(label: 'الاسم الثاني'),
-                    TextView(text: 'Ashraf'),
+                    TextView(text: loginmodel!.data!.lname.toString()),
                     TFLabel(label: 'النوع'),
-                    TextView(text: 'ذكر'),
+                    TextView(text: loginmodel!.data!.gender.toString()),
                     TFLabel(label: 'تاريخ الميلاد'),
-                    TextView(text: '02-08-2001'),
+                    TextView(text: loginmodel!.data!.date_of_birth.toString()),
                     TFLabel(label: 'رقم الهاتف'),
-                    TextView(text: '01092279230'),
+                    TextView(text: loginmodel!.data!.phone.toString()),
                     SizedBox(
                       height: 20.h,
                     )

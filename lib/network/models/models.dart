@@ -12,3 +12,4 @@ ChatClientModel?chatModel;
 ChatData?chatData;
 List chat=[];
 List chatWho=[];
+Map ?lawyerForUser;

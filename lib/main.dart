@@ -42,7 +42,7 @@ class MowakleApp extends StatelessWidget {
             theme: ThemeData(
               primarySwatch: MINT_PRIMARY_COLOR, // Use the custom MaterialColor
             ),
-            home: LawyersScreen()
+            home: SplashScreen()
           ),
         );
       },

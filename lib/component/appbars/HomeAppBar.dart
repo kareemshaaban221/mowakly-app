@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:fp/constants/constants.dart';
+import 'package:fp/network/models/models.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -25,7 +26,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         elevation: 0,
         actions: [
           Text(
-            userName,
+            loginmodel!.data!.fname.toString(),
             style: GoogleFonts.cairo(
                 color: const Color(0xff0B3939),
                 fontSize: 16.sp,

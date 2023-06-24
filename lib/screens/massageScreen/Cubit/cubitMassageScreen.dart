@@ -18,6 +18,8 @@ class MassageCubit extends Cubit<MassageStates>{
     await DioHelper.GetData(url: '/api/chat/$id?user_type=client',tokien: 'Bearer ${loginmodel!.token}').then((value){
       print(value.data);
       chatData=ChatData.fromJson(value.data);
+      chat=[];
+      chatWho=[];
       chatData?.data?.forEach((element) {
         chat.add( element['message']);
         chatWho.add(element['context']);
@@ -34,18 +36,34 @@ class MassageCubit extends Cubit<MassageStates>{
 
   void sendMassage({@required int ?id,@required String? message,})async{
      emit(MassageLoadingState());
-   await  DioHelper.PostData(
+   await DioHelper.PostData(
          tokien: 'Bearer ${loginmodel!.token}',
          url: '/api/chat/$id?user_type=client',
          data: {
            'message':message
          }
      ).then((value){
+
+       chat.add(message);
+       chatWho.add('me');
        emit(MassageSuccessState());
      }).onError((error, stackTrace) {
        print(error);
        emit(MassageErrorState());
      });
+  }
+  
+  void getMessageLawyers()async{
+    emit(MassageLoadingState());
+    await DioHelper.GetData(url: '/api/consultations?user_type=client',tokien: 'Bearer ${loginmodel!.token}').then((value) {
+      lawyerForUser=value.data['data'][0]['lawyer'];
+      print(lawyerForUser);
+      emit(MassageSuccessState());
+    }).onError((error, stackTrace) {
+      print(error);
+      emit(MassageErrorState());
+
+    });
   }
 
 }

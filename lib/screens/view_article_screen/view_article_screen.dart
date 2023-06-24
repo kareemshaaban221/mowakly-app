@@ -163,7 +163,7 @@ class CompleteArticle extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 ///also read
-                const TextWidget(label: 'اقرأ أيضاً', fontSize: 12,fontWeight: FontWeight.w700,),
+                 TextWidget(label: 'اقرأ أيضاً', fontSize: 12,fontWeight: FontWeight.w700,),
             SizedBox(
               height: 160,
               child: GridView.builder(
@@ -175,7 +175,7 @@ class CompleteArticle extends StatelessWidget {
                   mainAxisExtent: 20,
                 ),
                 itemBuilder: (BuildContext context, int index) {
-                  return  const TextWidget(label: 'المحامي والمحاماة', fontWeight: FontWeight.w500, fontSize: 10,)
+                  return   TextWidget(label: 'المحامي والمحاماة', fontWeight: FontWeight.w500, fontSize: 10,)
                   ;
                 },
               ),

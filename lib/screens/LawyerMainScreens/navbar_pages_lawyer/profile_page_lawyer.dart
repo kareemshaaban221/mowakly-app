@@ -49,10 +49,10 @@ class _ProfilePageLawyerState extends State<ProfilePageLawyer> {
                     SizedBox(
                       height: 8.h,
                     ),
-                    const Center(child: TextWidget(label: 'Mohammed Ashraf')),
+                     Center(child: TextWidget(label: 'Mohammed Ashraf')),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children:  [
                         TextWidget(
                           label: 'محامي',
                           fontSize: 16,

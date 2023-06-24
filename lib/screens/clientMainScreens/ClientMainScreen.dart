@@ -54,6 +54,7 @@ class _ClientMainScreenState extends State<ClientMainScreen> {
                   onNotificationsPage = (index == 1);
                   onMessagesPage = (index == 2);
                   onProfilePage = (index == 3);
+
                 });
               },
               children: const [

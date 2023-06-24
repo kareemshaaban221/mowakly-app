@@ -6,6 +6,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fp/models/classModels.dart';
 import 'package:fp/network/end_point.dart';
 import 'package:fp/network/models/models.dart';
 import 'package:fp/network/remote/dio_helper.dart';
@@ -37,7 +38,11 @@ class SignupScreenCubit extends Cubit<SignupStates> {
       'phone': phone,
     }).then((value) {
       emit(SignupSuccessState());
+      loginmodel=LoginModel.fromJson(value.data);
+
+      print(loginmodel!.message.toString());
     }).catchError((onError) {
+      print(onError);
       emit(SignupErrorState());
     });
   }

@@ -10,7 +10,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 class MassageScreen extends StatelessWidget {
    MassageScreen({Key? key}) : super(key: key);
 
-TextEditingController ?textEditingController;
+var textEditingController=TextEditingController();
   @override
 
 
@@ -109,6 +109,7 @@ TextEditingController ?textEditingController;
                                     // await sendMessageFCT();
                                   },
                                   decoration: InputDecoration.collapsed(
+
                                       hintText: 'اكتب رسالتك هنا',
                                       hintTextDirection: TextDirection.rtl,
                                       hintStyle: GoogleFonts.cairo(
@@ -124,7 +125,9 @@ TextEditingController ?textEditingController;
                               ),
                               child: IconButton(
                                 onPressed: () async {
-                                  cuibt.sendMassage(id: 1, message: textEditingController?.text);
+                                   cuibt.sendMassage(id:lawyerForUser?['id'], message: textEditingController?.text);
+                                   textEditingController.clear();
+                                   //cuibt.geAllMassage(id: lawyerForUser?['id']);
                                 },
                                 icon: Transform.rotate(
                                   angle: 315 * 3.14 / 180, // 45 degrees in radians

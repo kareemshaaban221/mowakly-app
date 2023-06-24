@@ -335,7 +335,7 @@ Widget ConsultationPrice({required String price}){
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
-              children: const [
+              children:  [
                 TextWidget(label: 'علماً بأن سعر الاستشارة', fontSize: 16, fontWeight: FontWeight.w600,),
                 TextWidget(
                   label: 'يجب الدفع من أجل تقديم طلب استشارة',

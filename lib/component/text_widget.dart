@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TextWidget extends StatelessWidget {
-  const TextWidget(
+    TextWidget(
       {Key? key,
       required this.label,
       this.fontSize,
@@ -12,7 +12,7 @@ class TextWidget extends StatelessWidget {
       })
       : super(key: key);
 
-  final String label;
+  final String ?label;
   final double? fontSize;
   final Color? color;
   final FontWeight? fontWeight;
@@ -21,7 +21,7 @@ class TextWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      label,
+      label!,
       overflow: TextOverflow.ellipsis,
       textDirection: textDirection?? TextDirection.rtl,
       style: GoogleFonts.cairo(

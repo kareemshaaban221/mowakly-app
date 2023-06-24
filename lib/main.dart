@@ -40,7 +40,7 @@ class MowakleApp extends StatelessWidget {
             theme: ThemeData(
               primarySwatch: MINT_PRIMARY_COLOR, // Use the custom MaterialColor
             ),
-            home:  const ClientMainScreen(),
+            home:  const SplashScreen(),
           ),
         );
       },

@@ -12,7 +12,7 @@ Widget NotificationWidget(){
       child: Column(
         children: [
           const SizedBox(
-            height: 88,
+            height: 60,
           ),
           Padding(
             padding:

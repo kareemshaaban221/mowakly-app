@@ -6,6 +6,7 @@ import 'package:fp/component/navigation_bar.dart';
 import 'package:fp/component/side_drawer.dart';
 import 'package:fp/component/text_widget.dart';
 import 'package:fp/constants/constant_colors.dart';
+import 'package:fp/constants/constants.dart';
 import 'package:fp/models/article_model.dart';
 import 'package:fp/screens/LawyerMainScreens/navbar_pages_lawyer/messages_page_lawyer.dart';
 import 'package:fp/screens/LawyerMainScreens/navbar_pages_lawyer/notification_page_lawyer.dart';
@@ -16,9 +17,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-///
-/// THIS IS  FOR NAVIGATION BETWEEN THESE 4 PAGES   (3 الرئيسية 0, الإشعارات 1, الرساىل 2, ملفي)
-///
 
 class ViewArticleScreen extends StatefulWidget {
   ViewArticleScreen({Key? key, required this.articleModel}) : super(key: key);
@@ -30,7 +28,7 @@ class ViewArticleScreen extends StatefulWidget {
 }
 
 class _ViewArticleScreenState extends State<ViewArticleScreen> {
-  String userName = 'أحمد محمد';
+
   final PageController _controller = PageController();
   bool onHomePage = true;
   bool onNotificationsPage = false;
@@ -45,55 +43,9 @@ class _ViewArticleScreenState extends State<ViewArticleScreen> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: HomeAppBar(
-          userName: 'أحمد محمد علي',
-          userAvatar: 'asset/help.png',
-          showAppbar: !onProfilePage,
-        ),
+        appBar: HomeAppBar(),
         drawer: const SideDrawer(),
-        body: Stack(
-          children: [
-            /// VIEW 4 PAGES
-            PageView(
-              reverse: true,
-              controller: _controller,
-              onPageChanged: (index) {
-                setState(() {
-                  onHomePage = (index == 0);
-                  onNotificationsPage = (index == 1);
-                  onMessagesPage = (index == 2);
-                  onProfilePage = (index == 3);
-                });
-              },
-              children:  [
-                CompleteArticle(articleModel: widget.articleModel,),
-                const NotificationsPageLawyer(),
-                const MessagesPageLawyer(),
-                const ProfilePageLawyer(),
-              ],
-            ),
-
-            /// search box
-            onProfilePage ? const SizedBox.shrink() : SearchBox(),
-
-            /// NAV BAR
-            NavBar(
-                controller: _controller,
-                onHomePage: onHomePage,
-                onNotificationsPage: onNotificationsPage,
-                onMessagesPage: onMessagesPage,
-                onProfilePage: onProfilePage),
-
-            /// chatbot
-            ChatBotButton(onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ChatbotScreen(),
-                  ));
-            })
-          ],
-        ),
+        body: CompleteArticle(articleModel: widget.articleModel,),
       ),
     );
   }
@@ -110,9 +62,8 @@ class CompleteArticle extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 110,),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
               child: Container(
                 padding: const EdgeInsets.all(12),
                 width: 100.w,

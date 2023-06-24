@@ -24,7 +24,6 @@ class ClientMainScreen extends StatefulWidget {
 }
 
 class _ClientMainScreenState extends State<ClientMainScreen> {
-  String userName = 'أحمد محمد';
 
   final PageController _controller = PageController();
   bool onHomePage = true;
@@ -40,11 +39,7 @@ class _ClientMainScreenState extends State<ClientMainScreen> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: HomeAppBar(
-          userName: 'أحمد محمد علي',
-          userAvatar: 'asset/help.png',
-          showAppbar: !onProfilePage,
-        ),
+        appBar: HomeAppBar(hideAppbar: onProfilePage),
         drawer: const SideDrawer(),
         body: Stack(
           children: [

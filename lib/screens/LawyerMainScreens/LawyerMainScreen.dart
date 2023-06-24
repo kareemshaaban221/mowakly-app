@@ -41,11 +41,7 @@ class _LawyerMainScreenState extends State<LawyerMainScreen> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: HomeAppBar(
-          userName: 'أحمد محمد علي',
-          userAvatar: 'asset/help.png',
-          showAppbar: !onProfilePage,
-        ),
+        appBar: HomeAppBar(hideAppbar: onProfilePage),
         drawer: const SideDrawer(),
         body: Stack(
           children: [

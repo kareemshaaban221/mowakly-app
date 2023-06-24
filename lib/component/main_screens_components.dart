@@ -11,34 +11,35 @@ Widget SearchBox(){
   return Container(
     color:  Color(MINT_GREEN),
     child: Container(
-      padding: const EdgeInsets.all(24),
-      child: TextField(
-        autocorrect: false,
-        textAlign: TextAlign.right,
-        style: const TextStyle(color: Color(0xff000000)),
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-          prefixIcon: Icon(
-            Icons.search_rounded,
-            color: const Color(0xffCDD6D6),
-            size: 20.sp,
-          ),
-          hintText: ' ابحث من هنا',
-          hintStyle: GoogleFonts.cairo(
-              fontSize: 14.8.sp,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      child: SizedBox(
+        height: 36.0,
+        child: TextField(
+          autocorrect: false,
+          textAlign: TextAlign.right,
+          style: const TextStyle(color: Color(0xff000000)),
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+            prefixIcon: Icon(
+              Icons.search_rounded,
               color: const Color(0xffCDD6D6),
-              fontWeight: FontWeight.w600),
-          fillColor: Colors.white,
-          border: InputBorder.none,
-          enabledBorder: const OutlineInputBorder(
-              borderRadius:
-              BorderRadius.all(Radius.circular(28.0)),
-              borderSide: BorderSide(color: Color(0xffffffff))),
-          focusedBorder: const OutlineInputBorder(
-              borderRadius:
-              BorderRadius.all(Radius.circular(28.0)),
-              borderSide: BorderSide(color: Color(0xff0B3939))),
-          filled: true,
+              size: 20.0,
+            ),
+            hintText: ' ابحث من هنا',
+            hintStyle: GoogleFonts.cairo(
+                fontSize: 14.8,
+                color: const Color(0xffCDD6D6),
+                fontWeight: FontWeight.w600),
+            fillColor: Colors.white,
+            border: InputBorder.none,
+            enabledBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(28.0)),
+                borderSide: BorderSide(color: Color(0xffffffff))),
+            focusedBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(28.0)),
+                borderSide: BorderSide(color: Color(0xff1c8d8d))),
+            filled: true,
+          ),
         ),
       ),
     ),

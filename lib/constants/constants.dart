@@ -1,6 +1,8 @@
 import 'package:fp/models/article_model.dart';
 
 
+String userName = 'أحمد محمد';
+String userAvatar= 'asset/user_avatar.png';
 
 List<String> categories = [
   "أسرة",

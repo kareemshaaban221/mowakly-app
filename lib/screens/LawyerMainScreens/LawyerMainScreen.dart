@@ -6,6 +6,7 @@ import 'package:fp/component/navigation_bar.dart';
 import 'package:fp/component/side_drawer.dart';
 import 'package:fp/screens/LawyerMainScreens/navbar_pages_lawyer/home_page_lawyer.dart';
 import 'package:fp/screens/LawyerMainScreens/navbar_pages_lawyer/messages_page_lawyer.dart';
+import 'package:fp/screens/appointmentsScreen/appointmentsScreen.dart';
 import 'package:fp/screens/chatbotScreen/ChatbotScreen.dart';
 import 'package:fp/component/appbars/HomeAppBar.dart';
 
@@ -81,7 +82,7 @@ class _LawyerMainScreenState extends State<LawyerMainScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ChatbotScreen(),
+                    builder: (context) => AppointmentsScreen(),
                   ));
             })
           ],

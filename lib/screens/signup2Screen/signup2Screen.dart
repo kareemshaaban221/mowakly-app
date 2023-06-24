@@ -161,7 +161,7 @@ class Signup2Screen extends StatelessWidget {
 
                                             if(userType=='client'){
                                               cuibt.userSignup(user_type: 'client', fname: user!['name'], email:user!['email'], password: user!['password'], password_confirmation: user!['passwordConfirm'], lname: 'nghg', gender: gender, date_of_birth: dateController.text, phone: phoneController.text);
-
+                                            await  _dialogBuilder(context);
                                               Navigator.push(context, MaterialPageRoute(builder: (context) => ClientMainScreen(),));
                                             }
                                             else if(userType=='lawyer'){
@@ -235,4 +235,14 @@ class Signup2Screen extends StatelessWidget {
       ),
     );
   }
+   Future<void> _dialogBuilder(BuildContext context){
+    return showDialog(context: context,
+      builder:(context) => AlertDialog(content:Text('تم انشاء الحساب بنجاح') ,
+        actions: [
+          TextButton(onPressed: (){
+            Navigator.of(context).pop();
+          }, child: Text('تم'))
+        ],
+      ), );
+   }
 }

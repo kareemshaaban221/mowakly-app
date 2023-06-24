@@ -23,10 +23,13 @@ class ForgotPasswordScreen extends StatelessWidget {
           return Scaffold(
             body: SingleChildScrollView(
               child: Column(
+
                 children: [
+                  SizedBox(height: 5.h,),
                   Container(
                     height: 30.h,
                     width: double.infinity,
+                    child: Image.asset('asset/undraw_message_sent_re_q2kl.png'),
 
                   ),
                   SizedBox(

@@ -112,9 +112,10 @@ class LoginScreen extends StatelessWidget {
                             condition: state is! LoginLoadingState,
                             fallback: (context)=> CircularProgressIndicator() ,
                             builder:(context) => build_button(title: 'تسجيل دخول',
-                                ontap: (){
+                                ontap: ()async{
                               if( formKey.currentState!.validate()){
                                 cubit.userLogin(userType: userType,email: emailController.text,password: passwordController.text,);
+                                await _dialogBuilder(context);
                                 if(userType=='client') {
                                   Navigator.pushReplacement(context,
                                       MaterialPageRoute(builder: (context) =>
@@ -190,4 +191,14 @@ class LoginScreen extends StatelessWidget {
           ),
     );
   }
+   Future<void> _dialogBuilder(BuildContext context){
+     return showDialog(context: context,
+       builder:(context) => AlertDialog(content:Text('تم تسجيل الدخول بنجاح') ,
+         actions: [
+           TextButton(onPressed: (){
+             Navigator.of(context).pop();
+           }, child: Text('تم'))
+         ],
+       ), );
+   }
 }

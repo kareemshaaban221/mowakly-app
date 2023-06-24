@@ -27,11 +27,14 @@ class CodeForgotPasswordScreen extends StatelessWidget {
           return Scaffold(
             body: Column(
               children: [
+                SizedBox(height: 5.h,),
                 Container(
                   height: 30.h,
                   width: double.infinity,
+                  child: Image.asset('asset/undraw_forgot_password_re_hxwm.png'),
 
                 ),
+                SizedBox(height: 10.h,),
 
                 OTPTextField(
                   length: 6,
@@ -52,7 +55,7 @@ class CodeForgotPasswordScreen extends StatelessWidget {
 
                 ),
                 SizedBox(
-                  height: 15.h,
+                  height: 11.h,
                 ),
 
                 build_button(title: 'التالي', ontap: (){

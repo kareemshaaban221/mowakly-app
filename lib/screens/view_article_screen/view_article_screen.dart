@@ -17,7 +17,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-
 class ViewArticleScreen extends StatefulWidget {
   ViewArticleScreen({Key? key, required this.articleModel}) : super(key: key);
 
@@ -28,7 +27,6 @@ class ViewArticleScreen extends StatefulWidget {
 }
 
 class _ViewArticleScreenState extends State<ViewArticleScreen> {
-
   final PageController _controller = PageController();
   bool onHomePage = true;
   bool onNotificationsPage = false;
@@ -45,15 +43,17 @@ class _ViewArticleScreenState extends State<ViewArticleScreen> {
         backgroundColor: Colors.white,
         appBar: HomeAppBar(),
         drawer: const SideDrawer(),
-        body: CompleteArticle(articleModel: widget.articleModel,),
+        body: CompleteArticle(
+          articleModel: widget.articleModel,
+        ),
       ),
     );
   }
 }
 
 class CompleteArticle extends StatelessWidget {
-   CompleteArticle({Key? key, required this.articleModel}) : super(key: key);
-  ArticleModel articleModel ;
+  CompleteArticle({Key? key, required this.articleModel}) : super(key: key);
+  ArticleModel articleModel;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,8 @@ class CompleteArticle extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
               child: Container(
                 padding: const EdgeInsets.all(12),
                 width: 100.w,
@@ -100,11 +101,33 @@ class CompleteArticle extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text(articleModel.label, style: GoogleFonts.cairo(fontSize: 18,height: 1,fontWeight: FontWeight.w700,),),
-                            Row(textDirection: TextDirection.rtl,
+                            Text(
+                              articleModel.label,
+                              style: GoogleFonts.cairo(
+                                fontSize: 18,
+                                height: 1,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Row(
+                              textDirection: TextDirection.rtl,
                               children: [
-                                Text(' المحامي',style: GoogleFonts.cairo(fontSize: 10, height: 1.5,fontWeight: FontWeight.w500,),),
-                                Text(articleModel.author,style: GoogleFonts.cairo(fontSize: 14, height: 1.5,fontWeight: FontWeight.w600,),),
+                                Text(
+                                  ' المحامي',
+                                  style: GoogleFonts.cairo(
+                                    fontSize: 10,
+                                    height: 1.5,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  articleModel.author,
+                                  style: GoogleFonts.cairo(
+                                    fontSize: 14,
+                                    height: 1.5,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ],
                             ),
 
@@ -140,56 +163,78 @@ class CompleteArticle extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
                           image: DecorationImage(
-                              image: NetworkImage(articleModel.imageUrl), fit: BoxFit.fill),
+                              image: NetworkImage(articleModel.imageUrl),
+                              fit: BoxFit.fill),
                         ),
                       ),
                     ),
+
                     ///paragraph
-                    TextWidget(label: articleModel.paragraph, fontSize: 12,),
+                    TextWidget(
+                      label: articleModel.paragraph,
+                      fontSize: 12,
+                    ),
                   ],
                 ),
               ),
             ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
-          child: Container(
-            padding: const EdgeInsets.all(12),
-            width: 100.w,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                ///also read
-                 TextWidget(label: 'اقرأ أيضاً', fontSize: 12,fontWeight: FontWeight.w700,),
-            SizedBox(
-              height: 160,
-              child: GridView.builder(
-                itemCount: 10,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 2,
-                  mainAxisSpacing: 4,
-                  mainAxisExtent: 20,
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                width: 100.w,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                itemBuilder: (BuildContext context, int index) {
-                  return   TextWidget(label: 'المحامي والمحاماة', fontWeight: FontWeight.w500, fontSize: 10,)
-                  ;
-                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    ///also read
+                    TextWidget(
+                      label: 'اقرأ أيضاً',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    SizedBox(
+                      height: 160,
+                      child: GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: 8,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 2,
+                          mainAxisSpacing: 4,
+                          mainAxisExtent: 20,
+                        ),
+                        itemBuilder: (BuildContext context, int index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ViewArticleScreen(
+                                        articleModel: articlesList[index]),
+                                  ));
+                            },
+                            child: TextWidget(
+                              label: articlesList[index].label,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-
-              ],
+            const SizedBox(
+              height: 110,
             ),
-          ),
-        ),
-
-
-            const SizedBox(height: 110,),
-
-
           ],
         ),
       ),

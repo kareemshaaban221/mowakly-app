@@ -22,7 +22,6 @@ class TextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       label!,
-      overflow: TextOverflow.ellipsis,
       textDirection: textDirection?? TextDirection.rtl,
       style: GoogleFonts.cairo(
         color: color ?? Colors.black,

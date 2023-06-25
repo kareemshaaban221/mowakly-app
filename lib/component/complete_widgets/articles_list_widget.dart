@@ -14,8 +14,9 @@ import '../buildButton.dart';
 
 
 class ArticlesListWidget extends StatefulWidget {
-  const ArticlesListWidget({Key? key, })
+   ArticlesListWidget({Key? key,  this.height })
       : super(key: key);
+  double? height ;
 
   @override
   State<ArticlesListWidget> createState() => _ArticlesListWidgetState();
@@ -25,7 +26,7 @@ class _ArticlesListWidgetState extends State<ArticlesListWidget> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 58.h,
+      height:widget.height?? 58.h,
       child: ListView.builder(
         itemCount: articlesList.length,
         itemBuilder: (BuildContext context, int index) {

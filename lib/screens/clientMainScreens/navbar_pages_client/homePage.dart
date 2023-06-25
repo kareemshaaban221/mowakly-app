@@ -7,6 +7,7 @@ import 'package:fp/component/text_widget.dart';
 import 'package:fp/constants/cases_categories.dart';
 import 'package:fp/constants/constant_colors.dart';
 import 'package:fp/constants/constants.dart';
+import 'package:fp/screens/LawyersScreen/lawyersScreen.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -40,7 +41,7 @@ class _HomePageState extends State<HomePage> {
                   initialPage: 0,
                   enableInfiniteScroll: true,
                   reverse: true,
-                  autoPlay: false,
+                  autoPlay: true,
                   autoPlayInterval: const Duration(seconds: 4),
                   autoPlayAnimationDuration: const Duration(milliseconds: 800),
                   autoPlayCurve: Curves.fastOutSlowIn,
@@ -53,7 +54,6 @@ class _HomePageState extends State<HomePage> {
                   ArticleSliderCard(articleModel: articlesList[0]),
                   ArticleSliderCard(articleModel: articlesList[1]),
                   ArticleSliderCard(articleModel: articlesList[2]),
-                  ArticleSliderCard(articleModel: articlesList[3]),
                 ]),
 
             /// counter (how many lawyers & clients)
@@ -82,62 +82,74 @@ class _HomePageState extends State<HomePage> {
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
+              child: SizedBox(
                 height: 248,
                 child: Directionality(
                   textDirection: TextDirection.rtl,
                   child: GridView.builder(
                     itemCount: casesCategory.length,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       crossAxisSpacing: 8,
                       mainAxisSpacing: 8,
                       mainAxisExtent: 118,
                     ),
                     itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        height: 200,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              flex: 2,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: NetworkImage(casesCategory[index].imageUrl)
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LawyersScreen(
+                                  category: casesCategory[index].name,
+                                ),
+                              ));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          height: 200,
+                          child: Column(
+                            children: [
+                              Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage(
+                                              casesCategory[index].imageUrl)),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(16),
+                                        topRight: Radius.circular(16),
+                                      ),
                                     ),
-
-
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          topRight: Radius.circular(16),
-                        ),
-
-                                  ),
-                                )),
-                            Expanded(
-                              flex: 1,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Flexible(
-                                    child: TextWidget(
-                                      label: casesCategory[index].name,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 10,
+                                  )),
+                              Expanded(
+                                flex: 1,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      child: TextWidget(
+                                        label: casesCategory[index].name,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 10,
+                                      ),
                                     ),
-                                  ),
-                                  Icon(Icons.arrow_right, color: Color(MINT_GREEN),),
-                                ],
+                                    Icon(
+                                      Icons.arrow_right,
+                                      color: Color(MINT_GREEN),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -145,8 +157,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-
-
 
             const SizedBox(
               height: 160,
@@ -158,23 +168,87 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-
-
-
 Widget UsersCounter({required int clientsCount, required int lawyersCount}) {
-  double clientPercentage =
-      (clientsCount / (clientsCount + lawyersCount)) * 100;
+  // double clientPercentage =
+  //     (clientsCount / (clientsCount + lawyersCount)) * 100;
+
+  double clientPercentage = 35;
   return Padding(
     padding: const EdgeInsets.only(top: 8.0, left: 20, right: 20),
     child: Container(
-      padding: EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-          color: Colors.white,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
       ),
       width: double.infinity,
       child: Stack(
         children: [
+          Positioned(
+            left: 45,
+            top: 60,
+            child: Row(
+              children: [
+                Text(
+                  '570 عميل',
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.cairo(
+                      fontSize: 10, fontWeight: FontWeight.w700),
+                ),
+                SizedBox(width: 4,),
+                Container(
+                  height: 6,
+                  width: 6,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Color(MINT_GREEN),
+                      width: 1,
+                    ),
+                    shape: BoxShape.circle,
+                    color: Color(DARK_GREEN),
+                  ),
+                ),
+                Container(
+                  height: 2,
+                  width: 40,
+                  color: Color(MINT_GREEN),
+                ),
+              ],
+            ),
+          ),
+
+          Positioned(
+            right: 30,
+            top: 20,
+            child: Row(
+              children: [
+                Container(
+                  height: 2,
+                  width: 40,
+                  color: Color(DARK_GREEN),
+                ),
+                Container(
+                  height: 6,
+                  width: 6,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(MINT_GREEN),
+                    border: Border.all(
+                      color: Color(DARK_GREEN),
+                      width: 1,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 4,),
+                Text(
+                  '35 محامي',
+                  textDirection: TextDirection.rtl,
+                  style: GoogleFonts.cairo(
+                      fontSize: 10, fontWeight: FontWeight.w700),
+                ),
+              ],
+            ),
+          ),
           Center(
             child: SleekCircularSlider(
               appearance: CircularSliderAppearance(
@@ -206,24 +280,6 @@ Widget UsersCounter({required int clientsCount, required int lawyersCount}) {
               min: 0,
               max: 100,
               initialValue: clientPercentage,
-            ),
-          ),
-          Positioned(
-            right: 40,
-            top: 60,
-            child: Container(
-              height: 2,
-              width: 100,
-              color: Color(DARK_GREEN),
-            ),
-          ),
-          Positioned(
-            right: 36,
-            top: 50,
-            child: Container(
-              height: 2,
-              width: 100,
-              color: Color(MINT_GREEN),
             ),
           ),
         ],

@@ -22,7 +22,7 @@ class ArticleSliderCard extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 5.0),
         decoration: BoxDecoration(
             image: DecorationImage(
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
               image: NetworkImage(articleModel.imageUrl),
             ),
             borderRadius: const BorderRadius.all(Radius.circular(28))),

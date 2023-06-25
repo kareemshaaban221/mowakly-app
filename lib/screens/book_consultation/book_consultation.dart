@@ -10,13 +10,16 @@ import 'package:fp/component/text_widget.dart';
 import 'package:fp/component/themes/text_field_theme.dart';
 import 'package:fp/constants/constant_colors.dart';
 import 'package:fp/constants/dropdown_lists.dart';
+import 'package:fp/models/LawyerModel.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../component/form_components.dart';
 
 class BookConsultation extends StatefulWidget {
-  const BookConsultation({Key? key}) : super(key: key);
+   BookConsultation({Key? key, required this.lawyerModel}) : super(key: key);
+
+  LawyerModel lawyerModel ;
 
   @override
   State<BookConsultation> createState() => _BookConsultationState();
@@ -141,10 +144,32 @@ class _BookConsultationState extends State<BookConsultation> {
                         ],
                       )),
                 ),
+
+                ConsultationPrice(price: widget.lawyerModel.price),
                 
-                ConsultationPrice(price: '500'),
-                
-                BuildButton(title: 'طلب الاستشارة',labelSize: 18,height: 40,width: 200, onPress:(){} ),
+                BuildButton(title: 'طلب الاستشارة',labelSize: 18,height: 40,width: 200, onPress:(){
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: TextWidget(label: 'طلب الاستشارة', fontSize: 12,),
+                        content: TextWidget(label: 'تم إرسال طلب الاستشارة بنجاح', fontSize: 16,),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('حسناً', style: GoogleFonts.cairo(),),
+                          ),
+                        ],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      );
+                    },
+                  );
+                } ),
 
               ],
             ),

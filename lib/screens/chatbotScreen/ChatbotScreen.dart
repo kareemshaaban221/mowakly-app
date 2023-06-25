@@ -4,6 +4,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fp/component/text_widget.dart';
+import 'package:fp/constants/constant_colors.dart';
+import 'package:fp/screens/LawyersScreen/lawyersScreen.dart';
 import 'package:fp/screens/chatbotScreen/chatbot_api_service.dart';
 import 'package:fp/screens/chatbotScreen/chat_model.dart';
 import 'package:fp/screens/chatbotScreen/chat_widget.dart';
@@ -42,41 +45,56 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   }
 
   List<ChatModel> chatList = [];
+  String lastMsg = '';
+  String category = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const ChatBotAppBar(),
       body: SafeArea(
-        child: Column(
-          children: [
-            Flexible(
-              child: ListView.builder(
-                controller: _listScrollController,
-                itemCount: chatList.length,
-                itemBuilder: (context, index) {
-                  return ChatWidget(
-                    msg: chatList[index].msg,
-                    chatIndex: chatList[index].chatIndex,
-                  );
-                },
-              ),
+        child: Column(children: [
+          Flexible(
+            child: ListView.builder(
+              controller: _listScrollController,
+              itemCount: chatList.length,
+              itemBuilder: (context, index) {
+                return ChatWidget(
+                  msg: chatList[index].msg,
+                  chatIndex: chatList[index].chatIndex,
+                );
+              },
             ),
-            if (_isLoading) ...[
-              const SpinKitThreeBounce(
-                color: Colors.grey,
-                size: 18,
-              ),
-            ],
-            const SizedBox(height: 15,),
+          ),
+          if (lastMsg.startsWith('القضية دي تصنيفها')) ...[
+            YesNoWidget(onYes: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LawyersScreen(category: category),
+                  ));
+            }, onNo: () {
+              Navigator.of(context).pop();
+            }),
+          ],
+          if (_isLoading) ...[
+            const SpinKitThreeBounce(
+              color: Colors.grey,
+              size: 18,
+            ),
+          ],
+          const SizedBox(
+            height: 15,
+          ),
+          if (!lastMsg.startsWith('القضية دي تصنيفها')) ...[
             MessageTextField(
                 focusNode: focusNode,
                 textEditingController: textEditingController,
                 onSubmit: () async {
                   await sendMessage();
-                })
+                }),
           ],
-        ),
+        ]),
       ),
     );
   }
@@ -100,6 +118,31 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
           focusNode.unfocus();
         });
         chatList.addAll(await ChatbotApiService.sendMessage(message: msg));
+
+        ChatModel last = chatList[chatList.length - 1];
+        lastMsg = last.msg;
+        print(lastMsg);
+
+        RegExp regExp = RegExp(r'\((.*?)\)');
+        RegExpMatch? match = regExp.firstMatch(lastMsg);
+
+        if (match != null) {
+          String? word = match.group(1);
+          if (word != null) {
+            print('The word inside the parentheses is $word');
+            category = word;
+          } else {
+            print('Could not find the word in brackets in the message');
+          }
+        } else {
+          print('Could not find the word in brackets in the message');
+        }
+
+        print(category);
+        if(category == 'اسره') {
+          category = 'أسرة';
+        }
+
         setState(() {});
       } catch (e) {
         log('error: $e');
@@ -181,6 +224,50 @@ Widget MessageTextField(
           )
         ],
       ),
+    ),
+  );
+}
+
+Widget YesNoWidget({required VoidCallback onYes, required VoidCallback onNo}) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 8.0),
+    child: Row(
+      textDirection: TextDirection.rtl,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        InkWell(
+          onTap: onYes,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 8),
+            decoration: BoxDecoration(
+              color: Color(MINT_GREEN),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Color(MINT_GREEN)),
+            ),
+            child: TextWidget(
+              label: 'نعم',
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        InkWell(
+          onTap: onNo,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Color(MINT_GREEN)),
+            ),
+            child: TextWidget(
+              label: 'لا',
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
     ),
   );
 }

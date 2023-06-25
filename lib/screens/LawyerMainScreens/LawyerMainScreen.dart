@@ -44,7 +44,7 @@ class _LawyerMainScreenState extends State<LawyerMainScreen> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: HomeAppBar(hideAppbar: onProfilePage,textName: loginmodel!.data!.fname),
+        appBar: HomeAppBar(hideAppbar: onProfilePage,),
         drawer: const SideDrawer(),
         body: Stack(
           children: [

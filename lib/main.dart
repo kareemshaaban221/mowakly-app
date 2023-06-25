@@ -13,6 +13,7 @@ import 'package:fp/screens/loginScreen/cubit/cubitLoginScreen.dart';
 import 'package:fp/screens/payScreen/cubit/cubitPayScreen.dart';
 import 'package:fp/screens/signupScreen/cuibt/cubitSignupScreen.dart';
 import 'package:fp/screens/splashScreen/splashScreen.dart';
+import 'package:fp/screens/view_article_screen/view_article_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 
@@ -39,10 +40,11 @@ class MowakleApp extends StatelessWidget {
             //BlocProvider(create: (context) => ForgotPasswordScreenCubit(),),
           ],
           child: MaterialApp(
+            debugShowCheckedModeBanner: false,
             theme: ThemeData(
               primarySwatch: MINT_PRIMARY_COLOR, // Use the custom MaterialColor
             ),
-            home: SplashScreen()
+          home: SplashScreen()
           ),
         );
       },

@@ -15,11 +15,11 @@ class LoginScreenCubit extends Cubit<LoginStates>{
 
   static LoginScreenCubit get(context)=>BlocProvider.of(context);
 
-    Future userLogin({@required String ?email,@required String ? password,@required String ? userType,}){
+    Future userLogin({@required String ?email,@required String ? password,@required String ? userType,})async{
 
     emit(LoginLoadingState());
     return
-    DioHelper.PostData(
+    await DioHelper.PostData(
         url: userType=='client'? LOGIN:'/api/lawyer/login',
         data: {
           'user_type':userType,
@@ -32,11 +32,14 @@ class LoginScreenCubit extends Cubit<LoginStates>{
       loginmodel=LoginModel.fromJson(value.data);
 
       print(loginmodel!.message.toString());
+      done=true;
       emit(LoginSuccessState());
 
       return value.data;
     }).catchError((onError){
+       done=false;
       print(onError.toString());
+
       emit(LoginErrorState());
       return 'dd';
     },

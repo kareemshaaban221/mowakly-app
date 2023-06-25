@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fp/component/components.dart';
+import 'package:fp/network/models/models.dart';
 import 'package:fp/screens/clientMainScreens/ClientMainScreen.dart';
 import 'package:fp/screens/cv_lawerScreen/cv_lawerScreen.dart';
 import 'package:fp/screens/payScreen/payScreen.dart';
@@ -161,8 +162,14 @@ class Signup2Screen extends StatelessWidget {
 
                                             if(userType=='client'){
                                               cuibt.userSignup(user_type: 'client', fname: user!['name'], email:user!['email'], password: user!['password'], password_confirmation: user!['passwordConfirm'], lname: 'nghg', gender: gender, date_of_birth: dateController.text, phone: phoneController.text);
-                                            await  _dialogBuilder(context);
+                                            if(done==true){
+                                              await  _dialogBuilder(context,'تم انشاء الحساب بنجاح');
                                               Navigator.push(context, MaterialPageRoute(builder: (context) => ClientMainScreen(),));
+                                            }
+                                            else{
+                                              await  _dialogBuilder(context,'حدث خطأ يرجى اعادة المحاولة');
+                                            }
+
                                             }
                                             else if(userType=='lawyer'){
                                               print(user);
@@ -237,9 +244,9 @@ class Signup2Screen extends StatelessWidget {
       ),
     );
   }
-   Future<void> _dialogBuilder(BuildContext context){
+   Future<void> _dialogBuilder(BuildContext context,String?text){
     return showDialog(context: context,
-      builder:(context) => AlertDialog(content:Text('تم انشاء الحساب بنجاح') ,
+      builder:(context) => AlertDialog(content:Text(text!) ,
         actions: [
           TextButton(onPressed: (){
             Navigator.of(context).pop();

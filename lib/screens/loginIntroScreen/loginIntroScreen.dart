@@ -84,7 +84,7 @@ class _LoginIntroScreenState extends State<LoginIntroScreen> {
                     Container(
                       alignment: const Alignment(0, 0.75),
                       child: BuildButton(
-                        title: 'التالي',color: 0xff1BE5BF,onPress: (){
+                        title: 'التالي',labelSize: 25,color: 0xff1BE5BF,onPress: (){
                           if(onLastPage){
                             Navigator.pushReplacement(context,
                                 MaterialPageRoute(builder: (context){

@@ -23,7 +23,7 @@ class Intro1Screen extends StatelessWidget {
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 72, vertical: 8 ),
-            child: BuildButton(title: 'مرحبا بك' , color: 0xff0B3939, onPress: () {  },),
+            child: BuildButton(title: 'مرحبا بك' , color: 0xff0B3939,labelSize: 25, onPress: () {  },),
           ),
 
 
@@ -36,7 +36,7 @@ class Intro1Screen extends StatelessWidget {
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 48),
-            child: BuildButton(title: 'التالي',color: 0xff1BE5BF, onPress: () {
+            child: BuildButton(title: 'التالي',labelSize: 25,color: 0xff1BE5BF, onPress: () {
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
                 return LoginIntroScreen();
               }));

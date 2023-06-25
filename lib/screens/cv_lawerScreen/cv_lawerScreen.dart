@@ -322,7 +322,7 @@ class CvLawerScreen extends StatelessWidget {
                                     //                                       ),
                                     //                                     );
                                     build_button(title: 'التالــــــي',
-                                        ontap: (){
+                                        ontap: ()async{
 
                                       cubit.uploadImage(user_type: 'lawyer',
                                           fname: user!['name'],
@@ -334,16 +334,22 @@ class CvLawerScreen extends StatelessWidget {
                                           date_of_birth: user!['date_of_birth'],
                                           phones0: user!['phone'],
                                           description: descriptionController.text,
-                                          card_id: '165486591',
+                                          card_id: '165486599',
                                           filePathCard: filePath,
                                           fileNameCard: fileName,
                                           filePathAvatar: filePath,
                                           filenameAvatar: fileName,
                                           filePathAttachment: file1Path,
                                           fileNameAttaachment: file1Name,
-                                          phones1: '1584654650',
-                                          national_id: '11111111111118');
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => CvLawer2Screen(),));
+                                          phones1: '1584654658',
+                                          national_id: '11111111211110');
+                                      if(done==true){
+                                        await  _dialogBuilder(context,'تم انشاء الحساب بنجاح');
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => CvLawer2Screen(),));
+                                      }else{
+                                        await  _dialogBuilder(context,'حدث خطأ يرجى اعادة المحاولة');
+                                      }
+
                                         }
                                     ),
                                   ],
@@ -402,4 +408,14 @@ class CvLawerScreen extends StatelessWidget {
       ),
     );
   }
+   Future<void> _dialogBuilder(BuildContext context,String?text){
+     return showDialog(context: context,
+       builder:(context) => AlertDialog(content:Text(text!) ,
+         actions: [
+           TextButton(onPressed: (){
+             Navigator.of(context).pop();
+           }, child: Text('تم'))
+         ],
+       ), );
+   }
 }

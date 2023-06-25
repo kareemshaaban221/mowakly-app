@@ -37,12 +37,15 @@ class SignupScreenCubit extends Cubit<SignupStates> {
       'date_of_birth': date_of_birth,
       'phone': phone,
     }).then((value) {
-      emit(SignupSuccessState());
+
+      done=true;
       loginmodel=LoginModel.fromJson(value.data);
 
       print(loginmodel!.message.toString());
+      emit(SignupSuccessState());
     }).catchError((onError) {
       print(onError);
+      done=false;
       emit(SignupErrorState());
     });
   }
@@ -150,9 +153,11 @@ class SignupScreenCubit extends Cubit<SignupStates> {
      await DioHelper.PostData(url: SIGNUPLAWER, data: formData)
         .then((value) {
        loginmodel=LoginModel.fromJson(value.data);
+       done=true;
       emit(SignupSuccessState());
     }).onError((error, stackTrace){
       print(error);
+      done=false;
       emit(SignupErrorState());
      });
 

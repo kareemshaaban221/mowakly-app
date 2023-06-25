@@ -6,7 +6,7 @@ import 'package:fp/screens/massageScreen/chatModel.dart';
 String ?tokenPassword;
 List? categories=['تجاري و شركات','عمال','مجلس الدولة'];
 String ?userTp;
-
+bool done=true;
 LoginModel ?loginmodel;
 String ?token;
 ChatClientModel?chatModel;

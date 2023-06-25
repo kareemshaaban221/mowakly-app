@@ -24,7 +24,7 @@ class LoginIntro1Screen extends StatelessWidget {
 
             Text('حل مشكلة الوصول للمحامي المناسب', style: GoogleFonts.cairo(
               color: Color(0xff0B3939),
-              fontSize: 6.w
+              fontSize: 5.w
             ),),
 
 

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fp/network/models/models.dart';
+import 'package:fp/screens/massageScreen/Cubit/chatWidget.dart';
 import 'package:fp/screens/massageScreen/Cubit/cubitMassageScreen.dart';
 import 'package:fp/screens/massageScreen/Cubit/statesCubit.dart';
-import 'package:fp/screens/massageScreen/containerMassage.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -77,7 +78,7 @@ var textEditingController=TextEditingController();
                     width: 100.w,
                     child: ListView.builder(
                         itemCount: chat.length,
-                        itemBuilder: (context, index) => ContainerMessage(text: chat[index],chatwho: chatWho[index].toString())),
+                        itemBuilder: (context, index) => ChatWidgetClient(msg: chat[index], chatIndex: chatWho[index].toString())),
                   ),
 
 

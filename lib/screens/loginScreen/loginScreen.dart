@@ -4,6 +4,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fp/component/components.dart';
+import 'package:fp/network/models/models.dart';
 import 'package:fp/screens/LawyerMainScreens/LawyerMainScreen.dart';
 import 'package:fp/screens/clientMainScreens/ClientMainScreen.dart';
 import 'package:fp/screens/forgetPasswordScreen/forgetPasswordScreen.dart';
@@ -115,15 +116,20 @@ class LoginScreen extends StatelessWidget {
                                 ontap: ()async{
                               if( formKey.currentState!.validate()){
                                 cubit.userLogin(userType: userType,email: emailController.text,password: passwordController.text,);
-                                await _dialogBuilder(context);
-                                if(userType=='client') {
-                                  Navigator.pushReplacement(context,
-                                      MaterialPageRoute(builder: (context) =>
-                                          ClientMainScreen(),));
+                                if(done==true){
+                                  await _dialogBuilder(context,'تم التسجيل الدخول بنجاح');
+                                  if(userType=='client') {
+                                    Navigator.pushReplacement(context,
+                                        MaterialPageRoute(builder: (context) =>
+                                            ClientMainScreen(),));
+                                  }
+                                  else{
+                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LawyerMainScreen(),));
+                                  }
+                                }else{
+                                  await _dialogBuilder(context,'حدث خطأ يرجى اعادة المحاولة');
                                 }
-                                else{
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LawyerMainScreen(),));
-                                }
+
                                 }
                             },
                             ),
@@ -191,9 +197,9 @@ class LoginScreen extends StatelessWidget {
           ),
     );
   }
-   Future<void> _dialogBuilder(BuildContext context){
+   Future<void> _dialogBuilder(BuildContext context,String?text){
      return showDialog(context: context,
-       builder:(context) => AlertDialog(content:Text('تم تسجيل الدخول بنجاح') ,
+       builder:(context) => AlertDialog(content:Text(text!) ,
          actions: [
            TextButton(onPressed: (){
              Navigator.of(context).pop();

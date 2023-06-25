@@ -26,7 +26,7 @@ class _ArticlesListWidgetState extends State<ArticlesListWidget> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height:widget.height?? 58.h,
+      height:widget.height?? 60.h,
       child: ListView.builder(
         itemCount: articlesList.length,
         itemBuilder: (BuildContext context, int index) {

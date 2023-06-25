@@ -6,7 +6,13 @@ import 'package:fp/component/buildButton.dart';
 import 'package:fp/component/form_components.dart';
 import 'package:fp/component/main_screens_components.dart';
 import 'package:fp/component/side_drawer.dart';
+import 'package:fp/component/text_widget.dart';
 import 'package:fp/constants/constant_colors.dart';
+import 'package:fp/constants/constants.dart';
+import 'package:fp/models/article_model.dart';
+import 'package:fp/network/models/models.dart';
+import 'package:fp/screens/LawyerMainScreens/LawyerMainScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 
 class NewArticleScreen extends StatefulWidget {
@@ -30,6 +36,10 @@ class _NewArticleScreenState extends State<NewArticleScreen> {
   //   }
   // }
 
+  final _formKey = GlobalKey<FormState>();
+  final _titleController = TextEditingController();
+  final _contentController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,47 +49,75 @@ class _NewArticleScreenState extends State<NewArticleScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20),
-          child: Column(
-            children: [
-              TFLabel(label: 'عنوان المقالة'),
-              TransparentTextField(),
-              TFLabel(label: 'مضمون المقالة'),
-              TransparentTextField(maxLines: 16),
-              TFLabel(label: 'صورة المقالة'),
-              Row(
-                children: [
-                  BuildButton(
-                    title: 'رفع صورة للمقال',
-                    labelSize: 12,
-                    width: 120,
-                    height: 28,
-                    onPress: (){},
-                  ),
-                ],
-              ),
-              SizedBox(height: 32,),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TFLabel(label: 'عنوان المقالة'),
+                TransparentTextField2(
+                  controller: _titleController,
+                ),
+                TFLabel(label: 'مضمون المقالة'),
+                TransparentTextField2(
+                  maxLines: 16, controller: _contentController,),
+                TFLabel(label: 'صورة المقالة'),
+                Row(
+                  children: [
+                    BuildButton(
+                      title: 'رفع صورة للمقال',
+                      labelSize: 12,
+                      width: 120,
+                      height: 28,
+                      onPress: () {},
+                    ),
+                  ],
+                ),
+                SizedBox(height: 32,),
+                BuildButton(
+                  title: 'نشر المقالة',
+                  labelSize: 16,
+                  width: 180,
+                  height: 36,
+                  onPress: () {
+                    if (_formKey.currentState!.validate()) {
+                      ArticleModel newArticleModel = ArticleModel(
+                          label: _titleController.text,
+                          paragraph: _contentController.text,
+                          imageUrl: 'https://blog.ipleaders.in/wp-content/uploads/2021/02/lawyer-keywords.jpg',
+                          author: loginmodel?.data?.fname ?? 'said mosad',
+                          date: DateTime.now());
+                      articlesList.insert(0, newArticleModel);
+                      print(articlesList[0].label);
 
-              // if (_imageFile != null)
-              //   Container(
-              //     height: 200,
-              //     width: 200,
-              //     decoration: BoxDecoration(
-              //       image: DecorationImage(
-              //         image: FileImage(_imageFile!),
-              //         fit: BoxFit.cover,
-              //       ),
-              //       borderRadius: BorderRadius.circular(10),
-              //     ),
-              //   ),
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: TextWidget(label: 'نشر المقال', fontSize: 12,),
+                            content: TextWidget(label: 'تم نشر المقال بنجاح', fontSize: 16,),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LawyerMainScreen(),));
+                                },
+                                child: Text('حسناً', style: GoogleFonts.cairo(),),
+                              ),
+                            ],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          );
+                        },
+                      );
 
-              BuildButton(
-                title: 'نشر المقالة',
-                labelSize: 16,
-                width: 180,
-                height: 36,
-                onPress: () {},
-              ),
-            ],
+
+
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

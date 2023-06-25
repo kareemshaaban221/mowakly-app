@@ -21,7 +21,7 @@ class _HomePageLawyerState extends State<HomePageLawyer> {
         child: Column(
           children: [
             const SizedBox(
-              height: 108,
+              height: 68,
             ),
             Center(
               child: BuildButton(

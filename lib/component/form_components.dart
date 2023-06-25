@@ -198,3 +198,48 @@ Widget TransparentTextField({
     ),
   );
 }
+
+
+
+Widget TransparentTextField2({
+  String? hint,
+  int? maxLines,
+  TextEditingController? controller,
+}) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 12.0),
+    child: Theme(
+      data: ThemeData(
+        primarySwatch: MINT_PRIMARY_COLOR,
+        inputDecorationTheme: InputDecorationTheme(
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(color: Color(0xff9c9c9c))),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide(color: Color(LIGHT_GREY)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Color(MINT_GREEN)),
+              borderRadius: BorderRadius.circular(16),
+            )),
+      ),
+      child: TextFormField(
+        controller: controller,
+        maxLines: maxLines ?? 1,
+        textAlign: TextAlign.right,
+        textDirection: TextDirection.rtl,
+        decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 0,
+            ),
+            filled: true,
+            fillColor: Colors.transparent,
+            hintText: hint ?? '',
+            hintStyle: GoogleFonts.cairo(
+                color: const Color(0xffc9c9c9), fontSize: 12)),
+      ),
+    ),
+  );
+}

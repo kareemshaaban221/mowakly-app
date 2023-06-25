@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:fp/constants/notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -54,13 +55,13 @@ Widget NotificationWidget(){
             width: 100.w,
             height: 62.h,
             child: ListView.builder(
-              itemCount: 10,
+              itemCount: notificationList.length,
               itemBuilder: (context, index) {
                 return NotificationItem(
-                    event: 'لقد نجحت في تغيير كلمة السر الخاصة بك',
-                    dayWeek: 'الأربعاء',
-                    date: '16-3-2-23',
-                    hour: '10:15');
+                    event: notificationList[index].content,
+                    dayWeek:  notificationList[index].dayWeek,
+                    date:  notificationList[index].date,
+                    hour:  notificationList[index].hour);
               },
             ),
           ),

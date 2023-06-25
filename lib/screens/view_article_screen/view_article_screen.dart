@@ -1,4 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, must_be_immutable
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:fp/component/chatbot_button.dart';
 import 'package:fp/component/main_screens_components.dart';
@@ -164,7 +166,7 @@ class CompleteArticle extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16),
                           image: DecorationImage(
                               image: NetworkImage(articleModel.imageUrl),
-                              fit: BoxFit.fill),
+                              fit: BoxFit.cover),
                         ),
                       ),
                     ),
@@ -197,35 +199,38 @@ class CompleteArticle extends StatelessWidget {
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                     ),
-                    SizedBox(
-                      height: 160,
-                      child: GridView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 8,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 2,
-                          mainAxisSpacing: 4,
-                          mainAxisExtent: 20,
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: SizedBox(
+                        height: 160,
+                        child: GridView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount:  min(articlesList.length, 10),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 2,
+                            mainAxisSpacing: 4,
+                            mainAxisExtent: 20,
+                          ),
+                          itemBuilder: (BuildContext context, int index) {
+                            return InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ViewArticleScreen(
+                                          articleModel: articlesList[index]),
+                                    ));
+                              },
+                              child: TextWidget(
+                                label: articlesList[index].label,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 10,
+                              ),
+                            );
+                          },
                         ),
-                        itemBuilder: (BuildContext context, int index) {
-                          return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ViewArticleScreen(
-                                        articleModel: articlesList[index]),
-                                  ));
-                            },
-                            child: TextWidget(
-                              label: articlesList[index].label,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 10,
-                            ),
-                          );
-                        },
                       ),
                     ),
                   ],

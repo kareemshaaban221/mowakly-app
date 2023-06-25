@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fp/component/appbars/secondary_appbar.dart';
 import 'package:fp/component/complete_widgets/articles_list_widget.dart';
 import 'package:fp/component/side_drawer.dart';
+import 'package:fp/constants/constant_colors.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ViewAllArticlesScreen extends StatefulWidget {
@@ -15,12 +16,13 @@ class _ViewAllArticlesScreenState extends State<ViewAllArticlesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(LIGHT_GREY),
       appBar: SecondaryAppBar(label: 'مقالات',),
       drawer: const SideDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            ArticlesListWidget(),
+            ArticlesListWidget(height: 100.h),
           ],
         ),
       ),

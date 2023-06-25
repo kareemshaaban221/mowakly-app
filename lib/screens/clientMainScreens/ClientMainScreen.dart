@@ -40,11 +40,10 @@ class _ClientMainScreenState extends State<ClientMainScreen> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: HomeAppBar(hideAppbar: onProfilePage,textName: loginmodel!.data!.fname),
+        appBar: HomeAppBar(hideAppbar: onProfilePage,),
         drawer: const SideDrawer(),
         body: Stack(
           children: [
-
             /// VIEW 4 PAGES
             PageView(
               reverse: true,

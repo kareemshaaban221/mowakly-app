@@ -8,10 +8,9 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  HomeAppBar({super.key, this.hideAppbar,this.textName});
+  HomeAppBar({super.key, this.hideAppbar});
 
   bool? hideAppbar;
-  String ?textName;
 
   @override
   Size get preferredSize => hideAppbar?? false ? Size.zero : const Size.fromHeight(kToolbarHeight);
@@ -27,7 +26,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         elevation: 0,
         actions: [
           Text(
-           textName==null? 'Ahmed':textName!,
+            loginmodel!.data!.fname.toString(),
             style: GoogleFonts.cairo(
                 color: const Color(0xff0B3939),
                 fontSize: 16.sp,

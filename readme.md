@@ -3,6 +3,7 @@ Branches:
 - database ==> ERD, Schema, Migrations
 - front-end
 - main-service ==> laravel service
+- nlp-model
 - ml-service ==> flask service - model deployment
 - scrapping-script ==> python, js
 ------------------------------------
